@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>חיה סגל צילום - צלמת ילדים ומשפחה בטבריה</title>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&family=Assistant:wght@300;400;600;700&family=Frank+Ruhl+Libre:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --gold: #D4A574; --gold-light: #E8C4A0; --gold-dark: #B8936A;
+            --cream: #F2DFCE; --pink: #F5C6D0; --text-dark: #2C2C2C; --black: #1A1A1A;
+        }
+        body { font-family: 'Assistant', sans-serif; background: white; color: var(--text-dark); line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        
+        .loading {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white;
+            display: flex; align-items: center; justify-content: center; z-index: 9999;
+        }
+        .loading-content { text-align: center; font-size: 1.5rem; }
+        
+        .navbar { position: fixed; top: 0; left: 0; right: 0; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); box-shadow: 0 2px 20px rgba(26, 26, 26, 0.1); z-index: 999; padding: 15px 0; }
+        .navbar.hidden { display: none; }
+        .nav-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { height: 50px; cursor: pointer; }
+        .nav-menu { display: flex; gap: 30px; list-style: none; }
+        .nav-menu a { text-decoration: none; color: var(--text-dark); font-weight: 500; font-size: 1.05rem; transition: color 0.3s; cursor: pointer; }
+        .nav-menu a:hover { color: var(--gold); }
+        
+        .special-offer-banner {
+            background: linear-gradient(135deg, #FF6B9D 0%, #FFA07A 100%);
+            padding: 25px 0; text-align: center; box-shadow: 0 4px 20px rgba(255, 107, 157, 0.3);
+            margin-top: 80px; display: none;
+        }
+        .special-offer-banner.active { display: block; }
+        .special-offer-title { font-family: 'Frank Ruhl Libre', serif; font-size: 2.5rem; color: white; margin-bottom: 15px; }
+        .special-offer-text { font-size: 1.4rem; color: white; margin-bottom: 10px; line-height: 1.6; }
+        
+        .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; 
+                background: linear-gradient(135deg, var(--cream) 0%, white 50%, var(--pink) 100%); padding-top: 80px; }
+        .hero-content { position: relative; z-index: 2; text-align: center; max-width: 800px; padding: 40px 20px; }
+        .logo-img { max-width: 400px; height: auto; margin-bottom: 30px; }
+        .tagline { font-size: 1.5rem; color: var(--text-dark); margin-bottom: 20px; }
+        .highlight-text { font-family: 'Frank Ruhl Libre', serif; font-size: 2.2rem; font-weight: 700; 
+                         background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+                         -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; display: block; }
+        .subline { font-size: 1.2rem; color: var(--text-dark); margin-top: 15px; }
+        
+        .gallery-page { padding: 120px 0 80px; }
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-title { font-family: 'Frank Ruhl Libre', serif; font-size: 3rem; color: var(--text-dark); margin-bottom: 15px; }
+        .section-subtitle { font-size: 1.2rem; color: #666; }
+        .categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .category-card { border-radius: 20px; overflow: hidden; box-shadow: 0 10px 40px rgba(26, 26, 26, 0.1); cursor: pointer; transition: transform 0.3s; }
+        .category-card:hover { transform: translateY(-10px); }
+        .category-image { width: 100%; height: 300px; object-fit: cover; }
+        .category-info { padding: 25px; background: white; }
+        .category-name { font-family: 'Frank Ruhl Libre', serif; font-size: 1.8rem; color: var(--text-dark); margin-bottom: 10px; }
+        .category-desc { color: #666; }
+        
+        .packages-section { padding: 80px 0; background: linear-gradient(135deg, var(--cream) 0%, white 100%); }
+        .packages-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 50px; }
+        .package-card { background: white; border-radius: 20px; padding: 40px; box-shadow: 0 10px 40px rgba(26, 26, 26, 0.1); transition: transform 0.3s; }
+        .package-card:hover { transform: translateY(-10px); }
+        .package-name { font-family: 'Frank Ruhl Libre', serif; font-size: 2rem; color: var(--text-dark); margin-bottom: 15px; }
+        .package-price { font-size: 2.5rem; font-weight: 700; color: var(--gold); margin-bottom: 10px; }
+        .package-subtitle { color: #666; margin-bottom: 20px; }
+        .package-features { list-style: none; margin: 20px 0; }
+        .package-features li { padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+        
+        .footer { background: var(--black); color: white; padding: 60px 0 30px; }
+        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-section h3 { font-family: 'Frank Ruhl Libre', serif; font-size: 1.5rem; margin-bottom: 20px; }
+        .footer-section p { margin: 10px 0; }
+        
+        .whatsapp-float { position: fixed; bottom: 30px; right: 30px; background: #25D366; width: 60px; height: 60px; 
+                         border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+                         box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); cursor: pointer; z-index: 1000; font-size: 30px; text-decoration: none; color: white; }
+        
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <div id="loadingMessage" class="loading">
+        <div class="loading-content">טוען את האתר... ⏳</div>
+    </div>
+    
+    <nav class="navbar hidden">
+        <div class="nav-container">
+            <img class="nav-logo" alt="Logo">
+            <ul class="nav-menu">
+                <li><a onclick="navigateTo('homePage')">דף הבית</a></li>
+                <li><a onclick="navigateTo('galleryPage')">הגלריה</a></li>
+                <li><a onclick="navigateTo('packagesSection')">מחירון</a></li>
+                <li><a onclick="navigateTo('contactSection')">יצירת קשר</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <a href="https://wa.me/972548463238" class="whatsapp-float" target="_blank">📱</a>
+    
+    <div id="specialOfferBanner" class="special-offer-banner"></div>
+    
+    <div id="homePage" class="hero">
+        <div class="hero-content">
+            <img class="logo-img" alt="Logo">
+            <div class="tagline"></div>
+            <div class="highlight-text"></div>
+            <div class="subline"></div>
+        </div>
+    </div>
+    
+    <div id="galleryPage" class="gallery-page">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" id="galleryTitle"></h2>
+                <p class="section-subtitle" id="gallerySubtitle"></p>
+            </div>
+            <div class="categories-grid" id="categoriesContainer"></div>
+        </div>
+    </div>
+    
+    <div id="packagesSection" class="packages-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" id="packagesTitle"></h2>
+                <p class="section-subtitle" id="packagesSubtitle"></p>
+            </div>
+            <div class="packages-grid" id="packagesContainer"></div>
+        </div>
+    </div>
+    
+    <footer id="contactSection" class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>צרו קשר</h3>
+                    <p id="footerPhone"></p>
+                    <p id="footerEmail"></p>
+                    <p id="footerLocation"></p>
+                </div>
+            </div>
+            <div style="text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1);">
+                <p>© 2026 חיה סגל צילום - כל הזכויות שמורות</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        const SHEET_ID = '1Q9NOZyg_gFb-qQbjnYL7N_mH_gxHlOWU';
+        const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+        
+        let siteData = {};
+        
+        async function loadGoogleSheetData() {
+            try {
+                console.log('📡 Fetching data from Google Sheets...');
+                const response = await fetch(SHEET_URL);
+                const text = await response.text();
+                const json = JSON.parse(text.substring(47).slice(0, -2));
+                
+                console.log('📊 Raw data:', json);
+                
+                // Process rows - skip header row (index 0)
+                json.table.rows.forEach((row, index) => {
+                    if (index === 0) return; // Skip header row
+                    
+                    const key = row.c[0]?.v;
+                    const value = row.c[1]?.v;
+                    
+                    if (key && value) {
+                        siteData[key] = value;
+                        console.log(`✅ Loaded: ${key} = ${value.substring(0, 50)}...`);
+                    }
+                });
+                
+                console.log('✅ Site data loaded:', siteData);
+                renderWebsite();
+            } catch (error) {
+                console.error('❌ Error loading data:', error);
+                document.getElementById('loadingMessage').innerHTML = 
+                    '<div style="color: red; padding: 40px; text-align: center;">שגיאה בטעינת הנתונים ❌<br><br>אנא רענן את הדף</div>';
+            }
+        }
+        
+        function renderWebsite() {
+            console.log('🎨 Rendering website...');
+            
+            // Logo
+            const logoUrl = siteData.logo || '';
+            console.log('🖼️ Logo URL:', logoUrl);
+            const logos = document.querySelectorAll('.logo-img, .nav-logo');
+            logos.forEach(logo => logo.src = logoUrl);
+            
+            // Hero
+            document.querySelector('.tagline').textContent = siteData.hero_tagline || '';
+            document.querySelector('.highlight-text').textContent = siteData.hero_highlight || '';
+            document.querySelector('.subline').textContent = siteData.hero_subline || '';
+            
+            // Gallery
+            document.getElementById('galleryTitle').textContent = siteData.gallery_title || 'הגלריה שלנו';
+            document.getElementById('gallerySubtitle').textContent = siteData.gallery_subtitle || '';
+            
+            // Categories
+            const container = document.getElementById('categoriesContainer');
+            container.innerHTML = '';
+            
+            for (let i = 1; i <= 5; i++) {
+                const name = siteData[`cat${i}_name`];
+                const image = siteData[`cat${i}_image`];
+                const desc = siteData[`cat${i}_desc`];
+                
+                console.log(`📷 Category ${i}:`, name, image);
+                
+                if (name && image) {
+                    const card = document.createElement('div');
+                    card.className = 'category-card';
+                    card.innerHTML = `
+                        <img src="${image}" class="category-image" alt="${name}">
+                        <div class="category-info">
+                            <h3 class="category-name">${name}</h3>
+                            <p class="category-desc">${desc || ''}</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                }
+            }
+            
+            // Packages
+            document.getElementById('packagesTitle').textContent = siteData.packages_title || 'מחירון 2026';
+            document.getElementById('packagesSubtitle').textContent = siteData.packages_subtitle || '';
+            
+            const packagesContainer = document.getElementById('packagesContainer');
+            packagesContainer.innerHTML = '';
+            
+            for (let i = 1; i <= 4; i++) {
+                const name = siteData[`pkg${i}_name`];
+                const price = siteData[`pkg${i}_price`];
+                const subtitle = siteData[`pkg${i}_subtitle`];
+                const features = siteData[`pkg${i}_features`];
+                
+                console.log(`💰 Package ${i}:`, name, price);
+                
+                if (name && price) {
+                    const card = document.createElement('div');
+                    card.className = 'package-card';
+                    card.innerHTML = `
+                        <h3 class="package-name">${name}</h3>
+                        <div class="package-price">${price}</div>
+                        <p class="package-subtitle">${subtitle || ''}</p>
+                        <ul class="package-features">
+                            ${features ? features.split('|').map(f => `<li>${f}</li>`).join('') : ''}
+                        </ul>
+                    `;
+                    packagesContainer.appendChild(card);
+                }
+            }
+            
+            // Footer
+            document.getElementById('footerPhone').textContent = `טלפון: ${siteData.contact_phone || '054-846-3238'}`;
+            document.getElementById('footerEmail').textContent = `אימייל: ${siteData.contact_email || 'chaya054846@gmail.com'}`;
+            document.getElementById('footerLocation').textContent = `מיקום: ${siteData.contact_location || 'טבריה, ישראל'}`;
+            
+            // Show content
+            console.log('✅ Website rendered successfully!');
+            document.getElementById('loadingMessage').classList.add('hidden');
+            document.querySelector('.navbar').classList.remove('hidden');
+        }
+        
+        function navigateTo(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Initialize
+        console.log('🚀 Starting website...');
+        loadGoogleSheetData();
+    </script>
+</body>
+</html>
