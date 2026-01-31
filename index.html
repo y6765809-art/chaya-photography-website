@@ -7,29 +7,43 @@
 <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700&family=Frank+Ruhl+Libre:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--g:#D4A574;--c:#F2DFCE;--p:#F5C6D0;--t:#2C2C2C;--b:#1A1A1A}
+:root{--g:#D4A574;--gd:#B8936A;--c:#F2DFCE;--p:#F5C6D0;--t:#2C2C2C;--b:#1A1A1A}
 body{font-family:'Assistant',sans-serif;background:#fff;color:var(--t);line-height:1.6;overflow-x:hidden}
+
+/* NAVBAR */
 .navbar{position:fixed;top:0;left:0;right:0;background:rgba(255,255,255,0.97);backdrop-filter:blur(10px);box-shadow:0 2px 15px rgba(0,0,0,0.08);z-index:999;padding:12px 30px;display:flex;justify-content:space-between;align-items:center}
-.nav-logo{height:45px}
-.nav-menu{display:flex;gap:25px;list-style:none}
+.nav-logo{height:45px;cursor:pointer}
+.nav-menu{display:flex;gap:25px;list-style:none;align-items:center}
 .nav-menu a{text-decoration:none;color:var(--t);font-weight:500;cursor:pointer;font-size:1rem;transition:color 0.3s}
 .nav-menu a:hover{color:var(--g)}
+.nav-contact{background:var(--g);color:#fff !important;padding:8px 18px;border-radius:25px;font-weight:600 !important}
+.nav-contact:hover{background:var(--gd) !important;color:#fff !important}
+
+/* HERO */
 .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--c) 0%,#fff 50%,var(--p) 100%);padding-top:70px;text-align:center}
-.hero-inner{max-width:750px;padding:40px 20px}
-.logo-big{max-width:380px;margin-bottom:25px}
+.hero-inner{max-width:800px;padding:40px 20px}
+.logo-big{max-width:350px;margin-bottom:25px}
 .tagline{font-size:1.4rem;color:var(--t);margin-bottom:15px}
 .highlight{font-family:'Frank Ruhl Libre',serif;font-size:2.1rem;font-weight:700;color:var(--g);margin-bottom:12px}
-.subline{font-size:1.1rem;color:#555}
+.subline{font-size:1.1rem;color:#555;margin-bottom:30px}
+.hero-icons{display:flex;justify-content:center;gap:40px;margin-top:30px}
+.hero-icon{text-align:center}
+.hero-icon img{width:90px;height:90px;object-fit:contain;margin-bottom:8px}
+.hero-icon p{font-size:0.9rem;color:#666}
+
+/* GALLERY */
 .gallery{padding:100px 20px 80px}
 .sec-title{font-family:'Frank Ruhl Libre',serif;font-size:2.6rem;text-align:center;margin-bottom:10px}
 .sec-sub{text-align:center;color:#666;margin-bottom:50px;font-size:1.05rem}
 .cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:25px;max-width:1150px;margin:0 auto}
-.card{border-radius:18px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,0.1);transition:transform 0.3s}
+.card{border-radius:18px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,0.1);transition:transform 0.3s;cursor:pointer}
 .card:hover{transform:translateY(-6px)}
 .card img{width:100%;height:280px;object-fit:cover}
 .card-info{padding:22px;background:#fff}
 .card-name{font-family:'Frank Ruhl Libre',serif;font-size:1.7rem;margin-bottom:6px}
 .card-desc{color:#666;font-size:0.95rem}
+
+/* PACKAGES */
 .pkgs{padding:80px 20px;background:linear-gradient(135deg,var(--c),#fff)}
 .pkgs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:25px;max-width:1150px;margin:40px auto 0}
 .pkg{background:#fff;border-radius:18px;padding:35px;box-shadow:0 8px 30px rgba(0,0,0,0.1);transition:transform 0.3s}
@@ -40,177 +54,195 @@ body{font-family:'Assistant',sans-serif;background:#fff;color:var(--t);line-heig
 .pkg-feat{list-style:none;margin-bottom:12px}
 .pkg-feat li{padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:0.95rem}
 .pkg-bonus{color:var(--g);font-size:0.9rem;font-weight:600;margin-top:10px}
+
+/* TESTIMONIALS */
 .testimonials{padding:80px 20px;background:#fff}
 .test-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:25px;max-width:1000px;margin:40px auto 0}
 .test-card{background:var(--c);border-radius:18px;padding:30px;text-align:center}
 .test-stars{font-size:1.2rem;margin-bottom:12px}
 .test-text{font-size:1rem;color:var(--t);margin-bottom:12px;font-style:italic}
 .test-author{color:#888;font-size:0.9rem;font-weight:600}
+
+/* FAQ - ACCORDION */
 .faq{padding:80px 20px;background:linear-gradient(135deg,#fff,var(--c))}
 .faq-list{max-width:750px;margin:40px auto 0}
-.faq-item{border-bottom:1px solid #e0d5cc;padding:20px 0}
-.faq-q{font-weight:700;font-size:1.05rem;margin-bottom:8px;color:var(--t)}
-.faq-a{color:#666;font-size:0.95rem}
-.footer{background:var(--b);color:#fff;padding:55px 20px 25px;text-align:center}
-.footer h3{font-family:'Frank Ruhl Libre',serif;font-size:1.5rem;margin-bottom:18px}
-.footer p{margin:7px 0;font-size:0.95rem;color:#ccc}
-.footer .copy{margin-top:25px;padding-top:18px;border-top:1px solid #333;color:#666;font-size:0.85rem}
+.faq-item{border-bottom:1px solid #e0d5cc;overflow:hidden}
+.faq-q{font-weight:700;font-size:1.05rem;padding:18px 0;color:var(--t);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none}
+.faq-q::after{content:'＋';font-size:1.4rem;color:var(--g);transition:transform 0.3s;font-weight:300}
+.faq-item.open .faq-q::after{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height 0.4s ease,padding 0.3s ease;color:#666;font-size:0.95rem}
+.faq-item.open .faq-a{max-height:200px;padding-bottom:18px}
+
+/* CONTACT SECTION */
+.contact{padding:80px 20px;background:var(--c)}
+.contact-inner{max-width:600px;margin:0 auto;text-align:center}
+.contact-inner h2{font-family:'Frank Ruhl Libre',serif;font-size:2.4rem;margin-bottom:10px}
+.contact-inner p.sub{color:#666;margin-bottom:35px;font-size:1.05rem}
+.contact-info{display:flex;flex-direction:column;gap:15px;align-items:center}
+.contact-row{display:flex;align-items:center;gap:12px;font-size:1.05rem}
+.contact-row .icon{width:40px;height:40px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+.contact-btn{display:inline-block;margin-top:30px;background:var(--g);color:#fff;padding:14px 35px;border-radius:30px;text-decoration:none;font-size:1.1rem;font-weight:600;transition:background 0.3s}
+.contact-btn:hover{background:var(--gd)}
+
+/* FOOTER */
+.footer{background:var(--b);color:#fff;padding:40px 20px 20px;text-align:center}
+.footer p{margin:5px 0;font-size:0.9rem;color:#aaa}
+.footer .copy{margin-top:20px;padding-top:15px;border-top:1px solid #333;color:#555;font-size:0.8rem}
+
+/* WHATSAPP */
 .wa{position:fixed;bottom:28px;right:28px;background:#25D366;width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 15px rgba(37,211,102,0.4);z-index:1000;transition:transform 0.3s}
 .wa:hover{transform:scale(1.1)}
 </style>
 </head>
 <body>
-<div id="app"></div>
+<div id="app">טוען... ⏳</div>
 <script>
-// ========== FALLBACK DATA ==========
-const FALLBACK = {
+const SHEET_ID='1Q9NOZyg_gFb-qQbjnYL7N_mH_gxHlOWU';
+
+// FALLBACK DATA
+const FB={
 logo:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/logo.png",
+camera_image:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/camera-haircut.png",
+album_image:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/album.png",
+studio_image:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/1.jpeg",
 hero_tagline:"צילום אומנותי לחלאקה ומשפחות",
 hero_highlight:"אני חיה סגל צלמת ילדים ומשפחה",
 hero_subline:"הופכת כל מבט ליצירת אומנות",
-gallery_title:"הגלריה שלנו",
-gallery_subtitle:"סוגי הצילומים שאנחנו מציעים",
+gallery_title:"הגלריה שלנו",gallery_subtitle:"סוגי הצילומים שאנחנו מציעים",
 cat1_name:"חלאקה",cat1_image:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/1.jpeg",cat1_desc:"צילום מרגש ליום המיוחד",
 cat2_name:"ניובורן",cat2_image:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/2.jpeg",cat2_desc:"הרגעים הראשונים",
 cat3_name:"סמאש קייק",cat3_image:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/3.jpeg",cat3_desc:"יום הולדת ראשון",
 cat4_name:"משפחה",cat4_image:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/4.jpeg",cat4_desc:"צילומי משפחה מרגשים",
 cat5_name:"בת מצווה",cat5_image:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/5.jpeg",cat5_desc:"יום שלא תשכחו",
-packages_title:"מחירון 2026",
-packages_subtitle:"חבילות צילום מהממות - לחוויה בלתי נשכחת",
+packages_title:"מחירון 2026",packages_subtitle:"חבילות צילום מהממות - לחוויה בלתי נשכחת",
 pkg1_name:"מיני",pkg1_price:"499₪",pkg1_subtitle:"ללא אלבום",pkg1_features:"● חצי שעה צילומים|● סט בגדים אחד|● 8 תמונות מעובדות",pkg1_bonus:"תמונה נוספת - 25₪",
 pkg2_name:"בייסיק",pkg2_price:"820₪",pkg2_subtitle:"ללא אלבום",pkg2_features:"● שעה צילומים|● 3 סטים|● 15 תמונות",pkg2_bonus:"תמונה נוספת - 25₪",
 pkg3_name:"גולד",pkg3_price:"1,390₪",pkg3_subtitle:"כולל אלבום",pkg3_features:"● שעתיים|● 4 סטים|● 25 תמונות|● אלבום 21×56",pkg3_bonus:"תמונה/עמוד - 25₪",
 pkg4_name:"פרימיום",pkg4_price:"1,750₪",pkg4_subtitle:"אלבום פרימיום",pkg4_features:"● 2.5 שעות|● 4 סטים|● 35 תמונות|● אלבום 21×56",pkg4_bonus:"תמונה/עמוד - 25₪",
-testimonials_title:"מה הלקוחות אומרים",
-testimonials_subtitle:"המלצות מלקוחות מרוצים",
+testimonials_title:"מה הלקוחות אומרים",testimonials_subtitle:"המלצות מלקוחות מרוצים",
 test1_stars:"⭐⭐⭐⭐⭐",test1_text:"צילומי החלאקה מדהימים! חיה מקצועית ונעימה!",test1_author:"ר.כ. - טבריה",
 test2_stars:"⭐⭐⭐⭐⭐",test2_text:"הסטודיו יפהפה! התמונות מושלמות!",test2_author:"ש.ל. - צפת",
 test3_stars:"⭐⭐⭐⭐⭐",test3_text:"צילומי הניובורן חלומיים! האלבום מושלם!",test3_author:"מ.ר. - כרמיאל",
-faq_title:"שאלות נפוצות",
-faq_subtitle:"תשובות לשאלות הכי נפוצות",
+faq_title:"שאלות נפוצות",faq_subtitle:"תשובות לשאלות הכי נפוצות",
 faq1_q:"כמה זמן לוקח צילום?",faq1_a:"מיני - חצי שעה, בייסיק - שעה, גולד - שעתיים, פרימיום - 2.5 שעות.",
 faq2_q:"מתי מקבלים את התמונות?",faq2_a:"תוך חודשיים, ובזמני עומס מעט יותר.",
 faq3_q:"איפה מתקיימים הצילומים?",faq3_a:"בסטודיו בטבריה, או בחוץ בטבע.",
 faq4_q:"האם צריך להביא בגדים?",faq4_a:"מומלץ 2-4 חליפות. יש לנו אביזרים ורקעים.",
 faq5_q:"איך משלמים?",faq5_a:"מזומן, העברה, ביט, פייבוקס, אשראי.",
 faq6_q:"מה אם הילד לא משתף פעולה?",faq6_a:"אנחנו סבלניים ומתאימים את הקצב.",
-contact_phone:"054-846-3238",
-contact_email:"chaya054846@gmail.com",
-contact_location:"טבריה, ישראל"
+contact_phone:"054-846-3238",contact_email:"chaya054846@gmail.com",contact_location:"טבריה, ישראל"
 };
 
-// ========== FETCH FROM GOOGLE SHEETS ==========
-const SHEET_ID = '1Q9NOZyg_gFb-qQbjnYL7N_mH_gxHlOWU';
-
-async function loadData() {
-    try {
-        // Try CSV export - more reliable than gviz
-        const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
-        const res = await fetch(url);
-        if (!res.ok) throw new Error('Fetch failed: ' + res.status);
-        const csv = await res.text();
-        console.log('✅ CSV loaded from Google Sheets');
-        
-        const d = {};
-        const lines = csv.split('\n');
-        lines.forEach(line => {
-            const parts = line.split(',');
-            const key = parts[0]?.trim().replace(/^"|"$/g,'');
-            const val = parts.slice(1).join(',').trim().replace(/^"|"$/g,'');
-            if (key && val && key !== 'key') d[key] = val;
+async function loadData(){
+    try{
+        const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
+        const res=await fetch(url);
+        if(!res.ok) throw new Error('HTTP '+res.status);
+        const csv=await res.text();
+        const d={};
+        csv.split('\n').forEach(line=>{
+            const m=line.match(/^"?([^",]+)"?\s*,\s*"?(.*?)"?\s*$/);
+            if(m&&m[1]&&m[2]&&m[1].trim()!=='key'){
+                d[m[1].trim()]=m[2].trim();
+            }
         });
-        
-        // If we got the important keys, use sheet data
-        if (d.logo && d.cat1_name) {
-            console.log('✅ Using LIVE data from Google Sheets');
-            return d;
-        } else {
-            console.log('⚠️ Sheet data incomplete, using fallback');
-            console.log('Keys found:', Object.keys(d));
-            return FALLBACK;
-        }
-    } catch(e) {
-        console.log('⚠️ Could not load sheet, using fallback:', e.message);
-        return FALLBACK;
-    }
+        if(d.logo&&d.cat1_name){console.log('✅ LIVE data');return d;}
+        console.log('⚠️ Incomplete, fallback. Keys:',Object.keys(d));
+        return FB;
+    }catch(e){console.log('⚠️ Fallback:',e.message);return FB;}
 }
 
-// ========== RENDER ==========
-function render(d) {
-    let cats = '';
-    for (let i = 1; i <= 5; i++) {
-        const n = d[`cat${i}_name`], img = d[`cat${i}_image`], desc = d[`cat${i}_desc`];
-        if (n && img) cats += `<div class="card"><img src="${img}" alt="${n}"><div class="card-info"><div class="card-name">${n}</div><div class="card-desc">${desc||''}</div></div></div>`;
+function render(d){
+    let cats='';
+    for(let i=1;i<=5;i++){
+        const n=d[`cat${i}_name`],img=d[`cat${i}_image`],desc=d[`cat${i}_desc`];
+        if(n&&img) cats+=`<div class="card"><img src="${img}" alt="${n}"><div class="card-info"><div class="card-name">${n}</div><div class="card-desc">${desc||''}</div></div></div>`;
     }
-
-    let pkgs = '';
-    for (let i = 1; i <= 4; i++) {
+    let pkgs='';
+    for(let i=1;i<=4;i++){
         const n=d[`pkg${i}_name`],p=d[`pkg${i}_price`],s=d[`pkg${i}_subtitle`],f=d[`pkg${i}_features`],b=d[`pkg${i}_bonus`];
-        if (n && p) {
-            const fl = f ? f.split('|').map(x=>`<li>${x}</li>`).join('') : '';
-            pkgs += `<div class="pkg"><div class="pkg-name">${n}</div><div class="pkg-price">${p}</div><div class="pkg-sub">${s||''}</div><ul class="pkg-feat">${fl}</ul><div class="pkg-bonus">${b||''}</div></div>`;
+        if(n&&p){
+            const fl=f?f.split('|').map(x=>`<li>${x}</li>`).join(''):'';
+            pkgs+=`<div class="pkg"><div class="pkg-name">${n}</div><div class="pkg-price">${p}</div><div class="pkg-sub">${s||''}</div><ul class="pkg-feat">${fl}</ul><div class="pkg-bonus">${b||''}</div></div>`;
         }
     }
-
-    let tests = '';
-    for (let i = 1; i <= 3; i++) {
+    let tests='';
+    for(let i=1;i<=3;i++){
         const s=d[`test${i}_stars`],t=d[`test${i}_text`],a=d[`test${i}_author`];
-        if (t) tests += `<div class="test-card"><div class="test-stars">${s||'⭐⭐⭐⭐⭐'}</div><div class="test-text">${t}</div><div class="test-author">${a||''}</div></div>`;
+        if(t) tests+=`<div class="test-card"><div class="test-stars">${s||'⭐⭐⭐⭐⭐'}</div><div class="test-text">${t}</div><div class="test-author">${a||''}</div></div>`;
     }
-
-    let faqs = '';
-    for (let i = 1; i <= 6; i++) {
+    let faqs='';
+    for(let i=1;i<=6;i++){
         const q=d[`faq${i}_q`],a=d[`faq${i}_a`];
-        if (q) faqs += `<div class="faq-item"><div class="faq-q">${q}</div><div class="faq-a">${a||''}</div></div>`;
+        if(q) faqs+=`<div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">${q}</div><div class="faq-a">${a||''}</div></div>`;
     }
 
-    document.getElementById('app').innerHTML = `
+    document.getElementById('app').innerHTML=`
 <nav class="navbar">
-<img class="nav-logo" src="${d.logo||''}" alt="Logo">
+<img class="nav-logo" src="${d.logo||''}" onclick="document.getElementById('home').scrollIntoView({behavior:'smooth'})">
 <ul class="nav-menu">
 <li><a onclick="document.getElementById('home').scrollIntoView({behavior:'smooth'})">דף הבית</a></li>
 <li><a onclick="document.getElementById('gallery').scrollIntoView({behavior:'smooth'})">גלריה</a></li>
 <li><a onclick="document.getElementById('pkgs').scrollIntoView({behavior:'smooth'})">מחירון</a></li>
-<li><a onclick="document.getElementById('footer').scrollIntoView({behavior:'smooth'})">יצירת קשר</a></li>
+<li><a class="nav-contact" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">📞 יצירת קשר</a></li>
 </ul>
 </nav>
 <a href="https://wa.me/972548463238" class="wa" target="_blank">📱</a>
+
 <div id="home" class="hero"><div class="hero-inner">
 <img class="logo-big" src="${d.logo||''}" alt="חיה סגל">
 <div class="tagline">${d.hero_tagline||''}</div>
 <div class="highlight">${d.hero_highlight||''}</div>
 <div class="subline">${d.hero_subline||''}</div>
+<div class="hero-icons">
+<div class="hero-icon"><img src="${d.camera_image||''}" alt="מצלמה"><p>צילום מקצועי</p></div>
+<div class="hero-icon"><img src="${d.album_image||''}" alt="אלבום"><p>אלבום יפה</p></div>
+<div class="hero-icon"><img src="${d.studio_image||''}" alt="סטודיו"><p>סטודיו מלבב</p></div>
+</div>
 </div></div>
+
 <div id="gallery" class="gallery">
-<h2 class="sec-title">${d.gallery_title||'הגלריה שלנו'}</h2>
+<h2 class="sec-title">${d.gallery_title||''}</h2>
 <p class="sec-sub">${d.gallery_subtitle||''}</p>
 <div class="cats">${cats}</div>
 </div>
+
 <div id="pkgs" class="pkgs">
-<h2 class="sec-title">${d.packages_title||'מחירון'}</h2>
+<h2 class="sec-title">${d.packages_title||''}</h2>
 <p class="sec-sub">${d.packages_subtitle||''}</p>
 <div class="pkgs-grid">${pkgs}</div>
 </div>
+
 <div id="testimonials" class="testimonials">
-<h2 class="sec-title">${d.testimonials_title||'המלצות'}</h2>
+<h2 class="sec-title">${d.testimonials_title||''}</h2>
 <p class="sec-sub">${d.testimonials_subtitle||''}</p>
 <div class="test-grid">${tests}</div>
 </div>
+
 <div id="faq" class="faq">
-<h2 class="sec-title">${d.faq_title||'שאלות נפוצות'}</h2>
+<h2 class="sec-title">${d.faq_title||''}</h2>
 <p class="sec-sub">${d.faq_subtitle||''}</p>
 <div class="faq-list">${faqs}</div>
 </div>
-<footer id="footer" class="footer">
-<h3>צרו קשר</h3>
-<p>טלפון: ${d.contact_phone||''}</p>
-<p>אימייל: ${d.contact_email||''}</p>
-<p>מיקום: ${d.contact_location||''}</p>
-<div class="copy">© 2026 חיה סגל צילום - כל הזכויות שמורות</div>
+
+<div id="contact" class="contact">
+<div class="contact-inner">
+<h2>צרו קשר</h2>
+<p class="sub">אנחנו שמשמשים לשמוע מכם!</p>
+<div class="contact-info">
+<div class="contact-row"><div class="icon">📞</div><span>${d.contact_phone||''}</span></div>
+<div class="contact-row"><div class="icon">✉️</div><span>${d.contact_email||''}</span></div>
+<div class="contact-row"><div class="icon">📍</div><span>${d.contact_location||''}</span></div>
+</div>
+<a href="https://wa.me/972548463238" class="contact-btn" target="_blank">📱 שלשלו הודשה בWhatsApp</a>
+</div>
+</div>
+
+<footer class="footer">
+<p>© 2026 חיה סגל צילום - כל הזכויות שמורות</p>
 </footer>`;
 }
 
-// ========== INIT ==========
 loadData().then(render);
 </script>
 </body>
