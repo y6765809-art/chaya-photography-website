@@ -57,10 +57,10 @@
         .hidden { display: none !important; }
     </style>
 </head>
-<body><div id="loadingMessage" class="loading">
+<body>
+    <div id="loadingMessage" class="loading">
         <div class="loading-content">טוען את האתר... ⏳</div>
     </div>
-    
     <nav class="navbar hidden" id="navbar">
         <div class="nav-container">
             <img class="nav-logo" id="navLogo" alt="Logo">
@@ -72,16 +72,13 @@
             </ul>
         </div>
     </nav>
-    
     <a href="https://wa.me/972548463238" class="whatsapp-float" target="_blank">📱</a>
-    
     <div id="specialOfferBanner" class="special-offer-banner">
         <div class="container">
             <div class="special-offer-title" id="offerTitle"></div>
             <div class="special-offer-text" id="offerText"></div>
         </div>
     </div>
-    
     <div id="homePage" class="hero">
         <div class="hero-content">
             <img class="logo-img" id="heroLogo" alt="Logo">
@@ -90,7 +87,6 @@
             <div class="subline" id="subline"></div>
         </div>
     </div>
-    
     <div id="galleryPage" class="gallery-page">
         <div class="container">
             <div class="section-header">
@@ -100,7 +96,6 @@
             <div class="categories-grid" id="categoriesContainer"></div>
         </div>
     </div>
-    
     <div id="packagesSection" class="packages-section">
         <div class="container">
             <div class="section-header">
@@ -110,46 +105,48 @@
             <div class="packages-grid" id="packagesGrid"></div>
         </div>
     </div>
-    
-    <footer id=<script>
+    <footer id="contactSection" class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>צרו קשר</h3>
+                    <p id="footerPhone"></p>
+                    <p id="footerEmail"></p>
+                    <p id="footerLocation"></p>
+                </div>
+            </div>
+            <div style="text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1);">
+                <p>© 2026 חיה סגל צילום - כל הזכויות שמורות</p>
+            </div>
+        </div>
+    </footer>
+    <script>
         const SHEET_ID = '1Q9NOZyg_gFb-qQbjnYL7N_mH_gxHlOWU';
         const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
-        
         fetch(SHEET_URL)
             .then(r => r.text())
             .then(text => {
                 const json = JSON.parse(text.substring(47).slice(0, -2));
                 const data = {};
-                
                 json.table.rows.forEach((row, i) => {
                     if (i === 0) return;
                     const key = row.c[0]?.v;
                     const val = row.c[1]?.v;
                     if (key && val) data[key] = val;
                 });
-                
                 console.log('✅ Data loaded:', data);
-                
-                // Logo
                 document.getElementById('navLogo').src = data.logo || '';
                 document.getElementById('heroLogo').src = data.logo || '';
-                
-                // Hero
                 document.getElementById('tagline').textContent = data.hero_tagline || '';
                 document.getElementById('highlight').textContent = data.hero_highlight || '';
                 document.getElementById('subline').textContent = data.hero_subline || '';
-                
-                // Offer
                 if (data.show_offer === 'TRUE') {
                     document.getElementById('specialOfferBanner').classList.add('active');
                     document.getElementById('offerTitle').textContent = data.offer_title || '';
                     document.getElementById('offerText').textContent = data.offer_text || '';
                 }
-                
-                // Gallery
                 document.getElementById('galleryTitle').textContent = data.gallery_title || '';
                 document.getElementById('gallerySubtitle').textContent = data.gallery_subtitle || '';
-                
                 const cats = document.getElementById('categoriesContainer');
                 for (let i = 1; i <= 5; i++) {
                     const name = data[`cat${i}_name`];
@@ -159,11 +156,8 @@
                         cats.innerHTML += `<div class="category-card"><img src="${img}" class="category-image" alt="${name}"><div class="category-info"><div class="category-name">${name}</div><p class="category-desc">${desc || ''}</p></div></div>`;
                     }
                 }
-                
-                // Packages
                 document.getElementById('packagesTitle').textContent = data.packages_title || '';
                 document.getElementById('packagesSubtitle').textContent = data.packages_subtitle || '';
-                
                 const pkgs = document.getElementById('packagesGrid');
                 for (let i = 1; i <= 4; i++) {
                     const name = data[`pkg${i}_name`];
@@ -175,13 +169,9 @@
                         pkgs.innerHTML += `<div class="package-card"><div class="package-name">${name}</div><div class="package-price">${price}</div><p class="package-subtitle">${sub || ''}</p><ul class="package-features">${featList}</ul></div>`;
                     }
                 }
-                
-                // Footer
                 document.getElementById('footerPhone').textContent = 'טלפון: ' + (data.contact_phone || '');
                 document.getElementById('footerEmail').textContent = 'אימייל: ' + (data.contact_email || '');
                 document.getElementById('footerLocation').textContent = 'מיקום: ' + (data.contact_location || '');
-                
-                // Show
                 document.getElementById('loadingMessage').classList.add('hidden');
                 document.getElementById('navbar').classList.remove('hidden');
             })
@@ -189,7 +179,6 @@
                 console.error('❌ Error:', err);
                 document.getElementById('loadingMessage').innerHTML = '<div style="color:red;font-size:1.5rem;">שגיעה בטעינה ❌<br>אנא רענן את הדף</div>';
             });
-        
         function navigateTo(id) {
             document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
         }
