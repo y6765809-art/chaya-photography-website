@@ -11,7 +11,7 @@
 <title>חיה סגל צילום - צלמת ילדים ומשפחה בטבריה</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700&family=Frank+Ruhl+Libre:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700&family=Frank+Ruhl+Libre:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -85,7 +85,7 @@ body.has-banner #home{padding-top:122px}
 @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
 .logo-big{max-width:300px;width:75%;margin-bottom:22px;filter:drop-shadow(0 5px 18px rgba(212,165,116,0.28))}
 .hero-tagline{font-size:1.05rem;color:#888;margin-bottom:6px;letter-spacing:0.02em}
-.hero-highlight{font-family:'Frank Ruhl Libre',Georgia,serif;font-size:clamp(1.7rem,4vw,2.4rem);font-weight:700;color:var(--g);margin-bottom:10px;line-height:1.3}
+.hero-highlight{font-family:'Cormorant Garamond','Frank Ruhl Libre',Georgia,serif;font-size:clamp(2rem,4.8vw,3rem);font-weight:600;color:var(--g);margin-bottom:12px;line-height:1.2;letter-spacing:0.02em}
 .hero-subline{font-size:1rem;color:#777;margin-bottom:32px}
 .hero-cta{display:inline-flex;align-items:center;gap:9px;background:var(--g);color:var(--white);padding:14px 36px;border-radius:30px;text-decoration:none;font-size:1.05rem;font-weight:700;transition:all var(--tr);box-shadow:0 8px 28px rgba(212,165,116,0.38)}
 .hero-cta:hover{background:var(--gd);transform:translateY(-3px);box-shadow:0 14px 38px rgba(212,165,116,0.48)}
@@ -97,7 +97,7 @@ body.has-banner #home{padding-top:122px}
 
 /* SECTION COMMON */
 .sec-wrap{text-align:center;margin-bottom:55px}
-.sec-title{font-family:'Frank Ruhl Libre',Georgia,serif;font-size:clamp(1.9rem,4vw,2.7rem);margin-bottom:10px;line-height:1.2}
+.sec-title{font-family:'Cormorant Garamond','Frank Ruhl Libre',Georgia,serif;font-size:clamp(2.2rem,4.5vw,3.4rem);margin-bottom:10px;line-height:1.12;font-weight:600;letter-spacing:0.01em}
 .sec-sub{color:#888;font-size:0.98rem;max-width:480px;margin:0 auto}
 .sec-line{width:55px;height:3px;background:linear-gradient(to left,var(--g),var(--pt));border-radius:3px;margin:14px auto 0}
 
@@ -115,11 +115,13 @@ body.has-banner #home{padding-top:122px}
 
 /* GALLERY */
 .gallery{padding:100px 20px 80px}
-.gal-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:22px;max-width:1200px;margin:0 auto}
-.gal-card{flex:0 0 calc(33.333% - 16px);min-width:260px;max-width:370px}
-.gal-card{border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);transition:transform var(--tr),box-shadow var(--tr);cursor:pointer;position:relative;background:var(--c)}
-.gal-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-h)}
-.gal-img-wrap{overflow:hidden;height:270px}
+.gal-grid{columns:3 260px;column-gap:20px;max-width:1180px;margin:0 auto;padding:0 20px}
+.gal-card{break-inside:avoid;margin-bottom:20px;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);transition:transform var(--tr),box-shadow var(--tr);cursor:pointer;position:relative;background:var(--c);display:block;width:100%}
+.gal-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-h)}
+.gal-img-wrap{overflow:hidden}
+.gal-card:nth-child(3n+1) .gal-img-wrap{height:310px}
+.gal-card:nth-child(3n+2) .gal-img-wrap{height:240px}
+.gal-card:nth-child(3n) .gal-img-wrap{height:275px}
 .gal-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 0.65s ease;display:block}
 .gal-card:hover .gal-img-wrap img{transform:scale(1.08)}
 .gal-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.52) 0%,transparent 55%);opacity:0;transition:opacity var(--tr);display:flex;align-items:flex-end;justify-content:center;padding-bottom:18px}
@@ -149,20 +151,29 @@ body.has-banner #home{padding-top:122px}
 /* PACKAGES */
 .pkgs{padding:90px 20px;background:linear-gradient(160deg,var(--c) 0%,var(--white) 100%)}
 .pkgs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:25px;max-width:1200px;margin:0 auto}
-.pkg{background:var(--white);border-radius:var(--r);padding:35px 30px;box-shadow:var(--shadow);transition:transform var(--tr),box-shadow var(--tr);position:relative;border:2px solid transparent}
-.pkg:hover{transform:translateY(-8px);box-shadow:var(--shadow-h)}
-.pkg.featured{border-color:var(--g);transform:scale(1.03)}
-.pkg.featured:hover{transform:scale(1.03) translateY(-7px)}
-.pkg-badge{position:absolute;top:-15px;right:50%;transform:translateX(50%);background:linear-gradient(135deg,var(--g),var(--gd));color:var(--white);padding:5px 20px;border-radius:20px;font-size:0.78rem;font-weight:700;white-space:nowrap;box-shadow:0 4px 14px rgba(212,165,116,0.42)}
-.pkg-name{font-family:'Frank Ruhl Libre',Georgia,serif;font-size:1.75rem;margin-bottom:8px}
-.pkg-price{font-size:2.3rem;color:var(--g);font-weight:700;margin-bottom:4px;line-height:1}
-.pkg-sub{color:#999;margin-bottom:18px;font-size:0.88rem;padding-bottom:18px;border-bottom:1px solid #f0ece8}
-.pkg-feat{list-style:none;margin-bottom:18px}
-.pkg-feat li{padding:8px 0;border-bottom:1px solid #f8f5f2;font-size:0.92rem;display:flex;align-items:center;gap:9px}
-.pkg-feat li::before{content:'✓';color:var(--g);font-weight:700;font-size:0.82rem;flex-shrink:0}
-.pkg-bonus{color:var(--gd);font-size:0.83rem;font-weight:600;margin-bottom:20px;padding:9px 13px;background:rgba(212,165,116,0.08);border-radius:9px}
-.pkg-btn{display:block;text-align:center;background:var(--g);color:var(--white);padding:12px 20px;border-radius:25px;text-decoration:none;font-weight:700;font-size:0.92rem;transition:all var(--tr)}
-.pkg-btn:hover{background:var(--gd);transform:translateY(-2px);box-shadow:0 6px 18px rgba(212,165,116,0.38)}
+.pkg{background:var(--white);border-radius:22px;padding:40px 32px 36px;box-shadow:0 4px 28px rgba(0,0,0,0.07);transition:transform var(--tr),box-shadow var(--tr);position:relative;border:1.5px solid #EDE5DC;overflow:hidden}
+.pkg::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--g),var(--pt))}
+.pkg:hover{transform:translateY(-10px);box-shadow:0 24px 56px rgba(0,0,0,0.13)}
+.pkg.featured{background:linear-gradient(160deg,#2C2318 0%,#3a2c20 100%);border-color:var(--g);transform:scale(1.04)}
+.pkg.featured::after{height:0}
+.pkg.featured:hover{transform:scale(1.04) translateY(-8px)}
+.pkg-badge{position:absolute;top:20px;left:20px;background:linear-gradient(135deg,var(--g),var(--gd));color:var(--white);padding:5px 16px;border-radius:20px;font-size:0.75rem;font-weight:700;white-space:nowrap;box-shadow:0 4px 14px rgba(212,165,116,0.5);letter-spacing:0.03em}
+.pkg-name{font-family:'Cormorant Garamond','Frank Ruhl Libre',Georgia,serif;font-size:2rem;margin-bottom:10px;font-weight:600;line-height:1}
+.pkg.featured .pkg-name{color:var(--gl)}
+.pkg-price{font-size:3rem;color:var(--g);font-weight:700;margin-bottom:3px;line-height:1;letter-spacing:-0.02em}
+.pkg.featured .pkg-price{color:var(--gl)}
+.pkg-sub{color:#aaa;margin-bottom:22px;font-size:0.85rem;padding-bottom:20px;border-bottom:1px solid #f0ece8}
+.pkg.featured .pkg-sub{color:rgba(255,255,255,0.45);border-bottom-color:rgba(255,255,255,0.1)}
+.pkg-feat{list-style:none;margin-bottom:20px}
+.pkg-feat li{padding:10px 0;border-bottom:1px solid #f8f5f2;font-size:0.91rem;display:flex;align-items:center;gap:10px;color:#555}
+.pkg.featured .pkg-feat li{border-bottom-color:rgba(255,255,255,0.08);color:rgba(255,255,255,0.82)}
+.pkg-feat li::before{content:'✦';color:var(--g);font-size:0.72rem;flex-shrink:0}
+.pkg.featured .pkg-feat li::before{color:var(--gl)}
+.pkg-bonus{font-size:0.82rem;font-weight:600;margin-bottom:22px;padding:10px 14px;background:rgba(212,165,116,0.09);border-radius:10px;color:var(--gd);border:1px solid rgba(212,165,116,0.2)}
+.pkg.featured .pkg-bonus{background:rgba(255,255,255,0.07);color:var(--gl);border-color:rgba(212,165,116,0.3)}
+.pkg-btn{display:block;text-align:center;background:linear-gradient(135deg,var(--g),var(--gd));color:var(--white);padding:14px 20px;border-radius:30px;text-decoration:none;font-weight:700;font-size:0.93rem;transition:all var(--tr);letter-spacing:0.02em;box-shadow:0 4px 16px rgba(212,165,116,0.3)}
+.pkg-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(212,165,116,0.45)}
+.pkg.featured .pkg-btn{background:var(--g);box-shadow:0 6px 22px rgba(212,165,116,0.5)}
 
 /* TESTIMONIALS */
 .testimonials{padding:90px 20px;background:var(--white)}
@@ -248,8 +259,8 @@ body.has-banner #home{padding-top:122px}
   .hero-icons{gap:20px}
   .hero-icon img{width:65px;height:65px}
   .stats-grid{grid-template-columns:1fr 1fr;gap:28px}
-  .gal-grid{gap:16px}
-  .gal-card{flex:0 0 100%;max-width:440px}
+  .gal-grid{columns:1}
+  .gal-card:nth-child(n) .gal-img-wrap{height:260px}
   .pkgs-grid{grid-template-columns:1fr}
   .pkg.featured{transform:scale(1)}
   .test-grid{grid-template-columns:1fr}
@@ -264,7 +275,7 @@ body.has-banner #home{padding-top:122px}
 }
 @media(min-width:769px) and (max-width:1100px){
   .stats-grid{grid-template-columns:repeat(4,1fr)}
-  .gal-card{flex:0 0 calc(50% - 12px);max-width:none}
+  .gal-grid{columns:2}
   .pkgs-grid{grid-template-columns:repeat(2,1fr)}
   .test-grid{grid-template-columns:repeat(2,1fr)}
 }
@@ -394,6 +405,12 @@ async function loadData(){
   }
 }
 
+function mkStat(d,nk,lk,defN,defL){
+  var n=d[nk],l=d[lk];
+  if(n===''||l==='') return '';
+  var val=n||defN; var lab=l||defL;
+  return '<div class="stat"><span class="stat-num" data-target="'+val+'">0</span><span class="stat-label">'+lab+'</span></div>';
+}
 function render(d){
   // Gallery
   galItems=[];
@@ -490,14 +507,12 @@ function render(d){
 +'</div>'
 +'</section>'
 
-+'<div class="stats">'
-+'<div class="stats-grid">'
-+'<div class="stat"><span class="stat-num" data-target="500">0</span><span class="stat-label">משפחות מרוצות</span></div>'
-+'<div class="stat"><span class="stat-num" data-target="7">0</span><span class="stat-label">שנות ניסיון</span></div>'
-+'<div class="stat"><span class="stat-num" data-target="5000">0</span><span class="stat-label">תמונות מעובדות</span></div>'
-+'<div class="stat"><span class="stat-num" data-target="100">0</span><span class="stat-label">% שביעות רצון</span></div>'
-+'</div>'
-+'</div>'
++(d.hide_stats==='true'?'':'<div class="stats"><div class="stats-grid">'
++mkStat(d,'stat1_num','stat1_label','500','משפחות מרוצות')
++mkStat(d,'stat2_num','stat2_label','7','שנות ניסיון')
++mkStat(d,'stat3_num','stat3_label','5000','תמונות מעובדות')
++mkStat(d,'stat4_num','stat4_label','100','% שביעות רצון')
++'</div></div>')
 
 +'<section id="gallery" class="gallery">'
 +'<div class="sec-wrap"><h2 class="sec-title">'+(d.gallery_title||'הגלריה שלנו')+'</h2><p class="sec-sub">'+(d.gallery_subtitle||'')+'</p><div class="sec-line"></div></div>'
@@ -509,15 +524,15 @@ function render(d){
 +'<div class="pkgs-grid">'+pkgs+'</div>'
 +'</section>'
 
-+'<section id="testimonials" class="testimonials">'
++(d.hide_testimonials==='true'?'':'<section id="testimonials" class="testimonials">'
 +'<div class="sec-wrap"><h2 class="sec-title">'+(d.testimonials_title||'מה הלקוחות אומרים')+'</h2><p class="sec-sub">'+(d.testimonials_subtitle||'')+'</p><div class="sec-line"></div></div>'
 +'<div class="test-grid">'+tests+'</div>'
-+'</section>'
++'</section>')
 
-+'<section id="faq" class="faq">'
++(d.hide_faq==='true'?'':'<section id="faq" class="faq">'
 +'<div class="sec-wrap"><h2 class="sec-title">'+(d.faq_title||'שאלות נפוצות')+'</h2><p class="sec-sub">'+(d.faq_subtitle||'')+'</p><div class="sec-line"></div></div>'
 +'<div class="faq-list">'+faqs+'</div>'
-+'</section>'
++'</section>')
 
 +'<section id="contact" class="contact">'
 +'<div class="contact-inner">'
