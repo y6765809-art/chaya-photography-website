@@ -25,6 +25,14 @@
 html{scroll-behavior:smooth}
 body{font-family:'Assistant',system-ui,sans-serif;background:var(--white);color:var(--t);line-height:1.6;overflow-x:hidden}
 
+/* SALE BANNER */
+.sale-banner{display:none;background:linear-gradient(135deg,var(--g),var(--pt));color:var(--white);text-align:center;padding:10px 20px;font-size:0.92rem;font-weight:700;position:fixed;top:0;left:0;right:0;z-index:1000;letter-spacing:0.01em;box-shadow:0 2px 10px rgba(212,165,116,0.4)}
+.sale-banner.visible{display:block}
+.sale-banner+.navbar{top:42px}
+.sale-banner.visible~#app .navbar{top:42px}
+body.has-banner .navbar{top:42px}
+body.has-banner #home{padding-top:122px}
+
 /* LOADING */
 #loading{position:fixed;inset:0;background:var(--white);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.5s,visibility 0.5s}
 #loading.hidden{opacity:0;visibility:hidden;pointer-events:none}
@@ -267,6 +275,9 @@ body{font-family:'Assistant',system-ui,sans-serif;background:var(--white);color:
   <div class="spinner"></div>
   <div class="loading-text">חיה סגל צילום</div>
 </div>
+
+<!-- SALE BANNER -->
+<div class="sale-banner" id="saleBanner"></div>
 
 <!-- SCROLL PROGRESS -->
 <div id="scrollProg"></div>
@@ -556,6 +567,15 @@ function render(d){
 +'</a>'
 
 +'<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:\'smooth\'})" aria-label="חזרה למעלה">↑</button>';
+
+  // Sale banner
+  var banner=document.getElementById('saleBanner');
+  if(banner&&d.sale_active==='true'&&d.sale_text){
+    var emoji=d.sale_emoji||'🎉';
+    banner.textContent=emoji+' '+d.sale_text;
+    banner.classList.add('visible');
+    document.body.classList.add('has-banner');
+  }
 
   renderLbDots();
   initApp();
