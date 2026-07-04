@@ -741,28 +741,47 @@ async function submitForm(e){
 
   btn.textContent='שולח...';btn.disabled=true;
   try{
+    var autoReply=emailVal
+      ? 'שלום '+name+' 😊\n\n'
+        +'תודה רבה על פנייתך לחיה סגל צילום!\n'
+        +'קיבלנו את הפרטים שלך ונחזור אליך בהקדם האפשרי.\n\n'
+        +'📋 פרטי הפנייה:\n'
+        +'━━━━━━━━━━━━━━━━━━\n'
+        +'שם: '+name+'\n'
+        +'טלפון: '+phone+'\n'
+        +(type?'סוג צילום: '+type+'\n':'')
+        +(msg?'הודעה: '+msg+'\n':'')
+        +'━━━━━━━━━━━━━━━━━━\n\n'
+        +'בברכה,\n'
+        +'חיה סגל צילום 📸\n'
+        +PHONE
+      : '';
+    var payload={
+      name:name,phone:phone,
+      'סוג צילום':type||'לא צוין',
+      email:emailVal||'לא צוין',
+      message:msg||'—',
+      _subject:'פנייה חדשה מהאתר — '+name,
+      _template:'table'
+    };
+    if(emailVal){payload._replyto=emailVal;payload._autoresponse=autoReply;}
     var res=await fetch('https://formsubmit.co/ajax/'+EMAIL,{
       method:'POST',
       headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify({
-        name:name,phone:phone,
-        'סוג צילום':type||'לא צוין',
-        email:emailVal||'לא צוין',
-        message:msg||'—',
-        _subject:'פנייה חדשה מהאתר — '+name,
-        _template:'table'
-      })
+      body:JSON.stringify(payload)
     });
     btn.disabled=false;btn.textContent='📨 שלחו פנייה';
     if(res.ok){
-      if(note){note.textContent='ההודעה נשלחה! נחזור אליכם בהקדם 😊';note.style.color='#2E7D52';}
+      var successMsg='ההודעה נשלחה! נחזור אליכם בהקדם 😊';
+      if(emailVal) successMsg+=' — אישור נשלח למייל שלכם';
+      if(note){note.textContent=successMsg;note.style.color='#2E7D52';}
       form.reset();
     }else{
-      if(note){note.textContent='שגיאה בשליחה — נסו ליצור קשר בוואטסאפ';note.style.color='#B84040';}
+      if(note){note.textContent='שגיאה בשליחה — נסו ליצור קשר בטלפון';note.style.color='#B84040';}
     }
   }catch(err){
     btn.disabled=false;btn.textContent='📨 שלחו פנייה';
-    if(note){note.textContent='שגיאה בשליחה — נסו ליצור קשר בוואטסאפ';note.style.color='#B84040';}
+    if(note){note.textContent='שגיאה בשליחה — נסו ליצור קשר בטלפון: '+PHONE;note.style.color='#B84040';}
   }
 }
 
