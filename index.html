@@ -312,6 +312,9 @@ var WA_NUM='972548463238';
 var PHONE='054-846-3238';
 var EMAIL='chaya054846@gmail.com';
 var SHEET_ID='1Q9NOZyg_gFb-qQbjnYL7N_mH_gxHlOWU';
+var EJS_PUBLIC='';   // ← Public Key מ-emailjs.com
+var EJS_SERVICE='';  // ← Service ID
+var EJS_TMPL='';     // ← Template ID
 
 var FB={
   logo:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/logo.png",
@@ -534,7 +537,7 @@ function render(d){
 +'</div>'
 +'<div class="form-row">'
 +'<div class="form-group"><label for="cf-type">סוג צילום</label><select id="cf-type" name="type"><option value="">בחרו סוג צילום</option><option>חלאקה</option><option>ניובורן</option><option>סמאש קייק</option><option>משפחה</option><option>בת מצווה</option><option>אחר</option></select></div>'
-+'<div class="form-group"><label for="cf-email">אימייל</label><input type="email" id="cf-email" name="email" placeholder="your@email.com" autocomplete="email"></div>'
++'<div class="form-group"><label for="cf-email">אימייל *</label><input type="email" id="cf-email" name="email" required placeholder="your@email.com" autocomplete="email"></div>'
 +'</div>'
 +'<div class="form-row"><div class="form-group form-full"><label for="cf-msg">הודעה</label><textarea id="cf-msg" name="message" placeholder="כתבו כאן כל מה שתרצו..."></textarea></div></div>'
 +'<button type="submit" class="form-submit">📨 שלחו פנייה</button>'
@@ -741,43 +744,63 @@ async function submitForm(e){
 
   btn.textContent='שולח...';btn.disabled=true;
   try{
-    var autoReply=emailVal
-      ? 'שלום '+name+' 😊\n\n'
-        +'תודה רבה על פנייתך לחיה סגל צילום!\n'
-        +'קיבלנו את הפרטים שלך ונחזור אליך בהקדם האפשרי.\n\n'
-        +'📋 פרטי הפנייה:\n'
-        +'━━━━━━━━━━━━━━━━━━\n'
-        +'שם: '+name+'\n'
-        +'טלפון: '+phone+'\n'
-        +(type?'סוג צילום: '+type+'\n':'')
-        +(msg?'הודעה: '+msg+'\n':'')
-        +'━━━━━━━━━━━━━━━━━━\n\n'
-        +'בברכה,\n'
-        +'חיה סגל צילום 📸\n'
-        +PHONE
-      : '';
-    var payload={
-      name:name,phone:phone,
-      'סוג צילום':type||'לא צוין',
-      email:emailVal||'לא צוין',
-      message:msg||'—',
-      _subject:'פנייה חדשה מהאתר — '+name,
-      _template:'table'
-    };
-    if(emailVal){payload._replyto=emailVal;payload._autoresponse=autoReply;}
-    var res=await fetch('https://formsubmit.co/ajax/'+EMAIL,{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify(payload)
+    // Build beautiful HTML confirmation email
+    var logoUrl='https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/logo.png';
+    var rows='';
+    var rowBg=['#FAF7F4','#fff'];
+    var fields=[['שם',name],['טלפון',phone],['סוג צילום',type||'—'],['הודעה',msg||'—']];
+    fields.forEach(function(f,i){
+      rows+='<tr style="background:'+rowBg[i%2]+'"><td style="padding:10px 16px;color:#999;font-size:0.85rem;width:110px;border-bottom:1px solid #EDE5DC">'+f[0]+'</td><td style="padding:10px 16px;font-weight:600;color:#2C2C2C;border-bottom:1px solid #EDE5DC">'+f[1]+'</td></tr>';
     });
+    var htmlBody='<!DOCTYPE html><html dir="rtl" lang="he"><head><meta charset="UTF-8"></head>'
+      +'<body style="margin:0;padding:0;background:#FAF7F4;font-family:Arial,Helvetica,sans-serif;direction:rtl">'
+      +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#FAF7F4;padding:30px 16px"><tr><td align="center">'
+      +'<table width="560" cellpadding="0" cellspacing="0" style="max-width:100%;background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 6px 30px rgba(0,0,0,0.10)">'
+      // Header
+      +'<tr><td style="background:linear-gradient(135deg,#D4A574 0%,#e8b4c0 100%);padding:36px 40px;text-align:center">'
+      +'<img src="'+logoUrl+'" alt="חיה סגל צילום" style="max-height:65px;max-width:200px;display:block;margin:0 auto 14px">'
+      +'<div style="color:#fff;font-size:1.35rem;font-weight:700">חיה סגל צילום</div>'
+      +'<div style="color:rgba(255,255,255,0.82);font-size:0.85rem;margin-top:5px">צלמת ילדים ומשפחה | טבריה</div>'
+      +'</td></tr>'
+      // Body
+      +'<tr><td style="padding:38px 40px">'
+      +'<p style="margin:0 0 8px;font-size:1.2rem;font-weight:700;color:#2C2C2C">שלום '+name+' 😊</p>'
+      +'<p style="margin:0 0 26px;color:#666;line-height:1.75;font-size:0.96rem">תודה רבה על פנייתך!<br>קיבלנו את בקשתך ונחזור אליך בהקדם האפשרי.</p>'
+      +'<div style="background:#FAF7F4;border-radius:12px;overflow:hidden;margin-bottom:28px;border:1px solid #EDE5DC">'
+      +'<div style="background:#D4A574;padding:11px 16px"><span style="color:#fff;font-weight:700;font-size:0.88rem">📋 פרטי הפנייה שלך</span></div>'
+      +'<table width="100%" cellpadding="0" cellspacing="0">'+rows+'</table></div>'
+      +'<p style="margin:0 0 22px;color:#999;font-size:0.88rem;line-height:1.65">לשאלות נוספות ניתן לפנות ישירות בטלפון.</p>'
+      +'<div style="text-align:center"><a href="tel:0548463238" style="display:inline-block;background:linear-gradient(135deg,#D4A574,#B8936A);color:#fff;text-decoration:none;padding:13px 38px;border-radius:30px;font-weight:700;font-size:0.92rem">📞 054-846-3238</a></div>'
+      +'</td></tr>'
+      // Footer
+      +'<tr><td style="background:#2C2C2C;padding:22px 40px;text-align:center">'
+      +'<p style="margin:0 0 4px;color:#aaa;font-size:0.82rem">חיה סגל צילום | טבריה, ישראל</p>'
+      +'<p style="margin:0;color:#555;font-size:0.76rem">מייל זה נשלח אוטומטית — אין צורך להשיב</p>'
+      +'</td></tr>'
+      +'</table></td></tr></table></body></html>';
+
+    // Send to owner via formsubmit
+    var payload={name:name,phone:phone,'סוג צילום':type||'לא צוין',email:emailVal||'לא צוין',message:msg||'—',_subject:'פנייה חדשה מהאתר — '+name,_template:'table'};
+    if(emailVal){payload._replyto=emailVal;}
+    var res=await fetch('https://formsubmit.co/ajax/'+EMAIL,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)});
     btn.disabled=false;btn.textContent='📨 שלחו פנייה';
+
+    // Send beautiful HTML confirmation to client only (200/month EmailJS free limit)
+    if(emailVal&&EJS_PUBLIC&&EJS_SERVICE&&EJS_TMPL){
+      fetch('https://api.emailjs.com/api/v1.0/email/send',{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({service_id:EJS_SERVICE,template_id:EJS_TMPL,user_id:EJS_PUBLIC,
+          template_params:{to_email:emailVal,to_name:name,subject:'קיבלנו את פנייתך — חיה סגל צילום',html_content:htmlBody}})
+      }).catch(function(){});
+    }
+
     if(res.ok){
       var successMsg='ההודעה נשלחה! נחזור אליכם בהקדם 😊';
       if(emailVal) successMsg+=' — אישור נשלח למייל שלכם';
       if(note){note.textContent=successMsg;note.style.color='#2E7D52';}
       form.reset();
     }else{
-      if(note){note.textContent='שגיאה בשליחה — נסו ליצור קשר בטלפון';note.style.color='#B84040';}
+      if(note){note.textContent='שגיאה בשליחה — נסו ליצור קשר בטלפון: '+PHONE;note.style.color='#B84040';}
     }
   }catch(err){
     btn.disabled=false;btn.textContent='📨 שלחו פנייה';
