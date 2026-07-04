@@ -312,9 +312,7 @@ var WA_NUM='972548463238';
 var PHONE='054-846-3238';
 var EMAIL='chaya054846@gmail.com';
 var SHEET_ID='1Q9NOZyg_gFb-qQbjnYL7N_mH_gxHlOWU';
-var EJS_PUBLIC='';   // ← Public Key מ-emailjs.com
-var EJS_SERVICE='';  // ← Service ID
-var EJS_TMPL='';     // ← Template ID
+var EJS_PUBLIC='';var EJS_SERVICE='';var EJS_TMPL=''; // loaded from content.json
 
 var FB={
   logo:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/logo.png",
@@ -455,6 +453,9 @@ function render(d){
       +'</div>';
   }
 
+  if(d.ejs_public) EJS_PUBLIC=d.ejs_public;
+  if(d.ejs_service) EJS_SERVICE=d.ejs_service;
+  if(d.ejs_template) EJS_TMPL=d.ejs_template;
   var phone=d.contact_phone||PHONE;
   var email=d.contact_email||EMAIL;
   var loc=d.contact_location||'טבריה, ישראל';
