@@ -171,7 +171,7 @@ body.has-banner #home{padding-top:122px}
 .pkg.featured .pkg-feat li::before{color:var(--gl)}
 .pkg-bonus{font-size:0.82rem;font-weight:600;margin-bottom:22px;padding:10px 14px;background:rgba(212,165,116,0.09);border-radius:10px;color:var(--gd);border:1px solid rgba(212,165,116,0.2)}
 .pkg.featured .pkg-bonus{background:rgba(255,255,255,0.07);color:var(--gl);border-color:rgba(212,165,116,0.3)}
-.pkg-btn{display:block;text-align:center;background:linear-gradient(135deg,var(--g),var(--gd));color:var(--white);padding:14px 20px;border-radius:30px;text-decoration:none;font-weight:700;font-size:0.93rem;transition:all var(--tr);letter-spacing:0.02em;box-shadow:0 4px 16px rgba(212,165,116,0.3)}
+.pkg-btn{display:block;width:100%;text-align:center;background:linear-gradient(135deg,var(--g),var(--gd));color:var(--white);padding:14px 20px;border-radius:30px;text-decoration:none;font-weight:700;font-size:0.93rem;transition:all var(--tr);letter-spacing:0.02em;box-shadow:0 4px 16px rgba(212,165,116,0.3);cursor:pointer;border:none;font-family:inherit}
 .pkg-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(212,165,116,0.45)}
 .pkg.featured .pkg-btn{background:var(--g);box-shadow:0 6px 22px rgba(212,165,116,0.5)}
 
@@ -376,6 +376,14 @@ function wa(msg){
   return 'https://wa.me/'+WA_NUM+(msg?'?text='+encodeURIComponent(msg):'');
 }
 
+function bookPkg(pkgName){
+  navTo('contact');
+  setTimeout(function(){
+    var el=document.getElementById('cf-msg');
+    if(el&&!el.value) el.value='שלום, אני מעוניין/ת בחבילת '+pkgName+' 📸';
+  },400);
+}
+
 function imgFb(name){
   return "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='270'%3E%3Crect fill='%23f2dfce' width='400' height='270'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.35em' fill='%23b8936a' font-size='20' font-family='sans-serif'%3E"+encodeURIComponent(name)+"%3C/text%3E%3C/svg%3E";
 }
@@ -444,7 +452,7 @@ function render(d){
         +'<div class="pkg-sub">'+(ps||'')+'</div>'
         +'<ul class="pkg-feat">'+fl+'</ul>'
         +(pb?'<div class="pkg-bonus">'+pb+'</div>':'')
-        +'<a href="'+wa(msg)+'" class="pkg-btn" target="_blank" rel="noopener">📅 הזמן עכשיו</a>'
+        +'<button class="pkg-btn" onclick="bookPkg(\''+pn.replace(/'/g,"\\'")+'\')" type="button">📅 הזמן עכשיו</button>'
         +'</div>';
     }
   }
