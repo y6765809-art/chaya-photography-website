@@ -747,37 +747,80 @@ async function submitForm(e){
     // Build beautiful HTML confirmation email
     var logoUrl='https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/logo.png';
     var rows='';
-    var rowBg=['#FAF7F4','#fff'];
-    var fields=[['שם',name],['טלפון',phone],['סוג צילום',type||'—'],['הודעה',msg||'—']];
-    fields.forEach(function(f,i){
-      rows+='<tr style="background:'+rowBg[i%2]+'"><td style="padding:10px 16px;color:#999;font-size:0.85rem;width:110px;border-bottom:1px solid #EDE5DC">'+f[0]+'</td><td style="padding:10px 16px;font-weight:600;color:#2C2C2C;border-bottom:1px solid #EDE5DC">'+f[1]+'</td></tr>';
+    var flds=[['שם',name],['טלפון',phone],type?['סוג צילום',type]:null,msg?['הודעה',msg]:null].filter(Boolean);
+    flds.forEach(function(f,i){
+      rows+='<tr style="background:'+(i%2===0?'#FBF7F3':'#fff')+'">'
+        +'<td style="padding:12px 20px;color:#B8A89A;font-size:0.82rem;width:100px;border-bottom:1px solid #EDE0D4;font-family:Arial,sans-serif">'+f[0]+'</td>'
+        +'<td style="padding:12px 20px;font-weight:600;color:#2C2318;border-bottom:1px solid #EDE0D4;font-family:Arial,sans-serif">'+f[1]+'</td>'
+        +'</tr>';
     });
-    var htmlBody='<!DOCTYPE html><html dir="rtl" lang="he"><head><meta charset="UTF-8"></head>'
-      +'<body style="margin:0;padding:0;background:#FAF7F4;font-family:Arial,Helvetica,sans-serif;direction:rtl">'
-      +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#FAF7F4;padding:30px 16px"><tr><td align="center">'
-      +'<table width="560" cellpadding="0" cellspacing="0" style="max-width:100%;background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 6px 30px rgba(0,0,0,0.10)">'
-      // Header
-      +'<tr><td style="background:linear-gradient(135deg,#D4A574 0%,#e8b4c0 100%);padding:36px 40px;text-align:center">'
-      +'<img src="'+logoUrl+'" alt="חיה סגל צילום" style="max-height:65px;max-width:200px;display:block;margin:0 auto 14px">'
-      +'<div style="color:#fff;font-size:1.35rem;font-weight:700">חיה סגל צילום</div>'
-      +'<div style="color:rgba(255,255,255,0.82);font-size:0.85rem;margin-top:5px">צלמת ילדים ומשפחה | טבריה</div>'
-      +'</td></tr>'
-      // Body
-      +'<tr><td style="padding:38px 40px">'
-      +'<p style="margin:0 0 8px;font-size:1.2rem;font-weight:700;color:#2C2C2C">שלום '+name+' 😊</p>'
-      +'<p style="margin:0 0 26px;color:#666;line-height:1.75;font-size:0.96rem">תודה רבה על פנייתך!<br>קיבלנו את בקשתך ונחזור אליך בהקדם האפשרי.</p>'
-      +'<div style="background:#FAF7F4;border-radius:12px;overflow:hidden;margin-bottom:28px;border:1px solid #EDE5DC">'
-      +'<div style="background:#D4A574;padding:11px 16px"><span style="color:#fff;font-weight:700;font-size:0.88rem">📋 פרטי הפנייה שלך</span></div>'
-      +'<table width="100%" cellpadding="0" cellspacing="0">'+rows+'</table></div>'
-      +'<p style="margin:0 0 22px;color:#999;font-size:0.88rem;line-height:1.65">לשאלות נוספות ניתן לפנות ישירות בטלפון.</p>'
-      +'<div style="text-align:center"><a href="tel:0548463238" style="display:inline-block;background:linear-gradient(135deg,#D4A574,#B8936A);color:#fff;text-decoration:none;padding:13px 38px;border-radius:30px;font-weight:700;font-size:0.92rem">📞 054-846-3238</a></div>'
-      +'</td></tr>'
-      // Footer
-      +'<tr><td style="background:#2C2C2C;padding:22px 40px;text-align:center">'
-      +'<p style="margin:0 0 4px;color:#aaa;font-size:0.82rem">חיה סגל צילום | טבריה, ישראל</p>'
-      +'<p style="margin:0;color:#555;font-size:0.76rem">מייל זה נשלח אוטומטית — אין צורך להשיב</p>'
-      +'</td></tr>'
-      +'</table></td></tr></table></body></html>';
+    var typePhrase=type?' לצילום <strong style="color:#C9976A">'+type+'</strong>':'';
+    var htmlBody=
+     '<!DOCTYPE html><html dir="rtl" lang="he"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>'
+    +'<body style="margin:0;padding:0;background:#F5EFEA;direction:rtl">'
+    +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#F5EFEA;padding:40px 16px"><tr><td align="center">'
+    +'<table width="580" cellpadding="0" cellspacing="0" style="max-width:100%;background:#FFFDF9;border-radius:24px;overflow:hidden;box-shadow:0 8px 48px rgba(180,130,90,0.20)">'
+
+    // ── Header ──
+    +'<tr><td style="background:linear-gradient(160deg,#C9976A 0%,#D4A574 45%,#E8C0CC 100%);padding:50px 48px 44px;text-align:center">'
+    +'<img src="'+logoUrl+'" alt="חיה סגל צילום" style="max-height:78px;max-width:230px;display:block;margin:0 auto 18px;filter:drop-shadow(0 4px 14px rgba(0,0,0,0.18))">'
+    +'<div style="color:#fff;font-size:1.5rem;font-weight:700;letter-spacing:0.04em;text-shadow:0 2px 8px rgba(0,0,0,0.15);font-family:Georgia,serif">חיה סגל צילום</div>'
+    +'<div style="color:rgba(255,255,255,0.88);font-size:0.86rem;margin-top:7px;letter-spacing:0.1em;font-family:Arial,sans-serif">✦&nbsp;&nbsp;צלמת ילדים ומשפחה&nbsp;&nbsp;✦</div>'
+    +'</td></tr>'
+
+    // ── Confirmation badge ──
+    +'<tr><td style="background:#FFFDF9;padding:26px 48px 0;text-align:center">'
+    +'<div style="display:inline-block;background:linear-gradient(135deg,#E8F5EE,#D4EDE2);border:1.5px solid #82C4A0;border-radius:30px;padding:10px 26px;font-size:0.88rem;font-weight:700;color:#2E7A50;letter-spacing:0.03em;font-family:Arial,sans-serif">'
+    +'&#10003;&nbsp;&nbsp;הפנייה התקבלה בהצלחה'
+    +'</div>'
+    +'</td></tr>'
+
+    // ── Body ──
+    +'<tr><td style="padding:32px 48px 40px">'
+
+    // Greeting
+    +'<h2 style="margin:0 0 14px;font-size:1.45rem;color:#2C2318;font-family:Georgia,serif;font-weight:700">שלום '+name+' &#128522;</h2>'
+    +'<p style="margin:0 0 10px;color:#6B5A4E;line-height:1.9;font-size:0.96rem;font-family:Arial,sans-serif">תודה רבה שפנית אלינו — שמחנו לקבל את הודעתך!</p>'
+    +'<p style="margin:0 0 30px;color:#6B5A4E;line-height:1.9;font-size:0.96rem;font-family:Arial,sans-serif">קיבלנו את כל הפרטים'+typePhrase+' ונחזור אליך בהקדם לתיאום מועד מושלם.</p>'
+
+    // Divider
+    +'<div style="text-align:center;margin-bottom:28px"><span style="color:#D4A574;font-size:0.95rem;letter-spacing:10px">✦ ✦ ✦</span></div>'
+
+    // Details card
+    +'<div style="background:#FBF7F3;border-radius:16px;overflow:hidden;border:1px solid #EDE0D4;margin-bottom:30px">'
+    +'<div style="background:linear-gradient(135deg,#C9976A,#D4A574);padding:13px 22px">'
+    +'<span style="color:#fff;font-weight:700;font-size:0.89rem;font-family:Arial,sans-serif;letter-spacing:0.02em">&#128203;&nbsp; פרטי הפנייה שלך</span>'
+    +'</div>'
+    +'<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse">'+rows+'</table>'
+    +'</div>'
+
+    // What's next
+    +'<div style="background:linear-gradient(135deg,#FBF3EC,#FDF5F8);border-radius:14px;padding:22px 24px;margin-bottom:34px;border-right:4px solid #D4A574">'
+    +'<p style="margin:0 0 7px;font-weight:700;color:#2C2318;font-size:0.9rem;font-family:Arial,sans-serif">&#127775;&nbsp; מה קורה עכשיו?</p>'
+    +'<p style="margin:0;color:#7A6558;font-size:0.88rem;line-height:1.8;font-family:Arial,sans-serif">'
+    +'חיה תיצור איתך קשר בהקדם לתיאום מועד הצילום.<br>'
+    +'ניתן גם לפנות ישירות בטלפון בכל שאלה.'
+    +'</p>'
+    +'</div>'
+
+    // CTA
+    +'<div style="text-align:center">'
+    +'<a href="tel:0548463238" style="display:inline-block;background:linear-gradient(135deg,#C9976A,#B8836A);color:#fff;text-decoration:none;padding:15px 46px;border-radius:30px;font-weight:700;font-size:0.95rem;font-family:Arial,sans-serif;letter-spacing:0.02em;box-shadow:0 6px 24px rgba(180,130,90,0.38)">&#128222;&nbsp; 054-846-3238</a>'
+    +'</div>'
+
+    +'</td></tr>'
+
+    // Separator
+    +'<tr><td style="padding:0 48px"><div style="border-top:1px solid #EDE0D4"></div></td></tr>'
+
+    // Footer
+    +'<tr><td style="padding:26px 48px 30px;text-align:center">'
+    +'<p style="margin:0 0 5px;color:#C9976A;font-size:0.88rem;font-weight:700;font-family:Arial,sans-serif;letter-spacing:0.05em">חיה סגל צילום</p>'
+    +'<p style="margin:0 0 4px;color:#B0A098;font-size:0.8rem;font-family:Arial,sans-serif">טבריה, ישראל&nbsp;&#8226;&nbsp;054-846-3238</p>'
+    +'<p style="margin:0;color:#CEC4BC;font-size:0.74rem;font-family:Arial,sans-serif">מייל זה נשלח אוטומטית — אין צורך להשיב</p>'
+    +'</td></tr>'
+
+    +'</table></td></tr></table></body></html>';
 
     // Send to owner via formsubmit
     var payload={name:name,phone:phone,'סוג צילום':type||'לא צוין',email:emailVal||'לא צוין',message:msg||'—',_subject:'פנייה חדשה מהאתר — '+name,_template:'table'};
