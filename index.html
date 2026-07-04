@@ -726,22 +726,89 @@ function updateActiveNav(){
   });
 }
 
-function submitForm(e){
+async function submitForm(e){
   e.preventDefault();
   var form=e.target;
+  var btn=form.querySelector('.form-submit');
+  var note=form.querySelector('.form-note');
   var name=form.querySelector('#cf-name').value.trim();
   var phone=form.querySelector('#cf-phone').value.trim();
   var type=form.querySelector('#cf-type').value;
   var emailVal=form.querySelector('#cf-email').value.trim();
   var msg=form.querySelector('#cf-msg').value.trim();
-  var subject=encodeURIComponent('פנייה חדשה מהאתר — '+name);
-  var body=encodeURIComponent('שם: '+name+'\nטלפון: '+phone+'\nסוג צילום: '+(type||'לא צוין')+'\nמייל: '+(emailVal||'לא צוין')+'\n\nהודעה:\n'+(msg||'—'));
-  window.location.href='mailto:'+EMAIL+'?subject='+subject+'&body='+body;
-  form.reset();
+
+  // Try Formspree if configured, otherwise mailto fallback
+  var FORMSPREE_ID=''; // ← ימולא אוטומטית כשמגדירים Formspree
+  if(FORMSPREE_ID){
+    btn.textContent='שולח...';btn.disabled=true;
+    try{
+      var res=await fetch('https://formspree.io/f/'+FORMSPREE_ID,{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Accept':'application/json'},
+        body:JSON.stringify({name:name,phone:phone,type:type,email:emailVal,message:msg,'_subject':'פנייה חדשה מהאתר — '+name})
+      });
+      btn.disabled=false;
+      if(res.ok){
+        btn.textContent='📨 שלחו פנייה';
+        if(note){note.textContent='ההודעה נשלחה! נחזור אליכם בהקדם 😊';note.style.color='#2E7D52';}
+        form.reset();
+      }else{throw new Error('שגיאה');}
+    }catch(err){
+      btn.disabled=false;btn.textContent='📨 שלחו פנייה';
+      if(note){note.textContent='שגיאה בשליחה — נסו שוב או צרו קשר בוואטסאפ';note.style.color='#B84040';}
+    }
+  }else{
+    // mailto fallback
+    var subject=encodeURIComponent('פנייה חדשה מהאתר — '+name);
+    var body=encodeURIComponent('שם: '+name+'\nטלפון: '+phone+'\nסוג צילום: '+(type||'לא צוין')+'\nמייל: '+(emailVal||'לא צוין')+'\n\nהודעה:\n'+(msg||'—'));
+    window.open('mailto:'+EMAIL+'?subject='+subject+'&body='+body);
+    if(note){note.textContent='נפתח חלון מייל — שלחו את ההודעה ונחזור אליכם 😊';}
+    form.reset();
+  }
 }
 
-// Boot
-loadData().then(function(d){
+// Read gallery.json (admin-managed) and content.json, then merge with fallback
+async function loadAll(){
+  var d=Object.assign({},FB);
+  // 1. Try Google Sheets
+  try{
+    var url='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:csv';
+    var res=await fetch(url,{cache:'no-store'});
+    if(res.ok){
+      var csv=await res.text();
+      csv.split('\n').forEach(function(line){
+        line=line.trim(); if(!line) return;
+        var m=line.match(/^"?([^",\r\n]+)"?,\s*"?(.*?)"?\s*\r?$/);
+        if(m&&m[1]&&m[2]&&m[1].trim()!=='key') d[m[1].trim()]=m[2].trim();
+      });
+    }
+  }catch(e){}
+  // 2. content.json overrides (admin edits)
+  try{
+    var cr=await fetch('content.json?v='+Date.now(),{cache:'no-store'});
+    if(cr.ok){var cd=await cr.json();Object.assign(d,cd);}
+  }catch(e){}
+  // 3. gallery.json overrides cat images (admin-managed gallery order)
+  try{
+    var gr=await fetch('gallery.json?v='+Date.now(),{cache:'no-store'});
+    if(gr.ok){
+      var gal=await gr.json();
+      gal.forEach(function(slot,i){
+        var n=i+1;
+        if(slot.name) d['cat'+n+'_name']=slot.name;
+        if(slot.file) d['cat'+n+'_image']=RAW_BASE+slot.file;
+        if(slot.desc) d['cat'+n+'_desc']=slot.desc;
+      });
+      // Clear any slots beyond gallery length
+      for(var x=gal.length+1;x<=8;x++){d['cat'+x+'_name']='';d['cat'+x+'_image']='';}
+    }
+  }catch(e){}
+  return d;
+}
+
+var RAW_BASE='https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/';
+
+loadAll().then(function(d){
   render(d);
   setTimeout(function(){
     var loading=document.getElementById('loading');

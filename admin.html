@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ניהול אתר — חיה סגל צילום</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g:#D4A574;--gd:#B8936A;--c:#F2DFCE;--p:#F5C6D0;
+  --bg:#FAF7F4;--card:#fff;--border:#EDE5DC;
+  --t:#2C2C2C;--m:#7A6E65;--b:#1A1A1A;
+  --green:#2E7D52;--green-bg:#E6F4ED;
+  --red:#B84040;--red-bg:#FAEAEA;
+  --shadow:0 4px 20px rgba(0,0,0,0.08);
+  --r:14px;
+}
+body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--t);min-height:100vh}
+
+/* HEADER */
+.header{background:var(--g);padding:20px 24px;display:flex;align-items:center;gap:14px;box-shadow:0 2px 12px rgba(212,165,116,0.3)}
+.header h1{font-size:1.15rem;font-weight:700;color:#fff}
+.header-sub{font-size:0.82rem;color:rgba(255,255,255,0.75);margin-top:1px}
+.header-icon{font-size:1.6rem}
+.header-right{margin-right:auto;display:flex;gap:10px;align-items:center}
+.btn-sm{padding:7px 16px;border-radius:20px;font-size:0.82rem;font-weight:700;cursor:pointer;border:none;transition:all 0.2s}
+.btn-logout{background:rgba(255,255,255,0.2);color:#fff}
+.btn-logout:hover{background:rgba(255,255,255,0.3)}
+
+/* MAIN LAYOUT */
+.main{max-width:1100px;margin:0 auto;padding:28px 20px}
+
+/* TOKEN SCREEN */
+#tokenScreen{max-width:480px;margin:60px auto 0}
+.token-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:36px;box-shadow:var(--shadow);text-align:center}
+.token-card h2{font-size:1.3rem;font-weight:700;margin-bottom:8px}
+.token-card p{color:var(--m);font-size:0.92rem;margin-bottom:24px;line-height:1.6}
+.token-input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:0.95rem;font-family:inherit;outline:none;margin-bottom:12px;direction:ltr}
+.token-input:focus{border-color:var(--g);box-shadow:0 0 0 3px rgba(212,165,116,0.15)}
+.btn-primary{width:100%;padding:13px;background:var(--g);color:#fff;border:none;border-radius:25px;font-size:1rem;font-weight:700;cursor:pointer;transition:all 0.2s}
+.btn-primary:hover{background:var(--gd)}
+.token-steps{text-align:right;margin-bottom:20px}
+.token-steps li{font-size:0.85rem;color:var(--m);margin-bottom:6px;padding-right:4px}
+.token-link{color:var(--g);text-decoration:none;font-weight:600}
+.token-link:hover{text-decoration:underline}
+
+/* MANAGER */
+#manager{display:none}
+.section-title{font-size:1.05rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+
+/* UPLOAD ZONE */
+.upload-zone{background:var(--card);border:2.5px dashed var(--border);border-radius:var(--r);padding:40px 24px;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:28px}
+.upload-zone:hover,.upload-zone.drag-over{border-color:var(--g);background:rgba(212,165,116,0.04)}
+.upload-zone.drag-over{transform:scale(1.01)}
+.upload-icon{font-size:2.5rem;margin-bottom:10px;opacity:0.5}
+.upload-main{font-size:1rem;font-weight:600;color:var(--t);margin-bottom:4px}
+.upload-sub{font-size:0.85rem;color:var(--m)}
+#fileInput{display:none}
+
+/* PROGRESS */
+.progress-list{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.progress-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:12px}
+.progress-thumb{width:40px;height:40px;object-fit:cover;border-radius:6px;flex-shrink:0}
+.progress-name{font-size:0.88rem;font-weight:600;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.progress-bar-wrap{flex:1;height:6px;background:#eee;border-radius:3px;overflow:hidden;min-width:80px}
+.progress-bar{height:100%;background:var(--g);border-radius:3px;transition:width 0.3s;width:0}
+.progress-status{font-size:0.78rem;font-weight:700;white-space:nowrap}
+.progress-status.ok{color:var(--green)}
+.progress-status.err{color:var(--red)}
+
+/* GALLERY SLOTS */
+.slots-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;margin-bottom:32px}
+.slot{background:var(--card);border:2px solid var(--border);border-radius:var(--r);overflow:hidden;transition:all 0.2s;position:relative}
+.slot.has-image{border-color:var(--g)}
+.slot.drag-target{border-color:var(--g);box-shadow:0 0 0 3px rgba(212,165,116,0.25);transform:scale(1.02)}
+.slot-img-wrap{height:130px;background:var(--c);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.slot-img-wrap img{width:100%;height:100%;object-fit:cover}
+.slot-empty-icon{font-size:2.2rem;opacity:0.25}
+.slot-drop-hint{position:absolute;inset:0;background:rgba(212,165,116,0.85);display:none;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.9rem}
+.slot.drag-target .slot-drop-hint{display:flex}
+.slot-info{padding:10px 12px}
+.slot-name{font-size:0.9rem;font-weight:700;margin-bottom:2px}
+.slot-file{font-size:0.75rem;color:var(--m);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.slot-actions{display:flex;gap:6px;margin-top:8px}
+.slot-btn{flex:1;padding:5px 0;border:none;border-radius:8px;font-size:0.75rem;font-weight:700;cursor:pointer;transition:background 0.2s}
+.slot-btn.clear{background:var(--red-bg);color:var(--red)}
+.slot-btn.clear:hover{background:#f5d0d0}
+.slot-del{position:absolute;top:6px;left:6px;width:26px;height:26px;background:rgba(0,0,0,0.55);border:none;border-radius:50%;color:#fff;font-size:0.85rem;cursor:pointer;display:none;align-items:center;justify-content:center}
+.slot.has-image:hover .slot-del{display:flex}
+.slot-del:hover{background:var(--red)}
+.slot-order{position:absolute;top:4px;right:4px;display:flex;flex-direction:column;gap:2px}
+.slot-arr{width:22px;height:22px;background:rgba(0,0,0,0.45);border:none;border-radius:4px;color:#fff;font-size:0.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+.slot-arr:hover{background:var(--g)}
+
+/* ADD SLOT */
+.add-slot-btn{background:var(--card);border:2px dashed var(--border);border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;min-height:190px;transition:all 0.2s;color:var(--m);font-size:0.88rem;font-weight:600}
+.add-slot-btn:hover{border-color:var(--g);color:var(--g);background:rgba(212,165,116,0.04)}
+.add-slot-icon{font-size:1.8rem;opacity:0.4}
+
+/* IMAGE LIBRARY */
+.lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;margin-bottom:28px}
+.lib-img{border-radius:10px;overflow:hidden;cursor:grab;position:relative;aspect-ratio:1;background:var(--c);box-shadow:var(--shadow)}
+.lib-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.2s}
+.lib-img:hover img{transform:scale(1.05)}
+.lib-img.dragging{opacity:0.4}
+.lib-img-name{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.55);color:#fff;font-size:0.7rem;padding:4px 6px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lib-img-del{position:absolute;top:4px;left:4px;width:22px;height:22px;background:rgba(0,0,0,0.55);border:none;border-radius:50%;color:#fff;font-size:0.75rem;cursor:pointer;display:none;align-items:center;justify-content:center}
+.lib-img:hover .lib-img-del{display:flex}
+.lib-img-del:hover{background:var(--red)}
+
+/* SAVE BAR */
+.save-bar{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;gap:14px;box-shadow:0 -4px 20px rgba(0,0,0,0.07);z-index:100}
+.save-info{font-size:0.88rem;color:var(--m);flex:1}
+.btn-save{padding:11px 32px;background:var(--g);color:#fff;border:none;border-radius:25px;font-size:0.95rem;font-weight:700;cursor:pointer;transition:all 0.2s}
+.btn-save:hover{background:var(--gd);transform:translateY(-1px)}
+.btn-save:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.save-msg{font-size:0.85rem;font-weight:600;padding:8px 16px;border-radius:20px}
+.save-msg.ok{background:var(--green-bg);color:var(--green)}
+.save-msg.err{background:var(--red-bg);color:var(--red)}
+
+/* TOAST */
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:#222;color:#fff;padding:10px 22px;border-radius:22px;font-size:0.88rem;font-weight:600;z-index:9999;transition:transform 0.3s ease;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9000;display:none;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--card);border-radius:var(--r);padding:28px;max-width:400px;width:90%;text-align:center}
+.modal h3{font-size:1.1rem;font-weight:700;margin-bottom:8px}
+.modal p{color:var(--m);font-size:0.9rem;margin-bottom:20px}
+.modal-btns{display:flex;gap:10px;justify-content:center}
+.btn-danger{padding:10px 24px;background:var(--red);color:#fff;border:none;border-radius:20px;font-weight:700;cursor:pointer}
+.btn-cancel{padding:10px 24px;background:var(--border);color:var(--t);border:none;border-radius:20px;font-weight:700;cursor:pointer}
+
+/* RENAME */
+.rename-input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:0.95rem;font-family:inherit;outline:none;margin-bottom:12px;direction:ltr}
+.rename-input:focus{border-color:var(--g);box-shadow:0 0 0 3px rgba(212,165,116,0.15)}
+
+pb-20{padding-bottom:80px}
+@media(max-width:600px){
+  .slots-grid{grid-template-columns:repeat(2,1fr)}
+  .lib-grid{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-icon">📸</div>
+  <div>
+    <div class="header-sub">פאנל ניהול</div>
+    <h1>חיה סגל צילום</h1>
+  </div>
+  <div class="header-right">
+    <a href="/" class="btn-sm btn-logout" style="text-decoration:none">← האתר</a>
+    <button class="btn-sm btn-logout" onclick="logout()" id="logoutBtn" style="display:none">התנתק</button>
+  </div>
+</header>
+
+<!-- TOKEN SCREEN -->
+<div class="main" id="tokenScreen">
+  <div class="token-card">
+    <div style="font-size:2.5rem;margin-bottom:14px">🔑</div>
+    <h2>כניסה לניהול</h2>
+    <p>להעלאת תמונות ועריכת הגלריה צריך מפתח GitHub אחד פעם.<br>לאחר מכן הכל נשמר אוטומטית.</p>
+
+    <div style="background:#F7F0E8;border-radius:10px;padding:16px;margin-bottom:20px;text-align:right">
+      <div style="font-weight:700;font-size:0.88rem;margin-bottom:10px">איך מקבלים מפתח?</div>
+      <ol class="token-steps">
+        <li>כנסו ל-<a href="https://github.com/settings/tokens/new" target="_blank" class="token-link">github.com/settings/tokens/new</a></li>
+        <li>בחרו Note: "chaya-site"</li>
+        <li>סמנו: <strong>repo</strong> (full control)</li>
+        <li>לחצו "Generate token"</li>
+        <li>העתיקו את המפתח והדביקו כאן</li>
+      </ol>
+    </div>
+
+    <input type="password" class="token-input" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
+    <button class="btn-primary" onclick="login()">כניסה ←</button>
+    <div id="tokenError" style="color:#B84040;font-size:0.85rem;margin-top:10px;display:none"></div>
+  </div>
+</div>
+
+<!-- MANAGER -->
+<div class="main" id="manager" style="padding-bottom:90px">
+
+  <!-- UPLOAD -->
+  <div class="section-title">☁️ העלאת תמונות</div>
+  <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+    <div class="upload-icon">🖼️</div>
+    <div class="upload-main">גררו תמונות לכאן או לחצו לבחירה</div>
+    <div class="upload-sub">JPG, PNG, WEBP — ניתן להעלות כמה בבת-אחת</div>
+  </div>
+  <input type="file" id="fileInput" accept="image/*" multiple>
+  <div class="progress-list" id="progressList"></div>
+
+  <!-- GALLERY SLOTS -->
+  <div class="section-title">🖼️ גלריה באתר <span style="font-size:0.78rem;color:var(--m);font-weight:400">— גררו תמונה מהספרייה לכל מסגרת</span></div>
+  <div style="font-size:0.82rem;color:var(--m);margin-bottom:12px;background:#F7F0E8;border-radius:8px;padding:9px 14px">
+    💡 <strong>לשינוי סדר:</strong> השתמשו בחצים ↑ ↓ בכל מסגרת
+  </div>
+  <div class="slots-grid" id="slotsGrid"></div>
+
+  <!-- LIBRARY -->
+  <div class="section-title">📁 כל התמונות <span id="libCount" style="font-size:0.82rem;color:var(--m);font-weight:400"></span></div>
+  <div class="lib-grid" id="libGrid">
+    <div style="color:var(--m);font-size:0.9rem;grid-column:1/-1;padding:20px 0">טוען תמונות...</div>
+  </div>
+
+  <!-- CONTENT EDITOR -->
+  <div class="section-title" style="margin-top:10px">✏️ עריכת תוכן ומחירים</div>
+  <div id="contentEditor" style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:28px;box-shadow:var(--shadow)">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px" id="contentFields"></div>
+    <button class="btn-save" style="margin-top:20px" onclick="saveContent()">💾 שמור תוכן</button>
+    <div id="contentMsg" style="margin-top:10px;font-size:0.85rem"></div>
+  </div>
+
+</div>
+
+<!-- SAVE BAR -->
+<div class="save-bar" id="saveBar" style="display:none">
+  <div class="save-info" id="saveInfo">שינויים לא שמורים</div>
+  <div id="saveMsg"></div>
+  <button class="btn-save" id="saveBtn" onclick="saveGallery()">💾 שמור שינויים</button>
+</div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// Security: only person with GitHub token can use this panel
+var IMAGE_REPO='y6765809-art/chaya-segal-images';
+var SITE_REPO='y6765809-art/chaya-photography-website';
+var RAW_BASE='https://raw.githubusercontent.com/'+IMAGE_REPO+'/main/';
+var API='https://api.github.com';
+var token='';
+var allImages=[];   // {name, sha, url}
+var gallery=[];     // [{name, file, desc}, ...]
+var pendingChanges=false;
+
+// ─── AUTH ────────────────────────────────────
+function login(){
+  var t=document.getElementById('tokenInput').value.trim();
+  if(!t){showTokenError('הכנס מפתח');return;}
+  token=t;
+  testToken();
+}
+
+async function testToken(){
+  showTokenError('');
+  document.querySelector('.btn-primary').textContent='בודק...';
+  try{
+    var r=await ghGet('/user');
+    if(r.login){
+      localStorage.setItem('gh_token',token);
+      startManager();
+    }else{
+      showTokenError('מפתח שגוי — נסה שוב');
+      document.querySelector('.btn-primary').textContent='כניסה ←';
+    }
+  }catch(e){
+    showTokenError('שגיאה: '+e.message);
+    document.querySelector('.btn-primary').textContent='כניסה ←';
+  }
+}
+
+function showTokenError(msg){
+  var el=document.getElementById('tokenError');
+  el.textContent=msg;
+  el.style.display=msg?'block':'none';
+}
+
+function logout(){
+  localStorage.removeItem('gh_token');
+  token='';
+  document.getElementById('tokenScreen').style.display='block';
+  document.getElementById('manager').style.display='none';
+  document.getElementById('saveBar').style.display='none';
+  document.getElementById('logoutBtn').style.display='none';
+}
+
+// ─── INIT ────────────────────────────────────
+async function startManager(){
+  document.getElementById('tokenScreen').style.display='none';
+  document.getElementById('manager').style.display='block';
+  document.getElementById('saveBar').style.display='flex';
+  document.getElementById('logoutBtn').style.display='inline-block';
+  await loadGallery();
+  await loadLibrary();
+  await loadContent();
+  renderSlots();
+  renderLibrary();
+  setupDropzone();
+}
+
+// ─── API HELPERS ────────────────────────────────
+async function ghGet(path){
+  var r=await fetch(API+path,{headers:{Authorization:'token '+token,Accept:'application/vnd.github.v3+json'}});
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  return r.json();
+}
+
+async function ghPut(path,body){
+  var r=await fetch(API+path,{method:'PUT',headers:{Authorization:'token '+token,Accept:'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
+  if(!r.ok){var e=await r.json();throw new Error(e.message||'HTTP '+r.status);}
+  return r.json();
+}
+
+async function ghDelete(path,body){
+  var r=await fetch(API+path,{method:'DELETE',headers:{Authorization:'token '+token,Accept:'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  return r.json();
+}
+
+// ─── LIBRARY ────────────────────────────────
+var IMG_EXTS=/\.(jpg|jpeg|png|webp|gif)$/i;
+
+async function loadLibrary(){
+  try{
+    var files=await ghGet('/repos/'+IMAGE_REPO+'/contents/');
+    allImages=files.filter(function(f){return IMG_EXTS.test(f.name);}).map(function(f){
+      return {name:f.name,sha:f.sha,url:RAW_BASE+f.name};
+    });
+    document.getElementById('libCount').textContent='('+allImages.length+' תמונות)';
+  }catch(e){
+    allImages=[];
+  }
+}
+
+function renderLibrary(){
+  var grid=document.getElementById('libGrid');
+  if(!allImages.length){grid.innerHTML='<div style="color:var(--m);font-size:0.9rem;grid-column:1/-1;padding:20px 0">עדיין אין תמונות — העלו למעלה</div>';return;}
+  grid.innerHTML='';
+  allImages.forEach(function(img){
+    var div=document.createElement('div');
+    div.className='lib-img';
+    div.draggable=true;
+    div.dataset.file=img.name;
+    div.innerHTML='<img src="'+img.url+'?v='+Date.now()+'" alt="'+img.name+'" loading="lazy" onerror="this.src=\'data:image/svg+xml,<svg xmlns=\\\'http://www.w3.org/2000/svg\\\' width=\\\'120\\\' height=\\\'120\\\'><rect fill=\\\'%23f2dfce\\\'/></svg>\'">'
+      +'<div class="lib-img-name">'+img.name+'</div>'
+      +'<button class="lib-img-del" onclick="confirmDelete(\''+img.name+'\',\''+img.sha+'\',event)" title="מחק">✕</button>';
+    div.addEventListener('dragstart',function(e){
+      e.dataTransfer.setData('text/plain',img.name);
+      div.classList.add('dragging');
+    });
+    div.addEventListener('dragend',function(){div.classList.remove('dragging');});
+    div.addEventListener('click',function(e){
+      if(e.target.classList.contains('lib-img-del')) return;
+      assignToFirstEmpty(img.name);
+    });
+    grid.appendChild(div);
+  });
+}
+
+// ─── GALLERY ────────────────────────────────
+var DEFAULT_NAMES=['חלאקה','ניובורן','סמאש קייק','משפחה','בת מצווה'];
+var DEFAULT_DESCS=['צילום מרגש ליום המיוחד','הרגעים הראשונים','יום הולדת ראשון','צילומי משפחה מרגשים','יום שלא תשכחו'];
+
+async function loadGallery(){
+  try{
+    var r=await fetch('https://raw.githubusercontent.com/'+SITE_REPO+'/main/gallery.json?v='+Date.now());
+    if(r.ok){gallery=await r.json();return;}
+  }catch(e){}
+  // Default
+  gallery=DEFAULT_NAMES.map(function(n,i){
+    return {name:n,file:String(i+1)+'.jpeg',desc:DEFAULT_DESCS[i]};
+  });
+}
+
+function renderSlots(){
+  var grid=document.getElementById('slotsGrid');
+  grid.innerHTML='';
+  gallery.forEach(function(slot,i){
+    var hasImg=!!(slot.file&&getImageUrl(slot.file));
+    var div=document.createElement('div');
+    div.className='slot'+(hasImg?' has-image':'');
+    div.dataset.idx=i;
+    var imgHtml=hasImg
+      ?'<img src="'+getImageUrl(slot.file)+'?v='+Date.now()+'" alt="'+slot.name+'" loading="lazy" onerror="this.src=\'data:image/svg+xml,<svg xmlns=\\\'http://www.w3.org/2000/svg\\\' width=\\\'160\\\' height=\\\'130\\\'><rect fill=\\\'%23f2dfce\\\'/></svg>\'">'
+      :'<div class="slot-empty-icon">+</div>';
+    div.innerHTML='<div class="slot-img-wrap">'+imgHtml+'<div class="slot-drop-hint">שחרר כאן</div>'
+      +(hasImg?'<button class="slot-del" onclick="clearSlot('+i+',event)" title="הסר תמונה">✕</button>':'')
+      +'<div class="slot-order">'
+      +(i>0?'<button class="slot-arr" onclick="moveSlot('+i+',-1,event)" title="הזז למעלה">▲</button>':'')
+      +(i<gallery.length-1?'<button class="slot-arr" onclick="moveSlot('+i+',1,event)" title="הזז למטה">▼</button>':'')
+      +'</div>'
+      +'</div>'
+      +'<div class="slot-info">'
+      +'<div class="slot-name">'+escHtml(slot.name)+'</div>'
+      +(slot.file?'<div class="slot-file">'+escHtml(slot.file)+'</div>':'<div class="slot-file" style="color:#bbb">ריק — גרור תמונה לכאן</div>')
+      +'</div>';
+    div.addEventListener('dragover',function(e){e.preventDefault();div.classList.add('drag-target');});
+    div.addEventListener('dragleave',function(){div.classList.remove('drag-target');});
+    div.addEventListener('drop',function(e){
+      e.preventDefault();
+      div.classList.remove('drag-target');
+      var file=e.dataTransfer.getData('text/plain');
+      if(file) assignToSlot(i,file);
+    });
+    grid.appendChild(div);
+  });
+  // Add slot button
+  var addBtn=document.createElement('div');
+  addBtn.className='add-slot-btn';
+  addBtn.innerHTML='<div class="add-slot-icon">＋</div><div>הוסף קטגוריה</div>';
+  addBtn.onclick=addSlot;
+  grid.appendChild(addBtn);
+}
+
+function getImageUrl(file){
+  if(!file) return null;
+  var found=allImages.find(function(i){return i.name===file;});
+  return found?found.url:null;
+}
+
+function assignToSlot(idx,file){
+  gallery[idx].file=file;
+  markChanged();
+  renderSlots();
+  renderLibrary();
+  toast('תמונה הוקצתה ל'+gallery[idx].name+' ✓');
+}
+
+function assignToFirstEmpty(file){
+  for(var i=0;i<gallery.length;i++){
+    if(!gallery[i].file){
+      assignToSlot(i,file);
+      return;
+    }
+  }
+  toast('כל המשבצות תפוסות — גרור ידנית');
+}
+
+function clearSlot(idx,e){
+  if(e) e.stopPropagation();
+  gallery[idx].file='';
+  markChanged();
+  renderSlots();
+}
+
+function addSlot(){
+  showModal('<h3>קטגוריה חדשה</h3><p>מה שם הקטגוריה?</p><input class="rename-input" id="newSlotName" placeholder="לדוג׳: הריון"><div class="modal-btns"><button class="btn-primary" style="padding:10px 24px;width:auto" onclick="doAddSlot()">הוסף</button><button class="btn-cancel" onclick="closeModal()">ביטול</button></div>');
+  setTimeout(function(){document.getElementById('newSlotName')&&document.getElementById('newSlotName').focus();},50);
+}
+
+function moveSlot(idx,dir,e){
+  if(e) e.stopPropagation();
+  var to=idx+dir;
+  if(to<0||to>=gallery.length) return;
+  var tmp=gallery[idx];gallery[idx]=gallery[to];gallery[to]=tmp;
+  markChanged();
+  renderSlots();
+}
+
+function doAddSlot(){
+  var name=(document.getElementById('newSlotName').value||'').trim();
+  if(!name) return;
+  gallery.push({name:name,file:'',desc:''});
+  markChanged();
+  closeModal();
+  renderSlots();
+}
+
+// ─── UPLOAD ────────────────────────────────
+function setupDropzone(){
+  var zone=document.getElementById('uploadZone');
+  var fi=document.getElementById('fileInput');
+  zone.addEventListener('dragover',function(e){e.preventDefault();zone.classList.add('drag-over');});
+  zone.addEventListener('dragleave',function(){zone.classList.remove('drag-over');});
+  zone.addEventListener('drop',function(e){
+    e.preventDefault();
+    zone.classList.remove('drag-over');
+    handleFiles(Array.from(e.dataTransfer.files));
+  });
+  fi.addEventListener('change',function(){handleFiles(Array.from(fi.files));fi.value='';});
+}
+
+function handleFiles(files){
+  files=files.filter(function(f){return f.type.startsWith('image/');});
+  if(!files.length) return;
+  files.forEach(uploadFile);
+}
+
+async function uploadFile(file){
+  var item=addProgressItem(file.name);
+  try{
+    var compressed=await compressImage(file);
+    var fname=sanitizeName(file.name);
+    var b64=await toBase64(compressed);
+    b64=b64.split(',')[1];
+    // Check if exists
+    var sha='';
+    try{var existing=await ghGet('/repos/'+IMAGE_REPO+'/contents/'+fname);sha=existing.sha;}catch(e){}
+    item.setProgress(60);
+    await ghPut('/repos/'+IMAGE_REPO+'/contents/'+fname,{message:'העלאת תמונה: '+fname,content:b64,sha:sha||undefined});
+    item.setProgress(100);
+    item.setStatus('ok','✓ הועלה');
+    // Add to library
+    await loadLibrary();
+    renderLibrary();
+    // Auto-assign to first empty slot
+    assignToFirstEmpty(fname);
+    toast(fname+' הועלה בהצלחה 📸');
+  }catch(e){
+    item.setProgress(100);
+    item.setStatus('err','✗ שגיאה: '+e.message);
+  }
+}
+
+function addProgressItem(name){
+  var list=document.getElementById('progressList');
+  var div=document.createElement('div');
+  div.className='progress-item';
+  div.innerHTML='<div class="progress-name">'+escHtml(name)+'</div>'
+    +'<div class="progress-bar-wrap"><div class="progress-bar" id="pb_'+escHtml(name)+'"></div></div>'
+    +'<div class="progress-status" id="ps_'+escHtml(name)+'">מעלה...</div>';
+  list.appendChild(div);
+  return{
+    setProgress:function(p){var b=div.querySelector('.progress-bar');if(b)b.style.width=p+'%';},
+    setStatus:function(cls,txt){var s=div.querySelector('.progress-status');if(s){s.textContent=txt;s.className='progress-status '+cls;}
+      setTimeout(function(){div.remove();},3000);}
+  };
+}
+
+async function compressImage(file){
+  return new Promise(function(resolve){
+    var img=new Image();
+    var url=URL.createObjectURL(file);
+    img.onload=function(){
+      var maxW=1600,maxH=1600,w=img.width,h=img.height;
+      if(w>maxW){h=Math.round(h*maxW/w);w=maxW;}
+      if(h>maxH){w=Math.round(w*maxH/h);h=maxH;}
+      var c=document.createElement('canvas');
+      c.width=w;c.height=h;
+      c.getContext('2d').drawImage(img,0,0,w,h);
+      c.toBlob(function(blob){URL.revokeObjectURL(url);resolve(blob);},'image/jpeg',0.88);
+    };
+    img.src=url;
+  });
+}
+
+function toBase64(blob){
+  return new Promise(function(res){
+    var r=new FileReader();
+    r.onload=function(){res(r.result);};
+    r.readAsDataURL(blob);
+  });
+}
+
+function sanitizeName(name){
+  return name.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9._-]/g,'');
+}
+
+// ─── DELETE ────────────────────────────────
+function confirmDelete(name,sha,e){
+  if(e) e.stopPropagation();
+  showModal('<h3>מחיקת תמונה</h3><p>למחוק את "<strong>'+escHtml(name)+'</strong>"?<br>הפעולה בלתי הפיכה.</p><div class="modal-btns"><button class="btn-danger" onclick="doDelete(\''+name+'\',\''+sha+'\')">מחק</button><button class="btn-cancel" onclick="closeModal()">ביטול</button></div>');
+}
+
+async function doDelete(name,sha){
+  closeModal();
+  try{
+    await ghDelete('/repos/'+IMAGE_REPO+'/contents/'+name,{message:'מחיקת תמונה: '+name,sha:sha});
+    // Clear from gallery if used
+    gallery.forEach(function(s){if(s.file===name)s.file='';});
+    await loadLibrary();
+    renderLibrary();
+    renderSlots();
+    markChanged();
+    toast(name+' נמחקה');
+  }catch(e){toast('שגיאה: '+e.message);}
+}
+
+// ─── SAVE ────────────────────────────────
+async function saveGallery(){
+  var btn=document.getElementById('saveBtn');
+  var msg=document.getElementById('saveMsg');
+  btn.disabled=true;
+  btn.textContent='שומר...';
+  msg.className='';msg.textContent='';
+  try{
+    var json=JSON.stringify(gallery,null,2);
+    var b64=btoa(unescape(encodeURIComponent(json)));
+    // Get current SHA if exists
+    var sha='';
+    try{var cur=await ghGet('/repos/'+SITE_REPO+'/contents/gallery.json');sha=cur.sha;}catch(e){}
+    await ghPut('/repos/'+SITE_REPO+'/contents/gallery.json',{message:'עדכון גלריה',content:b64,sha:sha||undefined});
+    btn.disabled=false;
+    btn.textContent='💾 שמור שינויים';
+    msg.className='save-msg ok';
+    msg.textContent='✓ נשמר!';
+    pendingChanges=false;
+    document.getElementById('saveInfo').textContent='הגלריה עודכנה';
+    setTimeout(function(){msg.textContent='';msg.className='';},3000);
+  }catch(e){
+    btn.disabled=false;
+    btn.textContent='💾 שמור שינויים';
+    msg.className='save-msg err';
+    msg.textContent='✗ שגיאה: '+e.message;
+  }
+}
+
+function markChanged(){
+  pendingChanges=true;
+  document.getElementById('saveInfo').textContent='יש שינויים שלא נשמרו';
+}
+
+// ─── MODAL / TOAST ────────────────────────────────
+function showModal(html){
+  document.getElementById('modalContent').innerHTML=html;
+  document.getElementById('modalBg').classList.add('open');
+}
+function closeModal(){document.getElementById('modalBg').classList.remove('open');}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();});
+document.getElementById('modalBg').addEventListener('click',function(e){if(e.target===this)closeModal();});
+
+var toastTimer=null;
+function toast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){t.classList.remove('show');},2500);
+}
+
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ─── CONTENT EDITOR ────────────────────────────────
+var CONTENT_FIELDS=[
+  {key:'hero_tagline',label:'שורת תיאור קטנה'},
+  {key:'hero_highlight',label:'כותרת ראשית זהובה'},
+  {key:'hero_subline',label:'שורה קטנה מתחת'},
+  {key:'pkg1_name',label:'חבילה 1 — שם'},{key:'pkg1_price',label:'חבילה 1 — מחיר'},
+  {key:'pkg1_features',label:'חבילה 1 — פיצ׳רים (מופרדים ב-|)'},
+  {key:'pkg2_name',label:'חבילה 2 — שם'},{key:'pkg2_price',label:'חבילה 2 — מחיר'},
+  {key:'pkg2_features',label:'חבילה 2 — פיצ׳רים'},
+  {key:'pkg3_name',label:'חבילה 3 — שם'},{key:'pkg3_price',label:'חבילה 3 — מחיר'},
+  {key:'pkg3_features',label:'חבילה 3 — פיצ׳רים'},
+  {key:'pkg4_name',label:'חבילה 4 — שם'},{key:'pkg4_price',label:'חבילה 4 — מחיר'},
+  {key:'pkg4_features',label:'חבילה 4 — פיצ׳רים'},
+  {key:'sale_active',label:'מבצע פעיל? (true/false)'},
+  {key:'sale_text',label:'טקסט המבצע'},
+  {key:'sale_emoji',label:'אמוג׳י מבצע'},
+  {key:'contact_phone',label:'טלפון'},
+  {key:'contact_email',label:'מייל'},
+  {key:'contact_location',label:'מיקום'},
+  {key:'test1_text',label:'המלצה 1'},{key:'test1_author',label:'שם ממליץ 1'},
+  {key:'test2_text',label:'המלצה 2'},{key:'test2_author',label:'שם ממליץ 2'},
+  {key:'test3_text',label:'המלצה 3'},{key:'test3_author',label:'שם ממליץ 3'},
+];
+var contentData={};
+
+async function loadContent(){
+  try{
+    var r=await fetch('https://raw.githubusercontent.com/'+SITE_REPO+'/main/content.json?v='+Date.now());
+    if(r.ok) contentData=await r.json();
+  }catch(e){contentData={};}
+  renderContent();
+}
+
+function renderContent(){
+  var wrap=document.getElementById('contentFields');
+  if(!wrap) return;
+  wrap.innerHTML='';
+  CONTENT_FIELDS.forEach(function(f){
+    var div=document.createElement('div');
+    div.style.cssText='display:flex;flex-direction:column;gap:5px';
+    div.innerHTML='<label style="font-size:0.82rem;font-weight:700;color:var(--m)">'+escHtml(f.label)+'</label>'
+      +'<input class="token-input" style="margin-bottom:0" data-key="'+f.key+'" value="'+escHtml(contentData[f.key]||'')+'" placeholder="ריק">';
+    wrap.appendChild(div);
+  });
+}
+
+async function saveContent(){
+  var inputs=document.querySelectorAll('#contentFields input[data-key]');
+  inputs.forEach(function(inp){contentData[inp.dataset.key]=inp.value;});
+  var msg=document.getElementById('contentMsg');
+  msg.textContent='שומר...';msg.style.color='var(--m)';
+  try{
+    var json=JSON.stringify(contentData,null,2);
+    var b64=btoa(unescape(encodeURIComponent(json)));
+    var sha='';
+    try{var cur=await ghGet('/repos/'+SITE_REPO+'/contents/content.json');sha=cur.sha;}catch(e){}
+    await ghPut('/repos/'+SITE_REPO+'/contents/content.json',{message:'עדכון תוכן',content:b64,sha:sha||undefined});
+    msg.textContent='נשמר!';msg.style.color='var(--green)';
+    setTimeout(function(){msg.textContent='';},3000);
+    toast('התוכן עודכן ✓');
+  }catch(e){
+    msg.textContent='שגיאה: '+e.message;msg.style.color='var(--red)';
+  }
+}
+
+// ─── BOOT ────────────────────────────────
+var saved=localStorage.getItem('gh_token');
+if(saved){token=saved;startManager();}
+</script>
+</body>
+</html>
