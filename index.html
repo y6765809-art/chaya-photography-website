@@ -477,7 +477,7 @@ function render(d){
 +'<div class="hero-tagline">'+(d.hero_tagline||'')+'</div>'
 +'<div class="hero-highlight">'+(d.hero_highlight||'')+'</div>'
 +'<div class="hero-subline">'+(d.hero_subline||'')+'</div>'
-+'<a href="'+wa('שלום חיה, אני רוצה לתאם צילום 📸')+'" class="hero-cta" target="_blank" rel="noopener">📸 הזמינו צילום עכשיו</a>'
++'<a href="#contact" class="hero-cta" onclick="navTo(\'contact\');return false;">📸 הזמינו צילום עכשיו</a>'
 +'<div class="hero-icons">'
 +(d.camera_image?'<div class="hero-icon"><img src="'+d.camera_image+'" alt="צילום מקצועי" onerror="this.parentElement.style.display=\'none\'"><p>צילום מקצועי</p></div>':'')
 +(d.album_image?'<div class="hero-icon"><img src="'+d.album_image+'" alt="אלבום יפה" onerror="this.parentElement.style.display=\'none\'"><p>אלבום יפה</p></div>':'')
