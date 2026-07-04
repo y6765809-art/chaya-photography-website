@@ -635,26 +635,42 @@ function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').
 
 // ─── CONTENT EDITOR ────────────────────────────────
 var CONTENT_FIELDS=[
+  {key:'logo',label:'לוגו — כתובת URL לתמונת הלוגו',wide:true},
   {key:'hero_tagline',label:'שורת תיאור קטנה'},
   {key:'hero_highlight',label:'כותרת ראשית זהובה'},
   {key:'hero_subline',label:'שורה קטנה מתחת'},
-  {key:'pkg1_name',label:'חבילה 1 — שם'},{key:'pkg1_price',label:'חבילה 1 — מחיר'},
-  {key:'pkg1_features',label:'חבילה 1 — פיצ׳רים (מופרדים ב-|)'},
-  {key:'pkg2_name',label:'חבילה 2 — שם'},{key:'pkg2_price',label:'חבילה 2 — מחיר'},
-  {key:'pkg2_features',label:'חבילה 2 — פיצ׳רים'},
-  {key:'pkg3_name',label:'חבילה 3 — שם'},{key:'pkg3_price',label:'חבילה 3 — מחיר'},
-  {key:'pkg3_features',label:'חבילה 3 — פיצ׳רים'},
-  {key:'pkg4_name',label:'חבילה 4 — שם'},{key:'pkg4_price',label:'חבילה 4 — מחיר'},
-  {key:'pkg4_features',label:'חבילה 4 — פיצ׳רים'},
-  {key:'sale_active',label:'מבצע פעיל? (true/false)'},
-  {key:'sale_text',label:'טקסט המבצע'},
-  {key:'sale_emoji',label:'אמוג׳י מבצע'},
   {key:'contact_phone',label:'טלפון'},
   {key:'contact_email',label:'מייל'},
-  {key:'contact_location',label:'מיקום'},
-  {key:'test1_text',label:'המלצה 1'},{key:'test1_author',label:'שם ממליץ 1'},
-  {key:'test2_text',label:'המלצה 2'},{key:'test2_author',label:'שם ממליץ 2'},
-  {key:'test3_text',label:'המלצה 3'},{key:'test3_author',label:'שם ממליץ 3'},
+  {key:'contact_location',label:'מיקום / כתובת'},
+  {key:'sale_active',label:'מבצע פעיל? (true / false)'},
+  {key:'sale_text',label:'טקסט המבצע'},
+  {key:'sale_emoji',label:'אמוג׳י מבצע (לדוג׳: 🎉)'},
+  {key:'pkg1_name',label:'חבילה 1 — שם'},{key:'pkg1_price',label:'חבילה 1 — מחיר'},
+  {key:'pkg1_subtitle',label:'חבילה 1 — כיתוב מתחת למחיר'},
+  {key:'pkg1_features',label:'חבילה 1 — פיצ׳רים (מופרדים ב-|)',wide:true},
+  {key:'pkg1_bonus',label:'חבילה 1 — הערת בונוס'},
+  {key:'pkg2_name',label:'חבילה 2 — שם'},{key:'pkg2_price',label:'חבילה 2 — מחיר'},
+  {key:'pkg2_subtitle',label:'חבילה 2 — כיתוב מתחת למחיר'},
+  {key:'pkg2_features',label:'חבילה 2 — פיצ׳רים (מופרדים ב-|)',wide:true},
+  {key:'pkg2_bonus',label:'חבילה 2 — הערת בונוס'},
+  {key:'pkg3_name',label:'חבילה 3 — שם'},{key:'pkg3_price',label:'חבילה 3 — מחיר'},
+  {key:'pkg3_subtitle',label:'חבילה 3 — כיתוב מתחת למחיר'},
+  {key:'pkg3_features',label:'חבילה 3 — פיצ׳רים (מופרדים ב-|)',wide:true},
+  {key:'pkg3_bonus',label:'חבילה 3 — הערת בונוס'},
+  {key:'pkg3_featured',label:'חבילה 3 — מסומנת כ"הכי פופולרי"? (true/false)'},
+  {key:'pkg4_name',label:'חבילה 4 — שם'},{key:'pkg4_price',label:'חבילה 4 — מחיר'},
+  {key:'pkg4_subtitle',label:'חבילה 4 — כיתוב מתחת למחיר'},
+  {key:'pkg4_features',label:'חבילה 4 — פיצ׳רים (מופרדים ב-|)',wide:true},
+  {key:'pkg4_bonus',label:'חבילה 4 — הערת בונוס'},
+  {key:'pkg5_name',label:'חבילה 5 — שם (אופציונלי)'},{key:'pkg5_price',label:'חבילה 5 — מחיר'},
+  {key:'pkg5_subtitle',label:'חבילה 5 — כיתוב מתחת למחיר'},
+  {key:'pkg5_features',label:'חבילה 5 — פיצ׳רים (מופרדים ב-|)',wide:true},
+  {key:'pkg5_bonus',label:'חבילה 5 — הערת בונוס'},
+  {key:'test1_text',label:'המלצה 1 — טקסט',wide:true},{key:'test1_author',label:'המלצה 1 — שם'},
+  {key:'test2_text',label:'המלצה 2 — טקסט',wide:true},{key:'test2_author',label:'המלצה 2 — שם'},
+  {key:'test3_text',label:'המלצה 3 — טקסט',wide:true},{key:'test3_author',label:'המלצה 3 — שם'},
+  {key:'test4_text',label:'המלצה 4 — טקסט (אופציונלי)',wide:true},{key:'test4_author',label:'המלצה 4 — שם'},
+  {key:'test5_text',label:'המלצה 5 — טקסט (אופציונלי)',wide:true},{key:'test5_author',label:'המלצה 5 — שם'},
 ];
 var contentData={};
 
@@ -672,7 +688,7 @@ function renderContent(){
   wrap.innerHTML='';
   CONTENT_FIELDS.forEach(function(f){
     var div=document.createElement('div');
-    div.style.cssText='display:flex;flex-direction:column;gap:5px';
+    div.style.cssText='display:flex;flex-direction:column;gap:5px'+(f.wide?';grid-column:1/-1':'');
     div.innerHTML='<label style="font-size:0.82rem;font-weight:700;color:var(--m)">'+escHtml(f.label)+'</label>'
       +'<input class="token-input" style="margin-bottom:0" data-key="'+f.key+'" value="'+escHtml(contentData[f.key]||'')+'" placeholder="ריק">';
     wrap.appendChild(div);
