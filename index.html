@@ -223,6 +223,14 @@ body.has-banner #home{padding-top:122px}
 .form-submit{width:100%;padding:13px;background:var(--g);color:var(--white);border:none;border-radius:25px;font-family:'Assistant',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:all var(--tr);margin-top:4px}
 .form-submit:hover{background:var(--gd);transform:translateY(-2px);box-shadow:0 8px 22px rgba(212,165,116,0.4)}
 .form-note{font-size:0.8rem;color:#aaa;margin-top:10px;text-align:center}
+.success-card{text-align:center;padding:40px 20px;animation:fadeInUp 0.5s ease}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.success-check{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#2E7D52,#4CAF7A);color:#fff;font-size:2rem;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 8px 28px rgba(46,125,82,0.3)}
+.success-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.8rem;font-weight:600;color:var(--t);margin-bottom:12px}
+.success-body{color:#6B5A4E;line-height:1.8;font-size:1rem;margin-bottom:10px}
+.success-mail{font-size:0.88rem;color:var(--g);font-weight:600;margin-bottom:24px}
+.success-call{display:inline-block;background:linear-gradient(135deg,var(--g),var(--gd));color:#fff;text-decoration:none;padding:12px 36px;border-radius:30px;font-weight:700;font-size:0.93rem;box-shadow:0 4px 16px rgba(212,165,116,0.35);transition:all var(--tr)}
+.success-call:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(212,165,116,0.45)}
 .contact-details{display:flex;flex-direction:column;gap:14px;margin-top:30px;align-items:center}
 .contact-row{display:flex;align-items:center;gap:13px;font-size:0.97rem}
 .icon-circle{width:42px;height:42px;background:var(--white);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 3px 10px rgba(0,0,0,0.07);flex-shrink:0}
@@ -374,6 +382,19 @@ var lbIndex=0;
 
 function wa(msg){
   return 'https://wa.me/'+WA_NUM+(msg?'?text='+encodeURIComponent(msg):'');
+}
+
+function showSuccess(name,hasMail){
+  var wrap=document.querySelector('.contact-form');
+  if(!wrap) return;
+  wrap.innerHTML=
+    '<div class="success-card">'
+    +'<div class="success-check">✓</div>'
+    +'<h3 class="success-title">תודה, '+name+'!</h3>'
+    +'<p class="success-body">הפנייה התקבלה ✨<br>חיה תחזור אליך בהקדם לתיאום המועד המושלם.</p>'
+    +(hasMail?'<p class="success-mail">📩 אישור נשלח למייל שלך</p>':'')
+    +'<a href="tel:0548463238" class="success-call">📞 054-846-3238</a>'
+    +'</div>';
 }
 
 function bookPkg(pkgName){
@@ -846,21 +867,20 @@ async function submitForm(e){
 
     +'</table></td></tr></table></body></html>';
 
-    // Send to owner via formsubmit
+    // Send to owner via formsubmit (English keys — Hebrew keys cause delivery issues)
     var payload={
-      _subject:'📸 פנייה חדשה מהאתר — '+name,
-      _template:'box',
-      שם:name,
-      טלפון:phone,
-      'סוג צילום':type||'לא צוין',
-      'אימייל לקוח':emailVal||'לא צוין',
-      הודעה:msg||'—'
+      _subject:'פנייה חדשה מהאתר — '+name,
+      name:name,
+      phone:phone,
+      type:type||'לא צוין',
+      email:emailVal||'לא צוין',
+      message:msg||'—'
     };
     if(emailVal){payload._replyto=emailVal;}
     var res=await fetch('https://formsubmit.co/ajax/'+EMAIL,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)});
     btn.disabled=false;btn.textContent='📨 שלחו פנייה';
 
-    // Send beautiful HTML confirmation to client only (200/month EmailJS free limit)
+    // Send beautiful HTML confirmation to client via EmailJS
     if(emailVal&&EJS_PUBLIC&&EJS_SERVICE&&EJS_TMPL){
       fetch('https://api.emailjs.com/api/v1.0/email/send',{
         method:'POST',headers:{'Content-Type':'application/json'},
@@ -870,10 +890,7 @@ async function submitForm(e){
     }
 
     if(res.ok){
-      var successMsg='ההודעה נשלחה! נחזור אליכם בהקדם 😊';
-      if(emailVal) successMsg+=' — אישור נשלח למייל שלכם';
-      if(note){note.textContent=successMsg;note.style.color='#2E7D52';}
-      form.reset();
+      showSuccess(name,!!emailVal);
     }else{
       if(note){note.textContent='שגיאה בשליחה — נסו ליצור קשר בטלפון: '+PHONE;note.style.color='#B84040';}
     }
