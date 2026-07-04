@@ -538,7 +538,7 @@ function render(d){
 +'</div>'
 +'<div class="form-row"><div class="form-group form-full"><label for="cf-msg">הודעה</label><textarea id="cf-msg" name="message" placeholder="כתבו כאן כל מה שתרצו..."></textarea></div></div>'
 +'<button type="submit" class="form-submit">📨 שלחו פנייה</button>'
-+'<p class="form-note">הלחיצה תפתח את אפליקציית המייל שלכם עם הפרטים ממולאים</p>'
++'<p class="form-note">ההודעה תישלח ישירות למייל שלנו</p>'
 +'</form>'
 +'</div>'
 +'<div class="contact-details">'
@@ -739,33 +739,30 @@ async function submitForm(e){
   var emailVal=form.querySelector('#cf-email').value.trim();
   var msg=form.querySelector('#cf-msg').value.trim();
 
-  // Try Formspree if configured, otherwise mailto fallback
-  var FORMSPREE_ID=''; // ← ימולא אוטומטית כשמגדירים Formspree
-  if(FORMSPREE_ID){
-    btn.textContent='שולח...';btn.disabled=true;
-    try{
-      var res=await fetch('https://formspree.io/f/'+FORMSPREE_ID,{
-        method:'POST',
-        headers:{'Content-Type':'application/json','Accept':'application/json'},
-        body:JSON.stringify({name:name,phone:phone,type:type,email:emailVal,message:msg,'_subject':'פנייה חדשה מהאתר — '+name})
-      });
-      btn.disabled=false;
-      if(res.ok){
-        btn.textContent='📨 שלחו פנייה';
-        if(note){note.textContent='ההודעה נשלחה! נחזור אליכם בהקדם 😊';note.style.color='#2E7D52';}
-        form.reset();
-      }else{throw new Error('שגיאה');}
-    }catch(err){
-      btn.disabled=false;btn.textContent='📨 שלחו פנייה';
-      if(note){note.textContent='שגיאה בשליחה — נסו שוב או צרו קשר בוואטסאפ';note.style.color='#B84040';}
+  btn.textContent='שולח...';btn.disabled=true;
+  try{
+    var res=await fetch('https://formsubmit.co/ajax/'+EMAIL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({
+        name:name,phone:phone,
+        'סוג צילום':type||'לא צוין',
+        email:emailVal||'לא צוין',
+        message:msg||'—',
+        _subject:'פנייה חדשה מהאתר — '+name,
+        _template:'table'
+      })
+    });
+    btn.disabled=false;btn.textContent='📨 שלחו פנייה';
+    if(res.ok){
+      if(note){note.textContent='ההודעה נשלחה! נחזור אליכם בהקדם 😊';note.style.color='#2E7D52';}
+      form.reset();
+    }else{
+      if(note){note.textContent='שגיאה בשליחה — נסו ליצור קשר בוואטסאפ';note.style.color='#B84040';}
     }
-  }else{
-    // mailto fallback
-    var subject=encodeURIComponent('פנייה חדשה מהאתר — '+name);
-    var body=encodeURIComponent('שם: '+name+'\nטלפון: '+phone+'\nסוג צילום: '+(type||'לא צוין')+'\nמייל: '+(emailVal||'לא צוין')+'\n\nהודעה:\n'+(msg||'—'));
-    window.open('mailto:'+EMAIL+'?subject='+subject+'&body='+body);
-    if(note){note.textContent='נפתח חלון מייל — שלחו את ההודעה ונחזור אליכם 😊';}
-    form.reset();
+  }catch(err){
+    btn.disabled=false;btn.textContent='📨 שלחו פנייה';
+    if(note){note.textContent='שגיאה בשליחה — נסו ליצור קשר בוואטסאפ';note.style.color='#B84040';}
   }
 }
 
