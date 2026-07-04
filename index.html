@@ -847,7 +847,15 @@ async function submitForm(e){
     +'</table></td></tr></table></body></html>';
 
     // Send to owner via formsubmit
-    var payload={name:name,phone:phone,'סוג צילום':type||'לא צוין',email:emailVal||'לא צוין',message:msg||'—',_subject:'פנייה חדשה מהאתר — '+name,_template:'table'};
+    var payload={
+      _subject:'📸 פנייה חדשה מהאתר — '+name,
+      _template:'box',
+      שם:name,
+      טלפון:phone,
+      'סוג צילום':type||'לא צוין',
+      'אימייל לקוח':emailVal||'לא צוין',
+      הודעה:msg||'—'
+    };
     if(emailVal){payload._replyto=emailVal;}
     var res=await fetch('https://formsubmit.co/ajax/'+EMAIL,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)});
     btn.disabled=false;btn.textContent='📨 שלחו פנייה';
