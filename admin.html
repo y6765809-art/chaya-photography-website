@@ -635,7 +635,7 @@ function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').
 
 // ─── CONTENT EDITOR ────────────────────────────────
 var CONTENT_FIELDS=[
-  {key:'logo',label:'לוגו — כתובת URL לתמונת הלוגו',wide:true},
+  {key:'logo',label:'לוגו',wide:true,uploadBtn:true},
   {key:'hero_tagline',label:'שורת תיאור קטנה'},
   {key:'hero_highlight',label:'כותרת ראשית זהובה'},
   {key:'hero_subline',label:'שורה קטנה מתחת'},
@@ -689,10 +689,61 @@ function renderContent(){
   CONTENT_FIELDS.forEach(function(f){
     var div=document.createElement('div');
     div.style.cssText='display:flex;flex-direction:column;gap:5px'+(f.wide?';grid-column:1/-1':'');
-    div.innerHTML='<label style="font-size:0.82rem;font-weight:700;color:var(--m)">'+escHtml(f.label)+'</label>'
-      +'<input class="token-input" style="margin-bottom:0" data-key="'+f.key+'" value="'+escHtml(contentData[f.key]||'')+'" placeholder="ריק">';
+    var inputId='cf_'+f.key;
+    var uploadHtml='';
+    if(f.uploadBtn){
+      uploadHtml='<div style="display:flex;gap:8px;align-items:center">'
+        +'<input class="token-input" style="margin-bottom:0;flex:1" id="'+inputId+'" data-key="'+f.key+'" value="'+escHtml(contentData[f.key]||'')+'" placeholder="יועלה אוטומטית אחרי בחירת קובץ">'
+        +'<button class="slot-btn upload" style="white-space:nowrap;padding:10px 14px;border-radius:10px" onclick="uploadLogoBtn(\''+inputId+'\')">📤 העלה לוגו</button>'
+        +'</div>'
+        +(contentData[f.key]?'<img src="'+escHtml(contentData[f.key])+'" style="max-height:55px;max-width:200px;object-fit:contain;border-radius:6px;margin-top:4px" onerror="this.style.display=\'none\'">':'');
+    }else{
+      uploadHtml='<input class="token-input" style="margin-bottom:0" id="'+inputId+'" data-key="'+f.key+'" value="'+escHtml(contentData[f.key]||'')+'" placeholder="ריק">';
+    }
+    div.innerHTML='<label style="font-size:0.82rem;font-weight:700;color:var(--m)">'+escHtml(f.label)+'</label>'+uploadHtml;
     wrap.appendChild(div);
   });
+}
+
+var logoFileInput=null;
+var logoInputId='';
+function uploadLogoBtn(inputId){
+  logoInputId=inputId;
+  if(!logoFileInput){
+    logoFileInput=document.createElement('input');
+    logoFileInput.type='file';
+    logoFileInput.accept='image/*';
+    logoFileInput.style.display='none';
+    document.body.appendChild(logoFileInput);
+    logoFileInput.addEventListener('change',function(){
+      if(logoFileInput.files.length) doUploadLogo(logoFileInput.files[0]);
+      logoFileInput.value='';
+    });
+  }
+  logoFileInput.click();
+}
+async function doUploadLogo(file){
+  toast('מעלה לוגו...');
+  try{
+    var compressed=await compressImage(file);
+    var fname='logo'+file.name.replace(/.*(\.[^.]+)$/,'$1').toLowerCase();
+    var b64=await toBase64(compressed);b64=b64.split(',')[1];
+    var sha='';
+    try{var ex=await ghGet('/repos/'+IMAGE_REPO+'/contents/'+fname);sha=ex.sha;}catch(e){}
+    await ghPut('/repos/'+IMAGE_REPO+'/contents/'+fname,{message:'עדכון לוגו',content:b64,sha:sha||undefined});
+    var url=RAW_BASE+fname+'?v='+Date.now();
+    var inp=document.getElementById(logoInputId);
+    if(inp){inp.value=RAW_BASE+fname;contentData['logo']=RAW_BASE+fname;}
+    // update preview
+    var preview=inp&&inp.parentElement&&inp.parentElement.parentElement&&inp.parentElement.parentElement.querySelector('img');
+    if(preview){preview.src=url;preview.style.display='';}
+    else{
+      var prev=document.createElement('img');
+      prev.src=url;prev.style.cssText='max-height:55px;max-width:200px;object-fit:contain;border-radius:6px;margin-top:4px';
+      inp&&inp.parentElement&&inp.parentElement.parentElement&&inp.parentElement.parentElement.appendChild(prev);
+    }
+    toast('הלוגו הועלה ✓ — לחצו "שמור תוכן" לשמירה');
+  }catch(e){toast('שגיאה: '+e.message);}
 }
 
 async function saveContent(){
