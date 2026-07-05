@@ -12,6 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700&family=Frank+Ruhl+Libre:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -881,13 +882,19 @@ async function submitForm(e){
     var res=await fetch('https://formsubmit.co/ajax/'+EMAIL,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)});
     btn.disabled=false;btn.textContent='📨 שלחו פנייה';
 
-    // Send beautiful HTML confirmation to client via EmailJS
+    // Send beautiful HTML confirmation to client via EmailJS SDK
     if(emailVal&&EJS_PUBLIC&&EJS_SERVICE&&EJS_TMPL){
-      fetch('https://api.emailjs.com/api/v1.0/email/send',{
-        method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({service_id:EJS_SERVICE,template_id:EJS_TMPL,user_id:EJS_PUBLIC,
-          template_params:{to_email:emailVal,to_name:name,subject:'קיבלנו את פנייתך — חיה סגל צילום',html_content:htmlBody}})
-      }).catch(function(){});
+      try{
+        emailjs.init({publicKey:EJS_PUBLIC});
+        await emailjs.send(EJS_SERVICE,EJS_TMPL,{
+          to_email:emailVal,
+          to_name:name,
+          subject:'קיבלנו את פנייתך — חיה סגל צילום',
+          html_content:htmlBody
+        });
+      }catch(ejsErr){
+        console.warn('EmailJS error:',ejsErr);
+      }
     }
 
     if(res.ok){
