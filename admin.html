@@ -101,6 +101,15 @@ body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--
 .slot-btn.clear:hover{background:#f5d0d0}
 .slot-btn.upload{background:rgba(212,165,116,0.12);color:var(--g)}
 .slot-btn.upload:hover{background:rgba(212,165,116,0.28)}
+/* Extra images strip per slot */
+.slot-extra{padding:0 11px 10px;border-top:1px solid rgba(212,165,116,0.18);margin-top:6px}
+.slot-extra-label{font-size:0.7rem;color:var(--m);margin:7px 0 5px;font-weight:600;letter-spacing:0.03em}
+.slot-extra-row{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.slot-extra-thumb-wrap{position:relative;width:38px;height:38px;border-radius:5px;overflow:hidden;flex-shrink:0}
+.slot-extra-thumb{width:100%;height:100%;object-fit:cover;display:block}
+.slot-extra-del{position:absolute;top:0;right:0;background:rgba(180,0,0,0.75);color:#fff;border:none;width:14px;height:14px;font-size:9px;cursor:pointer;line-height:14px;text-align:center;padding:0;border-radius:0 0 0 4px}
+.slot-add-imgs{padding:4px 8px;border:1.5px dashed rgba(212,165,116,0.55);border-radius:7px;background:none;font-size:0.73rem;color:var(--g);cursor:pointer;white-space:nowrap;font-weight:700;transition:background 0.2s}
+.slot-add-imgs:hover{background:rgba(212,165,116,0.12)}
 
 /* ADD SLOT */
 .add-slot-btn{background:var(--card);border:2px dashed var(--border);border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;min-height:190px;transition:all 0.2s;color:var(--m);font-size:0.88rem;font-weight:600}
@@ -448,11 +457,32 @@ function renderSlots(){
     infoDiv.className='slot-info';
     infoDiv.innerHTML='<div class="slot-name">'+escHtml(slot.name)+'</div>'
       +(slot.file?'<div class="slot-file">'+escHtml(slot.file)+'</div>':'<div class="slot-file" style="color:#bbb">ריק — גרור תמונה לכאן</div>')
-      +'<div class="slot-actions"><button class="slot-btn upload" onclick="uploadToSlot('+i+',event)">📤 העלה תמונה</button></div>';
+      +'<div class="slot-actions"><button class="slot-btn upload" onclick="uploadToSlot('+i+',event)">📤 תמונה ראשית</button></div>';
+
+    // Extra images strip
+    var extras=slot.images||[];
+    var extraDiv=document.createElement('div');
+    extraDiv.className='slot-extra';
+    var thumbsHtml='';
+    extras.forEach(function(f,j){
+      var url=getImageUrl(f)||(allImages.length?'':null);
+      if(url){
+        thumbsHtml+='<div class="slot-extra-thumb-wrap">'
+          +'<img class="slot-extra-thumb" src="'+url+'" loading="lazy">'
+          +'<button class="slot-extra-del" onclick="removeExtraImage('+i+','+j+',event)" title="הסר">✕</button>'
+          +'</div>';
+      }
+    });
+    extraDiv.innerHTML='<div class="slot-extra-label">תמונות נוספות לסלייד-שואו ('+(extras.length)+')</div>'
+      +'<div class="slot-extra-row" id="extraRow'+i+'">'
+      +thumbsHtml
+      +'<button class="slot-add-imgs" onclick="addImagesToSlot('+i+',event)">➕ הוסף</button>'
+      +'</div>';
 
     div.appendChild(handleDiv);
     div.appendChild(imgWrap);
     div.appendChild(infoDiv);
+    div.appendChild(extraDiv);
 
     // Drop image FROM library onto slot
     div.addEventListener('dragover',function(e){
@@ -586,6 +616,7 @@ async function uploadFile(file){
     renderLibrary();
     // Auto-assign to first empty slot
     assignToFirstEmpty(fname);
+    saveGallery(); // auto-save so category thumbnail appears on site immediately
     toast(fname+' הועלה בהצלחה 📸');
   }catch(e){
     item.setProgress(100);
@@ -990,10 +1021,74 @@ async function uploadToSlotFile(idx,file){
     assignToSlot(idx,fname);
     renderLibrary();
     toast(fname+' הועלה ל'+gallery[idx].name+' ✓');
+    saveGallery(); // auto-save so site updates immediately
   }catch(e){
     item.setProgress(100);
     item.setStatus('err','✗ שגיאה: '+e.message);
   }
+}
+
+// ─── EXTRA IMAGES PER SLOT ───────────────
+var multiImgInput=null;
+var multiImgTarget=-1;
+
+function initMultiImgInput(){
+  if(multiImgInput) return;
+  multiImgInput=document.createElement('input');
+  multiImgInput.type='file';
+  multiImgInput.accept='image/*';
+  multiImgInput.multiple=true;
+  multiImgInput.style.display='none';
+  document.body.appendChild(multiImgInput);
+  multiImgInput.addEventListener('change',function(){
+    if(multiImgInput.files.length&&multiImgTarget>=0){
+      Array.from(multiImgInput.files).forEach(function(f){uploadExtraImage(multiImgTarget,f);});
+    }
+    multiImgInput.value='';
+  });
+}
+
+function addImagesToSlot(idx,e){
+  if(e) e.stopPropagation();
+  initMultiImgInput();
+  multiImgTarget=idx;
+  multiImgInput.click();
+}
+
+async function uploadExtraImage(idx,file){
+  if(!gallery[idx].images) gallery[idx].images=[];
+  var item=addProgressItem(file.name);
+  try{
+    var compressed=await compressImage(file);
+    var fname=sanitizeName(file.name);
+    var b64=await toBase64(compressed);
+    b64=b64.split(',')[1];
+    var sha='';
+    try{var existing=await ghGet('/repos/'+IMAGE_REPO+'/contents/'+fname);sha=existing.sha;}catch(e){}
+    item.setProgress(60);
+    await ghPut('/repos/'+IMAGE_REPO+'/contents/'+fname,{message:'העלאת תמונה: '+fname,content:b64,sha:sha||undefined});
+    item.setProgress(100);
+    item.setStatus('ok','✓ הועלה');
+    await loadLibrary();
+    gallery[idx].images.push(fname);
+    markChanged();
+    renderSlots();
+    renderLibrary();
+    toast(fname+' הועלה לגלריית '+gallery[idx].name+' ✓');
+    saveGallery();
+  }catch(e){
+    item.setProgress(100);
+    item.setStatus('err','✗ שגיאה: '+e.message);
+  }
+}
+
+function removeExtraImage(slotIdx,imgIdx,e){
+  if(e) e.stopPropagation();
+  if(!gallery[slotIdx]||!gallery[slotIdx].images) return;
+  gallery[slotIdx].images.splice(imgIdx,1);
+  markChanged();
+  renderSlots();
+  saveGallery();
 }
 
 // ─── BOOT ────────────────────────────────
