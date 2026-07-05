@@ -793,7 +793,7 @@ function submitForm(e){
     return;
   }
   btn.textContent='שולח...';btn.disabled=true;
-  var successUrl='https://y6765809-art.github.io/chaya-photography-website/success.html?n='+encodeURIComponent(name);
+  var successUrl='https://chaya-segal.netlify.app/success.html?n='+encodeURIComponent(name);
   var body='name='+encodeURIComponent(name)+'&phone='+encodeURIComponent(phone)+'&type='+encodeURIComponent(type)+'&email='+encodeURIComponent(emailVal)+'&message='+encodeURIComponent(msgVal);
   fetch(GAS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body})
     .then(function(){window.location.href=successUrl;})
