@@ -1125,41 +1125,55 @@ function initParticles(){
 }
 
 // Read gallery.json (admin-managed) and content.json, then merge with fallback
-async function fetchWithTimeout(url,opts,ms){
+var CACHE_KEY='cs_site_v1';
+var CACHE_TTL=5*60*1000; // 5 minutes
+async function fetchJ(url,ms){
   var ac=new AbortController();
-  var tid=setTimeout(function(){ac.abort();},ms);
-  try{var r=await fetch(url,Object.assign({},opts,{signal:ac.signal}));clearTimeout(tid);return r;}
+  var tid=setTimeout(function(){ac.abort();},ms||6000);
+  try{var r=await fetch(url,{cache:'no-store',signal:ac.signal});clearTimeout(tid);return r;}
   catch(e){clearTimeout(tid);throw e;}
 }
 async function loadAll(){
   var d=Object.assign({},FB);
-  // 1. Try Google Sheets — 3s timeout so it doesn't block the rest
-  if(SHEET_ID){
-    try{
-      var url='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:csv';
-      var res=await fetchWithTimeout(url,{cache:'no-store'},3000);
-      if(res.ok){
-        var csv=await res.text();
-        csv.split('\n').forEach(function(line){
-          line=line.trim(); if(!line) return;
-          var m=line.match(/^"?([^",\r\n]+)"?,\s*"?(.*?)"?\s*\r?$/);
-          if(m&&m[1]&&m[2]&&m[1].trim()!=='key') d[m[1].trim()]=m[2].trim();
-        });
-      }
-    }catch(e){}
-  }
-  // 2+3. content.json and gallery.json in parallel — much faster
-  var ts=Date.now();
-  var results=await Promise.allSettled([
-    fetchWithTimeout('content.json?v='+ts,{cache:'no-store'},8000),
-    fetchWithTimeout('gallery.json?v='+ts,{cache:'no-store'},8000)
-  ]);
+
+  // Serve from localStorage cache instantly (stale-while-revalidate)
+  var cached=null;
   try{
-    var cr=results[0];
+    var raw=localStorage.getItem(CACHE_KEY);
+    if(raw){var c=JSON.parse(raw);if(Date.now()-c.ts<CACHE_TTL){cached=c.data;Object.assign(d,cached);}}
+  }catch(e){}
+
+  // Fetch all sources in parallel — no sequential blocking
+  var ts=Date.now();
+  var sheetsPromise=SHEET_ID
+    ?fetchJ('https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:csv',3000)
+    :Promise.reject('no sheet');
+  var results=await Promise.allSettled([
+    sheetsPromise,
+    fetchJ('content.json?v='+ts,6000),
+    fetchJ('gallery.json?v='+ts,6000)
+  ]);
+
+  // Google Sheets
+  try{
+    var sr=results[0];
+    if(sr.status==='fulfilled'&&sr.value.ok){
+      var csv=await sr.value.text();
+      csv.split('\n').forEach(function(line){
+        line=line.trim(); if(!line) return;
+        var m=line.match(/^"?([^",\r\n]+)"?,\s*"?(.*?)"?\s*\r?$/);
+        if(m&&m[1]&&m[2]&&m[1].trim()!=='key') d[m[1].trim()]=m[2].trim();
+      });
+    }
+  }catch(e){}
+  // content.json
+  try{
+    var cr=results[1];
     if(cr.status==='fulfilled'&&cr.value.ok){var cd=await cr.value.json();Object.assign(d,cd);}
   }catch(e){}
+  // gallery.json
   try{
-    var gr=results[1];
+    var gr=results[2];
     if(gr.status==='fulfilled'&&gr.value.ok){
       var gal=await gr.value.json();
       gal.forEach(function(slot,i){
@@ -1171,6 +1185,14 @@ async function loadAll(){
       for(var x=gal.length+1;x<=8;x++){d['cat'+x+'_name']='';d['cat'+x+'_image']='';}
     }
   }catch(e){}
+
+  // Save fresh data to cache
+  try{
+    var toCache={};
+    Object.keys(d).forEach(function(k){if(d[k]!==FB[k])toCache[k]=d[k];});
+    localStorage.setItem(CACHE_KEY,JSON.stringify({ts:ts,data:toCache}));
+  }catch(e){}
+
   return d;
 }
 
@@ -1182,13 +1204,33 @@ document.addEventListener('keydown',function(e){
   if(e.ctrlKey&&(e.key==='u'||e.key==='U'||e.key==='s'||e.key==='S'||e.key==='p'||e.key==='P'))e.preventDefault();
 });
 
-loadAll().then(function(d){
-  render(d);
-  setTimeout(function(){
+// Stale-while-revalidate: serve cache immediately, refresh in background
+(function(){
+  var cachedD=null;
+  try{
+    var raw=localStorage.getItem(CACHE_KEY);
+    if(raw){var c=JSON.parse(raw);if(Date.now()-c.ts<CACHE_TTL){cachedD=Object.assign({},FB,c.data);}}
+  }catch(e){}
+  if(cachedD){
+    // Render from cache instantly — user sees content right away
+    render(cachedD);
+  }
+  // Always fetch fresh in background; re-render only if gallery changed
+  loadAll().then(function(d){
+    if(!cachedD){
+      render(d);
+    } else {
+      // Silent refresh: only re-render if gallery images changed
+      var galChanged=false;
+      for(var i=1;i<=8;i++){
+        if((d['cat'+i+'_image']||'')!==(cachedD['cat'+i+'_image']||'')){galChanged=true;break;}
+      }
+      if(galChanged) render(d);
+    }
     var loading=document.getElementById('loading');
     if(loading) loading.classList.add('hidden');
-  },350);
-});
+  });
+})();
 </script>
 </body>
 </html>
