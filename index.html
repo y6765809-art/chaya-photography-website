@@ -1167,7 +1167,7 @@ function initSS(){
 function initHeroSlideshow(){
   var container=document.getElementById('heroSlides');
   if(!container||galItems.length===0) return;
-  var photos=galItems.filter(function(p){return p.src&&!p.src.includes('svg');}).slice(0,6);
+  var photos=galItems.filter(function(p){return p.src&&!p.src.includes('svg');});
   if(photos.length===0) return;
   var slides=photos.map(function(p){
     var div=document.createElement('div');

@@ -68,53 +68,46 @@ body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--
 .progress-status.ok{color:var(--green)}
 .progress-status.err{color:var(--red)}
 
-/* GALLERY SLOTS */
-.slots-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:16px;margin-bottom:32px}
-.slot{background:var(--card);border:2px solid var(--border);border-radius:var(--r);overflow:hidden;transition:border-color 0.2s,box-shadow 0.2s,opacity 0.2s;position:relative;cursor:default}
+/* GALLERY SLOTS — expandable list */
+.gal-total{font-size:0.82rem;color:var(--m);font-weight:600;margin-bottom:14px;padding:8px 12px;background:rgba(212,165,116,0.1);border-radius:10px;display:inline-block}
+.slots-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:32px}
+.slot{background:var(--card);border:2px solid var(--border);border-radius:var(--r);overflow:hidden;transition:border-color 0.2s,box-shadow 0.2s}
 .slot.has-image{border-color:var(--g)}
 .slot.drag-target{border-color:var(--g);box-shadow:0 0 0 3px rgba(212,165,116,0.35)}
-.slot.dragging-self{opacity:0.4}
-/* Drag handle header */
-.slot-handle{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;background:var(--c);border-bottom:1px solid var(--border);cursor:grab;user-select:none;gap:6px}
-.slot-handle:active{cursor:grabbing}
-.slot-handle-grip{color:var(--m);font-size:1rem;letter-spacing:1px;opacity:0.6}
-.slot-handle-num{font-size:0.72rem;font-weight:700;color:var(--m);background:rgba(212,165,116,0.18);padding:2px 7px;border-radius:10px}
-.slot-handle-arrows{display:flex;gap:3px}
-.slot-arr{width:20px;height:20px;background:transparent;border:1px solid var(--border);border-radius:4px;color:var(--m);font-size:0.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;transition:all 0.15s}
+/* Slot header */
+.slot-head{display:flex;align-items:center;padding:10px 14px;gap:10px;cursor:pointer;user-select:none;background:rgba(242,223,206,0.4);transition:background 0.15s}
+.slot-head:hover{background:rgba(212,165,116,0.15)}
+.slot-head-grip{color:var(--m);font-size:0.95rem;opacity:0.55;cursor:grab;flex-shrink:0}
+.slot-head-grip:active{cursor:grabbing}
+.slot-head-name{font-weight:700;font-size:0.95rem;flex:1}
+.slot-head-count{font-size:0.76rem;background:rgba(212,165,116,0.22);color:var(--gd);padding:2px 10px;border-radius:12px;font-weight:700;white-space:nowrap;flex-shrink:0}
+.slot-head-arrows{display:flex;gap:3px;flex-shrink:0}
+.slot-arr{width:22px;height:22px;background:transparent;border:1px solid var(--border);border-radius:5px;color:var(--m);font-size:0.72rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s}
 .slot-arr:hover{background:var(--g);border-color:var(--g);color:#fff}
-/* Image area */
-.slot-img-wrap{height:130px;background:var(--c);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
-.slot-img-wrap img{width:100%;height:100%;object-fit:cover}
-.slot-empty-icon{font-size:2.2rem;opacity:0.25}
-.slot-drop-hint{position:absolute;inset:0;background:rgba(212,165,116,0.85);display:none;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.9rem;pointer-events:none}
-.slot.drag-target .slot-drop-hint{display:flex}
-.slot-del{position:absolute;top:6px;left:6px;width:26px;height:26px;background:rgba(0,0,0,0.55);border:none;border-radius:50%;color:#fff;font-size:0.85rem;cursor:pointer;display:none;align-items:center;justify-content:center}
-.slot.has-image:hover .slot-del{display:flex}
-.slot-del:hover{background:var(--red)}
-/* Info */
-.slot-info{padding:9px 11px}
-.slot-name{font-size:0.88rem;font-weight:700;margin-bottom:2px}
-.slot-file{font-size:0.73rem;color:var(--m);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.slot-actions{display:flex;gap:6px;margin-top:8px}
-.slot-btn{flex:1;padding:5px 0;border:none;border-radius:8px;font-size:0.74rem;font-weight:700;cursor:pointer;transition:background 0.2s}
-.slot-btn.clear{background:var(--red-bg);color:var(--red)}
-.slot-btn.clear:hover{background:#f5d0d0}
-.slot-btn.upload{background:rgba(212,165,116,0.12);color:var(--g)}
-.slot-btn.upload:hover{background:rgba(212,165,116,0.28)}
-/* Extra images strip per slot */
-.slot-extra{padding:0 11px 10px;border-top:1px solid rgba(212,165,116,0.18);margin-top:6px}
-.slot-extra-label{font-size:0.7rem;color:var(--m);margin:7px 0 5px;font-weight:600;letter-spacing:0.03em}
-.slot-extra-row{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
-.slot-extra-thumb-wrap{position:relative;width:38px;height:38px;border-radius:5px;overflow:hidden;flex-shrink:0}
-.slot-extra-thumb{width:100%;height:100%;object-fit:cover;display:block}
-.slot-extra-del{position:absolute;top:0;right:0;background:rgba(180,0,0,0.75);color:#fff;border:none;width:14px;height:14px;font-size:9px;cursor:pointer;line-height:14px;text-align:center;padding:0;border-radius:0 0 0 4px}
-.slot-add-imgs{padding:4px 8px;border:1.5px dashed rgba(212,165,116,0.55);border-radius:7px;background:none;font-size:0.73rem;color:var(--g);cursor:pointer;white-space:nowrap;font-weight:700;transition:background 0.2s}
-.slot-add-imgs:hover{background:rgba(212,165,116,0.12)}
-
+.slot-expand-icon{color:var(--m);font-size:0.85rem;transition:transform 0.2s;flex-shrink:0}
+.slot.expanded .slot-expand-icon{transform:rotate(180deg)}
+/* Slot body */
+.slot-body{display:none;padding:14px;border-top:1px solid var(--border)}
+.slot.expanded .slot-body{display:block}
+/* Photo grid inside slot */
+.slot-photos{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px;min-height:30px}
+.slot-photo{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0}
+.slot-photo-img-wrap{width:86px;height:86px;border-radius:8px;overflow:hidden;position:relative;background:var(--c)}
+.slot-photo-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.slot-photo-tag{position:absolute;bottom:3px;right:3px;background:var(--g);color:#fff;font-size:8px;padding:1px 5px;border-radius:6px;font-weight:700}
+.slot-photo-ctrls{display:flex;gap:3px}
+.spc{width:22px;height:22px;border:1px solid var(--border);background:var(--bg);border-radius:5px;font-size:0.68rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;line-height:1}
+.spc:hover:not(.del){background:var(--g);border-color:var(--g);color:#fff}
+.spc.del{color:var(--red);border-color:rgba(184,64,64,0.3)}
+.spc.del:hover{background:var(--red);border-color:var(--red);color:#fff}
+.slot-empty-msg{color:var(--m);font-size:0.85rem;padding:6px 0}
+/* Upload button inside slot */
+.slot-upload-btn{width:100%;padding:9px 16px;background:rgba(212,165,116,0.08);border:1.5px dashed rgba(212,165,116,0.5);border-radius:10px;color:var(--g);font-weight:700;font-size:0.85rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;justify-content:center;gap:7px;font-family:inherit}
+.slot-upload-btn:hover{background:rgba(212,165,116,0.2);border-style:solid}
 /* ADD SLOT */
-.add-slot-btn{background:var(--card);border:2px dashed var(--border);border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;min-height:190px;transition:all 0.2s;color:var(--m);font-size:0.88rem;font-weight:600}
+.add-slot-btn{background:var(--card);border:2px dashed var(--border);border-radius:var(--r);display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;padding:18px;transition:all 0.2s;color:var(--m);font-size:0.9rem;font-weight:600}
 .add-slot-btn:hover{border-color:var(--g);color:var(--g);background:rgba(212,165,116,0.04)}
-.add-slot-icon{font-size:1.8rem;opacity:0.4}
+.add-slot-icon{font-size:1.4rem;opacity:0.45}
 
 /* IMAGE LIBRARY */
 .lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;margin-bottom:28px}
@@ -219,10 +212,8 @@ pb-20{padding-bottom:80px}
   <div class="progress-list" id="progressList"></div>
 
   <!-- GALLERY SLOTS -->
-  <div class="section-title">🖼️ גלריה באתר <span style="font-size:0.78rem;color:var(--m);font-weight:400">— גררו תמונה מהספרייה לכל מסגרת</span></div>
-  <div style="font-size:0.82rem;color:var(--m);margin-bottom:12px;background:#F7F0E8;border-radius:8px;padding:9px 14px">
-    🔀 <strong>לשינוי סדר:</strong> גררו את הפס הצהבהב ⠿⠿ בראש כל מסגרת — או לחצו ◀ ▶
-  </div>
+  <div class="section-title">🖼️ קטגוריות גלריה</div>
+  <div id="galTotal" class="gal-total">טוען...</div>
   <div class="slots-grid" id="slotsGrid"></div>
 
   <!-- LIBRARY -->
@@ -413,83 +404,94 @@ async function loadGallery(){
 var dragSrcIdx=null;
 function renderSlots(){
   var grid=document.getElementById('slotsGrid');
+  // Save which slots are expanded before clearing
+  var expanded={};
+  grid.querySelectorAll('.slot').forEach(function(el){
+    if(el.classList.contains('expanded')) expanded[el.dataset.idx]=true;
+  });
   grid.innerHTML='';
+
+  // Update total count
+  var totalPhotos=gallery.reduce(function(sum,slot){
+    return sum+(slot.file?1:0)+(slot.images||[]).length;
+  },0);
+  var cats=gallery.filter(function(s){return s.name;}).length;
+  var totalEl=document.getElementById('galTotal');
+  if(totalEl) totalEl.textContent='סה"כ '+totalPhotos+' תמונות ב-'+cats+' קטגוריות';
+
   gallery.forEach(function(slot,i){
-    var hasImg=!!(slot.file&&getImageUrl(slot.file));
+    var allPhotos=[];
+    if(slot.file) allPhotos.push(slot.file);
+    (slot.images||[]).forEach(function(f){if(f) allPhotos.push(f);});
+    var count=allPhotos.length;
+
     var div=document.createElement('div');
-    div.className='slot'+(hasImg?' has-image':'');
+    div.className='slot'+(count>0?' has-image':'')+(expanded[i]?' expanded':'');
     div.dataset.idx=i;
 
-    // Header drag handle
-    var handleDiv=document.createElement('div');
-    handleDiv.className='slot-handle';
-    handleDiv.draggable=true;
-    handleDiv.innerHTML='<span class="slot-handle-grip">⠿⠿</span>'
-      +'<span class="slot-handle-num">'+(i+1)+'</span>'
-      +'<span class="slot-handle-arrows">'
-      +(i>0?'<button class="slot-arr" onclick="moveSlot('+i+',-1,event)" title="הזז שמאלה">◀</button>':'')
-      +(i<gallery.length-1?'<button class="slot-arr" onclick="moveSlot('+i+',1,event)" title="הזז ימינה">▶</button>':'')
-      +'</span>';
-
-    // Drag-to-reorder events on handle
-    handleDiv.addEventListener('dragstart',function(e){
-      dragSrcIdx=i;
-      e.dataTransfer.effectAllowed='move';
-      e.dataTransfer.setData('slot-move','1');
-      setTimeout(function(){div.classList.add('dragging-self');},0);
-    });
-    handleDiv.addEventListener('dragend',function(){
-      div.classList.remove('dragging-self');
-      dragSrcIdx=null;
-      document.querySelectorAll('.slot').forEach(function(s){s.classList.remove('drag-target');});
+    // ── Header ──
+    var headDiv=document.createElement('div');
+    headDiv.className='slot-head';
+    headDiv.innerHTML='<span class="slot-head-grip">⠿⠿</span>'
+      +'<span class="slot-head-name">'+escHtml(slot.name)+'</span>'
+      +'<span class="slot-head-count">'+count+' תמונות</span>'
+      +'<span class="slot-head-arrows">'
+      +(i>0?'<button class="slot-arr" onclick="moveSlot('+i+',-1,event)" title="הזז למעלה">▲</button>':'')
+      +(i<gallery.length-1?'<button class="slot-arr" onclick="moveSlot('+i+',1,event)" title="הזז למטה">▼</button>':'')
+      +'</span>'
+      +'<span class="slot-expand-icon">▾</span>';
+    headDiv.addEventListener('click',function(e){
+      if(e.target.classList.contains('slot-arr')) return;
+      div.classList.toggle('expanded');
     });
 
-    var imgHtml=hasImg
-      ?'<img src="'+getImageUrl(slot.file)+'?v='+Date.now()+'" alt="'+slot.name+'" loading="lazy" onerror="this.src=\'data:image/svg+xml,<svg xmlns=\\\'http://www.w3.org/2000/svg\\\' width=\\\'160\\\' height=\\\'130\\\'><rect fill=\\\'%23f2dfce\\\'/></svg>\'">'
-      :'<div class="slot-empty-icon">+</div>';
+    // ── Body (visible when expanded) ──
+    var bodyDiv=document.createElement('div');
+    bodyDiv.className='slot-body';
 
-    var imgWrap=document.createElement('div');
-    imgWrap.className='slot-img-wrap';
-    imgWrap.innerHTML=imgHtml+'<div class="slot-drop-hint">שחרר כאן</div>'
-      +(hasImg?'<button class="slot-del" onclick="clearSlot('+i+',event)" title="הסר תמונה">✕</button>':'');
+    // Photo grid
+    var photosDiv=document.createElement('div');
+    photosDiv.className='slot-photos';
 
-    var infoDiv=document.createElement('div');
-    infoDiv.className='slot-info';
-    infoDiv.innerHTML='<div class="slot-name">'+escHtml(slot.name)+'</div>'
-      +(slot.file?'<div class="slot-file">'+escHtml(slot.file)+'</div>':'<div class="slot-file" style="color:#bbb">ריק — גרור תמונה לכאן</div>');
-
-    // Extra images strip
-    var extras=slot.images||[];
-    var extraDiv=document.createElement('div');
-    extraDiv.className='slot-extra';
-    var thumbsHtml='';
-    extras.forEach(function(f,j){
-      var url=getImageUrl(f)||(allImages.length?'':null);
-      if(url){
-        thumbsHtml+='<div class="slot-extra-thumb-wrap">'
-          +'<img class="slot-extra-thumb" src="'+url+'" loading="lazy">'
-          +'<button class="slot-extra-del" onclick="removeExtraImage('+i+','+j+',event)" title="הסר">✕</button>'
+    if(count===0){
+      photosDiv.innerHTML='<div class="slot-empty-msg">אין תמונות — לחצו "הוסף תמונות" כדי להעלות</div>';
+    } else {
+      allPhotos.forEach(function(f,pi){
+        var url=getImageUrl(f);
+        var photoWrap=document.createElement('div');
+        photoWrap.className='slot-photo';
+        var imgHtml=url
+          ?'<img src="'+url+'" loading="lazy" onerror="this.style.opacity=\'0.3\'">'
+          :'<div style="width:86px;height:86px;display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:var(--m);text-align:center;padding:4px">'+escHtml(f)+'</div>';
+        photoWrap.innerHTML='<div class="slot-photo-img-wrap">'
+          +imgHtml
+          +(pi===0?'<div class="slot-photo-tag">ראשי</div>':'')
+          +'</div>'
+          +'<div class="slot-photo-ctrls">'
+          +(pi>0?'<button class="spc" onclick="movePhoto('+i+','+pi+',-1,event)">←</button>':'<span style="width:22px"></span>')
+          +'<button class="spc del" onclick="removePhoto('+i+','+pi+',event)" title="הסר תמונה">✕</button>'
+          +(pi<count-1?'<button class="spc" onclick="movePhoto('+i+','+pi+',1,event)">→</button>':'<span style="width:22px"></span>')
           +'</div>';
-      }
-    });
-    extraDiv.innerHTML='<div class="slot-extra-row" id="extraRow'+i+'">'
-      +thumbsHtml
-      +'<button class="slot-add-imgs" onclick="addImagesToSlot('+i+',event)">📤 הוסף תמונות</button>'
-      +'</div>';
+        photosDiv.appendChild(photoWrap);
+      });
+    }
 
-    div.appendChild(handleDiv);
-    div.appendChild(imgWrap);
-    div.appendChild(infoDiv);
-    div.appendChild(extraDiv);
+    // Upload button
+    var uploadBtn=document.createElement('button');
+    uploadBtn.className='slot-upload-btn';
+    uploadBtn.innerHTML='📤 הוסף תמונות';
+    uploadBtn.onclick=function(e){e.stopPropagation();addImagesToSlot(i,e);};
 
-    // Drop image FROM library onto slot
+    bodyDiv.appendChild(photosDiv);
+    bodyDiv.appendChild(uploadBtn);
+
+    div.appendChild(headDiv);
+    div.appendChild(bodyDiv);
+
+    // Drop image from library onto slot
     div.addEventListener('dragover',function(e){
-      e.preventDefault();
-      if(dragSrcIdx!==null&&dragSrcIdx!==i){
-        // Reorder mode
-        div.classList.add('drag-target');
-      } else if(dragSrcIdx===null){
-        // Image-from-library mode
+      if(e.dataTransfer.types.indexOf('text/plain')>=0){
+        e.preventDefault();
         div.classList.add('drag-target');
       }
     });
@@ -499,24 +501,17 @@ function renderSlots(){
     div.addEventListener('drop',function(e){
       e.preventDefault();
       div.classList.remove('drag-target');
-      var slotMove=e.dataTransfer.getData('slot-move');
-      if(slotMove&&dragSrcIdx!==null&&dragSrcIdx!==i){
-        // Reorder slots
-        var moved=gallery.splice(dragSrcIdx,1)[0];
-        gallery.splice(i,0,moved);
-        markChanged();
-        renderSlots();
-      } else {
-        var file=e.dataTransfer.getData('text/plain');
-        if(file) assignToSlot(i,file);
-      }
+      var file=e.dataTransfer.getData('text/plain');
+      if(file) assignToSlot(i,file);
     });
+
     grid.appendChild(div);
   });
+
   // Add slot button
   var addBtn=document.createElement('div');
   addBtn.className='add-slot-btn';
-  addBtn.innerHTML='<div class="add-slot-icon">＋</div><div>הוסף קטגוריה</div>';
+  addBtn.innerHTML='<span class="add-slot-icon">＋</span><span>הוסף קטגוריה</span>';
   addBtn.onclick=addSlot;
   grid.appendChild(addBtn);
 }
@@ -528,11 +523,17 @@ function getImageUrl(file){
 }
 
 function assignToSlot(idx,file){
-  gallery[idx].file=file;
+  if(!gallery[idx].file){
+    gallery[idx].file=file;
+  } else {
+    if(!gallery[idx].images) gallery[idx].images=[];
+    if(gallery[idx].images.indexOf(file)<0) gallery[idx].images.push(file);
+  }
   markChanged();
   renderSlots();
   renderLibrary();
-  toast('תמונה הוקצתה ל'+gallery[idx].name+' ✓');
+  scheduleAutoSave();
+  toast('תמונה נוספה ל'+gallery[idx].name+' ✓');
 }
 
 function assignToFirstEmpty(file){
@@ -1096,13 +1097,24 @@ async function uploadExtraImage(idx,file){
   }
 }
 
-function removeExtraImage(slotIdx,imgIdx,e){
+function movePhoto(slotIdx,photoIdx,dir,e){
   if(e) e.stopPropagation();
-  if(!gallery[slotIdx]||!gallery[slotIdx].images) return;
-  gallery[slotIdx].images.splice(imgIdx,1);
-  markChanged();
-  renderSlots();
-  scheduleAutoSave();
+  var slot=gallery[slotIdx];
+  var all=[slot.file].concat(slot.images||[]).filter(Boolean);
+  var to=photoIdx+dir;
+  if(to<0||to>=all.length) return;
+  var tmp=all[photoIdx]; all[photoIdx]=all[to]; all[to]=tmp;
+  slot.file=all[0]||''; slot.images=all.slice(1);
+  markChanged(); renderSlots(); scheduleAutoSave();
+}
+
+function removePhoto(slotIdx,photoIdx,e){
+  if(e) e.stopPropagation();
+  var slot=gallery[slotIdx];
+  var all=[slot.file].concat(slot.images||[]).filter(Boolean);
+  all.splice(photoIdx,1);
+  slot.file=all[0]||''; slot.images=all.slice(1);
+  markChanged(); renderSlots(); scheduleAutoSave();
 }
 
 // ─── BOOT ────────────────────────────────
