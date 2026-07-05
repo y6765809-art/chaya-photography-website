@@ -159,21 +159,23 @@ body.has-banner #home{padding-top:122px}
 /* GALLERY */
 .gallery{padding:100px 20px 80px}
 .gal-grid{columns:3 260px;column-gap:20px;max-width:1180px;margin:0 auto;padding:0 20px}
-.gal-card{break-inside:avoid;margin-bottom:20px;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);transition:transform var(--tr),box-shadow var(--tr);cursor:pointer;position:relative;background:var(--c);display:block;width:100%}
-.gal-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-h)}
+.gal-card{break-inside:avoid;margin-bottom:20px;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);transition:transform var(--tr),box-shadow var(--tr);cursor:pointer;position:relative;background:#c8b09a;display:block;width:100%}
+.gal-card:hover{transform:translateY(-7px);box-shadow:0 20px 52px rgba(0,0,0,0.18)}
+.gal-card::after{content:'';position:absolute;inset:0;border-radius:var(--r);border:2px solid transparent;transition:border-color 0.35s ease;pointer-events:none;z-index:3}
+.gal-card:hover::after{border-color:rgba(212,165,116,0.7)}
 .gal-img-wrap{overflow:hidden}
-.gal-card:nth-child(3n+1) .gal-img-wrap{height:310px}
-.gal-card:nth-child(3n+2) .gal-img-wrap{height:240px}
-.gal-card:nth-child(3n) .gal-img-wrap{height:275px}
-.gal-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 0.65s ease;display:block}
-.gal-card:hover .gal-img-wrap img{transform:scale(1.08)}
-.gal-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.52) 0%,transparent 55%);opacity:0;transition:opacity var(--tr);display:flex;align-items:flex-end;justify-content:center;padding-bottom:18px}
-.gal-card:hover .gal-overlay{opacity:1}
-.gal-overlay-txt{color:var(--white);font-size:0.9rem;font-weight:600;background:rgba(255,255,255,0.18);backdrop-filter:blur(4px);padding:6px 16px;border-radius:20px;transform:translateY(8px);transition:transform var(--tr)}
-.gal-card:hover .gal-overlay-txt{transform:translateY(0)}
-.gal-info{padding:18px 22px 22px}
-.gal-name{font-family:'Frank Ruhl Libre',Georgia,serif;font-size:1.45rem;margin-bottom:4px}
-.gal-desc{color:#888;font-size:0.88rem}
+.gal-card:nth-child(3n+1) .gal-img-wrap{height:330px}
+.gal-card:nth-child(3n+2) .gal-img-wrap{height:255px}
+.gal-card:nth-child(3n) .gal-img-wrap{height:290px}
+.gal-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 0.7s ease;display:block}
+.gal-card:hover .gal-img-wrap img{transform:scale(1.07)}
+.gal-info-overlay{position:absolute;bottom:0;left:0;right:0;padding:52px 20px 18px;background:linear-gradient(to top,rgba(0,0,0,0.68) 0%,rgba(0,0,0,0.28) 55%,transparent 100%);transform:translateY(4px);transition:transform 0.35s ease;z-index:2}
+.gal-card:hover .gal-info-overlay{transform:translateY(0)}
+.gal-name{font-family:'Cormorant Garamond','Frank Ruhl Libre',Georgia,serif;font-size:1.3rem;font-weight:600;color:var(--white);text-shadow:0 2px 10px rgba(0,0,0,0.5);line-height:1.2;margin-bottom:5px}
+.gal-desc{color:rgba(255,255,255,0.72);font-size:0.8rem;margin-bottom:10px;opacity:0;transform:translateY(5px);transition:opacity 0.3s ease,transform 0.3s ease}
+.gal-card:hover .gal-desc{opacity:1;transform:translateY(0)}
+.gal-zoom-pill{display:inline-flex;align-items:center;gap:5px;color:rgba(255,255,255,0.88);font-size:0.76rem;background:rgba(255,255,255,0.16);backdrop-filter:blur(6px);padding:4px 13px;border-radius:20px;opacity:0;transform:translateY(5px);transition:opacity 0.3s 0.05s ease,transform 0.3s 0.05s ease}
+.gal-card:hover .gal-zoom-pill{opacity:1;transform:translateY(0)}
 
 /* ALL-PHOTOS CARD */
 .gal-all{display:block;width:100%;border-radius:var(--r);overflow:hidden;cursor:pointer;position:relative;height:220px;background:#1a1a1a;margin-bottom:28px;box-shadow:var(--shadow);transition:box-shadow var(--tr)}
@@ -558,8 +560,11 @@ function render(d){
       var delay='rd'+(Math.min(i,4));
       cats+='<div class="gal-card reveal '+delay+'" onclick="openLb('+idx+')" tabindex="0" role="button" aria-label="פתח תמונה: '+n+'" onkeydown="if(event.key===\'Enter\'||event.key===\' \')openLb('+idx+')">'
         +'<div class="gal-img-wrap"><img src="'+img+'" alt="'+n+'" loading="lazy" onerror="this.src=imgFb(\''+n+'\')"></div>'
-        +'<div class="gal-overlay"><div class="gal-overlay-txt">🔍 הגדל</div></div>'
-        +'<div class="gal-info"><div class="gal-name">'+n+'</div><div class="gal-desc">'+(desc||'')+'</div></div>'
+        +'<div class="gal-info-overlay">'
+        +'<div class="gal-name">'+n+'</div>'
+        +(desc?'<div class="gal-desc">'+desc+'</div>':'')
+        +'<div class="gal-zoom-pill">&#128269; לחצו להגדלה</div>'
+        +'</div>'
         +'</div>';
     }
   }
