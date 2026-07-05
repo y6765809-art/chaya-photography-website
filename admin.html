@@ -391,13 +391,24 @@ var DEFAULT_NAMES=['חלאקה','ניובורן','סמאש קייק','משפחה
 var DEFAULT_DESCS=['צילום מרגש ליום המיוחד','הרגעים הראשונים','יום הולדת ראשון','צילומי משפחה מרגשים','יום שלא תשכחו'];
 
 async function loadGallery(){
+  // Use GitHub API (authenticated) to bypass CDN cache — raw URL returns stale data after save
   try{
-    var r=await fetch('https://raw.githubusercontent.com/'+SITE_REPO+'/main/gallery.json?v='+Date.now());
-    if(r.ok){gallery=await r.json();return;}
+    var r=await ghGet('/repos/'+SITE_REPO+'/contents/gallery.json');
+    if(r.content){
+      var json=decodeURIComponent(escape(atob(r.content.replace(/\n/g,''))));
+      gallery=JSON.parse(json);
+      if(r.sha) window._gallerySha=r.sha; // cache SHA for saves
+      return;
+    }
   }catch(e){}
-  // Default
+  // Fallback: try raw URL
+  try{
+    var r2=await fetch('https://raw.githubusercontent.com/'+SITE_REPO+'/main/gallery.json?t='+Date.now(),{cache:'no-store'});
+    if(r2.ok){gallery=await r2.json();return;}
+  }catch(e){}
+  // Default skeleton
   gallery=DEFAULT_NAMES.map(function(n,i){
-    return {name:n,file:String(i+1)+'.jpeg',desc:DEFAULT_DESCS[i]};
+    return {name:n,file:'',desc:DEFAULT_DESCS[i]};
   });
 }
 
@@ -717,17 +728,21 @@ async function saveGallery(){
   try{
     var json=JSON.stringify(gallery,null,2);
     var b64=btoa(unescape(encodeURIComponent(json)));
-    // Get current SHA if exists
-    var sha='';
-    try{var cur=await ghGet('/repos/'+SITE_REPO+'/contents/gallery.json');sha=cur.sha;}catch(e){}
-    await ghPut('/repos/'+SITE_REPO+'/contents/gallery.json',{message:'עדכון גלריה',content:b64,sha:sha||undefined});
+    // Get current SHA — use cached value first, fallback to API
+    var sha=window._gallerySha||'';
+    if(!sha){
+      try{var cur=await ghGet('/repos/'+SITE_REPO+'/contents/gallery.json');sha=cur.sha;}catch(e){}
+    }
+    var putResult=await ghPut('/repos/'+SITE_REPO+'/contents/gallery.json',{message:'עדכון גלריה',content:b64,sha:sha||undefined});
+    // Update SHA in memory so next save has the correct SHA without re-fetching
+    if(putResult&&putResult.content&&putResult.content.sha) window._gallerySha=putResult.content.sha;
     btn.disabled=false;
     btn.textContent='💾 שמור שינויים';
     msg.className='save-msg ok';
-    msg.textContent='✓ נשמר!';
+    msg.textContent='✓ נשמר בהצלחה!';
     pendingChanges=false;
-    document.getElementById('saveInfo').textContent='הגלריה עודכנה';
-    setTimeout(function(){msg.textContent='';msg.className='';},3000);
+    document.getElementById('saveInfo').textContent='הגלריה עודכנה ✓';
+    setTimeout(function(){msg.textContent='';msg.className='';},4000);
   }catch(e){
     btn.disabled=false;
     btn.textContent='💾 שמור שינויים';
