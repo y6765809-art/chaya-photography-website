@@ -112,6 +112,8 @@ body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--
 /* IMAGE LIBRARY */
 #libGrid{display:flex;flex-direction:column;margin-bottom:28px}
 .lib-grid-inner{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;margin-bottom:8px}
+.lib-toggle{cursor:pointer;user-select:none;display:flex;align-items:center;gap:4px}
+.lib-toggle:hover{opacity:0.8}
 .lib-section-head{font-size:0.88rem;font-weight:700;color:var(--text);margin:14px 0 8px;padding-bottom:6px;border-bottom:1.5px solid var(--border)}
 .lib-section-head .lib-sc{font-weight:400;color:var(--m);font-size:0.8rem}
 .lib-img{border-radius:10px;overflow:hidden;cursor:grab;position:relative;aspect-ratio:1;background:var(--c);box-shadow:var(--shadow)}
@@ -223,9 +225,9 @@ pb-20{padding-bottom:80px}
   <div class="slots-grid" id="slotsGrid"></div>
 
   <!-- LIBRARY -->
-  <div class="section-title">📁 כל התמונות <span id="libCount" style="font-size:0.82rem;color:var(--m);font-weight:400"></span></div>
-  <div id="libGrid">
-    <div style="color:var(--m);font-size:0.9rem;grid-column:1/-1;padding:20px 0">טוען תמונות...</div>
+  <div class="section-title lib-toggle" id="libToggle" onclick="toggleLib()">📁 כל התמונות <span id="libCount" style="font-size:0.82rem;color:var(--m);font-weight:400"></span> <span id="libArrow" style="font-size:0.85rem;margin-right:4px;transition:transform 0.2s;display:inline-block">▾</span></div>
+  <div id="libGrid" style="display:none">
+    <div style="color:var(--m);font-size:0.9rem;padding:20px 0">טוען תמונות...</div>
   </div>
 
   <!-- CONTENT EDITOR -->
@@ -367,6 +369,14 @@ async function loadLibrary(){
   }
 }
 
+function toggleLib(){
+  var grid=document.getElementById('libGrid');
+  var arrow=document.getElementById('libArrow');
+  var open=grid.style.display!=='none';
+  grid.style.display=open?'none':'flex';
+  grid.style.flexDirection='column';
+  arrow.style.transform=open?'':'rotate(180deg)';
+}
 function renderLibrary(){
   var container=document.getElementById('libGrid');
   if(!allImages.length){container.innerHTML='<div style="color:var(--m);font-size:0.9rem;padding:20px 0">עדיין אין תמונות — העלו למעלה</div>';return;}
