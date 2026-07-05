@@ -739,13 +739,55 @@ var CONTENT_FIELDS=[
   {key:'test5_stars',label:'המלצה 5 — כוכבים'},
   {key:'test5_text',label:'המלצה 5 — טקסט (אופציונלי)',wide:true},{key:'test5_author',label:'המלצה 5 — שם'},
 ];
+var DEFAULTS={
+  logo:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/logo.png",
+  camera_image:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/camera-haircut.png",
+  album_image:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/album.png",
+  studio_image:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/1.jpeg",
+  hero_tagline:"צילום אומנותי לחלאקה ומשפחות",
+  hero_highlight:"אני חיה סגל, צלמת ילדים ומשפחה",
+  hero_subline:"הופכת כל מבט ליצירת אומנות",
+  gallery_title:"הגלריה שלנו",
+  gallery_subtitle:"סוגי הצילומים שאנחנו מציעים",
+  packages_title:"מחירון 2026",
+  packages_subtitle:"חבילות צילום מהממות לחוויה בלתי נשכחת",
+  pkg1_name:"מיני",pkg1_price:"499₪",pkg1_subtitle:"ללא אלבום",
+  pkg1_features:"חצי שעה צילומים|סט בגדים אחד|8 תמונות מעובדות",
+  pkg1_bonus:"תמונה נוספת - 25₪",
+  pkg2_name:"בייסיק",pkg2_price:"820₪",pkg2_subtitle:"ללא אלבום",
+  pkg2_features:"שעה צילומים|3 סטי בגדים|15 תמונות מעובדות",
+  pkg2_bonus:"תמונה נוספת - 25₪",
+  pkg3_name:"גולד",pkg3_price:"1,390₪",pkg3_subtitle:"כולל אלבום",
+  pkg3_features:"שעתיים צילומים|4 סטי בגדים|25 תמונות מעובדות|אלבום 21×56",
+  pkg3_bonus:"תמונה/עמוד נוסף - 25₪",pkg3_featured:"true",
+  pkg4_name:"פרימיום",pkg4_price:"1,750₪",pkg4_subtitle:"אלבום פרימיום",
+  pkg4_features:"2.5 שעות צילומים|4 סטי בגדים|35 תמונות מעובדות|אלבום 21×56 פרימיום",
+  pkg4_bonus:"תמונה/עמוד נוסף - 25₪",
+  testimonials_title:"מה הלקוחות אומרים",
+  testimonials_subtitle:"המלצות מלקוחות מרוצים מרחבי הצפון",
+  test1_stars:"⭐⭐⭐⭐⭐",test1_text:"צילומי החלאקה מדהימים! חיה מקצועית ונעימה, הילדים אהבו אותה מיד!",test1_author:"ר.כ. — טבריה",
+  test2_stars:"⭐⭐⭐⭐⭐",test2_text:"הסטודיו יפהפה! התמונות מושלמות, האלבום יצא מהמם!",test2_author:"ש.ל. — צפת",
+  test3_stars:"⭐⭐⭐⭐⭐",test3_text:"צילומי הניובורן חלומיים! חיה סבלנית ומקצועית בצורה מדהימה!",test3_author:"מ.ר. — כרמיאל",
+  faq_title:"שאלות נפוצות",faq_subtitle:"כל מה שרציתם לדעת",
+  faq1_q:"כמה זמן לוקח צילום?",faq1_a:"מיני - חצי שעה, בייסיק - שעה, גולד - שעתיים, פרימיום - 2.5 שעות.",
+  faq2_q:"מתי מקבלים את התמונות?",faq2_a:"בדרך כלל תוך חודשיים. בעונות עומס עלול להיות מעט יותר — נעדכן מראש.",
+  faq3_q:"איפה מתקיימים הצילומים?",faq3_a:"בסטודיו שלנו בטבריה, או בצילומי חוץ בטבע. אפשר גם שילוב.",
+  faq4_q:"האם צריך להביא בגדים?",faq4_a:"מומלץ להביא 2-4 חליפות/שמלות. יש לנו גם אביזרים ורקעים מגוונים.",
+  faq5_q:"איך משלמים?",faq5_a:"מזומן, העברה בנקאית, ביט, פייבוקס, ואשראי.",
+  faq6_q:"מה אם הילד לא משתף פעולה?",faq6_a:"אנחנו סבלניים ואוהבים ילדים. מתאימים את הקצב לילד ועושים הפסקות לפי הצורך.",
+  contact_phone:"054-846-3238",contact_email:"chaya054846@gmail.com",contact_location:"טבריה, ישראל"
+};
+
 var contentData={};
 
 async function loadContent(){
+  var saved={};
   try{
     var r=await fetch('https://raw.githubusercontent.com/'+SITE_REPO+'/main/content.json?v='+Date.now());
-    if(r.ok) contentData=await r.json();
-  }catch(e){contentData={};}
+    if(r.ok) saved=await r.json();
+  }catch(e){}
+  // Merge: defaults fill empty fields, saved values override
+  contentData=Object.assign({},DEFAULTS,saved);
   renderContent();
 }
 
