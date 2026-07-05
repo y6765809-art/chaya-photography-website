@@ -175,16 +175,16 @@ body.has-banner #home{padding-top:122px}
 .gal-card:hover .gal-zoom-pill{opacity:1;transform:translateY(0)}
 
 /* ALL-PHOTOS CARD */
-.gal-all{display:block;width:100%;border-radius:var(--r);overflow:hidden;cursor:pointer;position:relative;height:220px;background:linear-gradient(135deg,#3a2a1a 0%,#2a1f12 50%,#1e1610 100%);margin-bottom:28px;box-shadow:var(--shadow);transition:box-shadow var(--tr)}
+.gal-all{display:block;width:100%;border-radius:var(--r);overflow:hidden;cursor:pointer;position:relative;height:220px;background:linear-gradient(135deg,#7a5c3e 0%,#6b4f35 50%,#5a4028 100%);margin-bottom:28px;box-shadow:var(--shadow);transition:box-shadow var(--tr)}
 .gal-all:hover{box-shadow:var(--shadow-h)}
 .gal-all-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform 0.7s ease}
 .gal-all:hover .gal-all-bg{transform:scale(1.04)}
-.gal-all-overlay{position:absolute;inset:0;background:linear-gradient(160deg,rgba(20,12,4,0.48) 0%,rgba(10,6,2,0.32) 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;transition:background var(--tr)}
-.gal-all:hover .gal-all-overlay{background:linear-gradient(160deg,rgba(20,12,4,0.32) 0%,rgba(10,6,2,0.18) 100%)}
-.gal-all-play{width:66px;height:66px;border-radius:50%;border:2.5px solid rgba(212,165,116,0.75);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:var(--gl);transition:all var(--tr);background:rgba(212,165,116,0.18)}
-.gal-all:hover .gal-all-play{background:rgba(212,165,116,0.55);border-color:var(--gl);transform:scale(1.12)}
-.gal-all-label{color:var(--gl);font-family:'Cormorant Garamond',Georgia,serif;font-size:1.65rem;font-weight:600;text-shadow:0 2px 12px rgba(0,0,0,0.6);letter-spacing:0.04em}
-.gal-all-sub{color:rgba(212,165,116,0.82);font-size:0.84rem;letter-spacing:0.04em}
+.gal-all-overlay{position:absolute;inset:0;background:linear-gradient(160deg,rgba(30,18,8,0.36) 0%,rgba(15,9,4,0.22) 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;transition:background var(--tr)}
+.gal-all:hover .gal-all-overlay{background:linear-gradient(160deg,rgba(30,18,8,0.22) 0%,rgba(15,9,4,0.10) 100%)}
+.gal-all-play{width:66px;height:66px;border-radius:50%;border:2.5px solid rgba(255,220,160,0.85);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#FFE5AA;transition:all var(--tr);background:rgba(212,165,116,0.22)}
+.gal-all:hover .gal-all-play{background:rgba(212,165,116,0.6);border-color:#FFE5AA;transform:scale(1.12)}
+.gal-all-label{color:#FFE8B0;font-family:'Cormorant Garamond',Georgia,serif;font-size:1.65rem;font-weight:600;text-shadow:0 2px 10px rgba(0,0,0,0.35);letter-spacing:0.04em}
+.gal-all-sub{color:rgba(255,225,150,0.88);font-size:0.84rem;letter-spacing:0.04em}
 
 /* SLIDESHOW */
 .slideshow{position:fixed;inset:0;background:#000;z-index:9995;display:none;flex-direction:column}
@@ -465,11 +465,11 @@ var FB={
   hero_subline:"הופכת כל מבט ליצירת אומנות",
   gallery_title:"הגלריה שלנו",
   gallery_subtitle:"סוגי הצילומים שאנחנו מציעים",
-  cat1_name:"חלאקה",cat1_image:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/1.jpeg",cat1_desc:"צילום מרגש ליום המיוחד",
-  cat2_name:"ניובורן",cat2_image:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/2.jpeg",cat2_desc:"הרגעים הראשונים",
-  cat3_name:"סמאש קייק",cat3_image:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/3.jpeg",cat3_desc:"יום הולדת ראשון",
-  cat4_name:"משפחה",cat4_image:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/4.jpeg",cat4_desc:"צילומי משפחה מרגשים",
-  cat5_name:"בת מצווה",cat5_image:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/5.jpeg",cat5_desc:"יום שלא תשכחו",
+  cat1_name:"חלאקה",cat1_image:"",cat1_desc:"צילום מרגש ליום המיוחד",
+  cat2_name:"ניובורן",cat2_image:"",cat2_desc:"הרגעים הראשונים",
+  cat3_name:"סמאש קייק",cat3_image:"",cat3_desc:"יום הולדת ראשון",
+  cat4_name:"משפחה",cat4_image:"",cat4_desc:"צילומי משפחה מרגשים",
+  cat5_name:"בת מצווה",cat5_image:"",cat5_desc:"יום שלא תשכחו",
   packages_title:"מחירון 2026",
   packages_subtitle:"חבילות צילום מהממות לחוויה בלתי נשכחת",
   pkg1_name:"מיני",pkg1_price:"499₪",pkg1_subtitle:"ללא אלבום",
@@ -1125,38 +1125,49 @@ function initParticles(){
 }
 
 // Read gallery.json (admin-managed) and content.json, then merge with fallback
+async function fetchWithTimeout(url,opts,ms){
+  var ac=new AbortController();
+  var tid=setTimeout(function(){ac.abort();},ms);
+  try{var r=await fetch(url,Object.assign({},opts,{signal:ac.signal}));clearTimeout(tid);return r;}
+  catch(e){clearTimeout(tid);throw e;}
+}
 async function loadAll(){
   var d=Object.assign({},FB);
-  // 1. Try Google Sheets
+  // 1. Try Google Sheets — 3s timeout so it doesn't block the rest
+  if(SHEET_ID){
+    try{
+      var url='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:csv';
+      var res=await fetchWithTimeout(url,{cache:'no-store'},3000);
+      if(res.ok){
+        var csv=await res.text();
+        csv.split('\n').forEach(function(line){
+          line=line.trim(); if(!line) return;
+          var m=line.match(/^"?([^",\r\n]+)"?,\s*"?(.*?)"?\s*\r?$/);
+          if(m&&m[1]&&m[2]&&m[1].trim()!=='key') d[m[1].trim()]=m[2].trim();
+        });
+      }
+    }catch(e){}
+  }
+  // 2+3. content.json and gallery.json in parallel — much faster
+  var ts=Date.now();
+  var results=await Promise.allSettled([
+    fetchWithTimeout('content.json?v='+ts,{cache:'no-store'},8000),
+    fetchWithTimeout('gallery.json?v='+ts,{cache:'no-store'},8000)
+  ]);
   try{
-    var url='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:csv';
-    var res=await fetch(url,{cache:'no-store'});
-    if(res.ok){
-      var csv=await res.text();
-      csv.split('\n').forEach(function(line){
-        line=line.trim(); if(!line) return;
-        var m=line.match(/^"?([^",\r\n]+)"?,\s*"?(.*?)"?\s*\r?$/);
-        if(m&&m[1]&&m[2]&&m[1].trim()!=='key') d[m[1].trim()]=m[2].trim();
-      });
-    }
+    var cr=results[0];
+    if(cr.status==='fulfilled'&&cr.value.ok){var cd=await cr.value.json();Object.assign(d,cd);}
   }catch(e){}
-  // 2. content.json overrides (admin edits)
   try{
-    var cr=await fetch('content.json?v='+Date.now(),{cache:'no-store'});
-    if(cr.ok){var cd=await cr.json();Object.assign(d,cd);}
-  }catch(e){}
-  // 3. gallery.json overrides cat images (admin-managed gallery order)
-  try{
-    var gr=await fetch('gallery.json?v='+Date.now(),{cache:'no-store'});
-    if(gr.ok){
-      var gal=await gr.json();
+    var gr=results[1];
+    if(gr.status==='fulfilled'&&gr.value.ok){
+      var gal=await gr.value.json();
       gal.forEach(function(slot,i){
         var n=i+1;
         if(slot.name) d['cat'+n+'_name']=slot.name;
         if(slot.file) d['cat'+n+'_image']=RAW_BASE+slot.file;
         if(slot.desc) d['cat'+n+'_desc']=slot.desc;
       });
-      // Clear any slots beyond gallery length
       for(var x=gal.length+1;x<=8;x++){d['cat'+x+'_name']='';d['cat'+x+'_image']='';}
     }
   }catch(e){}
