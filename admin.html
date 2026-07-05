@@ -616,7 +616,7 @@ async function uploadFile(file){
     renderLibrary();
     // Auto-assign to first empty slot
     assignToFirstEmpty(fname);
-    saveGallery(); // auto-save so category thumbnail appears on site immediately
+    scheduleAutoSave(); // debounced — waits for all concurrent uploads to finish
     toast(fname+' הועלה בהצלחה 📸');
   }catch(e){
     item.setProgress(100);
@@ -665,7 +665,18 @@ function toBase64(blob){
 }
 
 function sanitizeName(name){
-  return name.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9._-]/g,'');
+  var dotIdx=name.lastIndexOf('.');
+  var ext=dotIdx>=0?name.slice(dotIdx).toLowerCase():'.jpg';
+  var base=name.slice(0,dotIdx>=0?dotIdx:name.length).toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9._-]/g,'');
+  if(!base) base='photo';
+  // Add timestamp to guarantee uniqueness and avoid SHA conflicts on concurrent uploads
+  return base+'-'+Date.now()+ext;
+}
+
+var autoSaveTimer=null;
+function scheduleAutoSave(){
+  if(autoSaveTimer) clearTimeout(autoSaveTimer);
+  autoSaveTimer=setTimeout(function(){autoSaveTimer=null;saveGallery();},1800);
 }
 
 // ─── DELETE ────────────────────────────────
@@ -1021,7 +1032,7 @@ async function uploadToSlotFile(idx,file){
     assignToSlot(idx,fname);
     renderLibrary();
     toast(fname+' הועלה ל'+gallery[idx].name+' ✓');
-    saveGallery(); // auto-save so site updates immediately
+    scheduleAutoSave();
   }catch(e){
     item.setProgress(100);
     item.setStatus('err','✗ שגיאה: '+e.message);
@@ -1075,7 +1086,7 @@ async function uploadExtraImage(idx,file){
     renderSlots();
     renderLibrary();
     toast(fname+' הועלה לגלריית '+gallery[idx].name+' ✓');
-    saveGallery();
+    scheduleAutoSave();
   }catch(e){
     item.setProgress(100);
     item.setStatus('err','✗ שגיאה: '+e.message);
@@ -1088,7 +1099,7 @@ function removeExtraImage(slotIdx,imgIdx,e){
   gallery[slotIdx].images.splice(imgIdx,1);
   markChanged();
   renderSlots();
-  saveGallery();
+  scheduleAutoSave();
 }
 
 // ─── BOOT ────────────────────────────────
