@@ -575,7 +575,7 @@ function render(d){
 +'</div>'
 +'<div class="contact-divider">או השאירו פרטים ונחזור אליכם</div>'
 +'<div class="contact-form">'
-+'<form id="contactForm" onsubmit="submitForm(event)" action="https://script.google.com/macros/s/AKfycbx7onMA1nGK3Bh4Re1jAaR2jLoBXon1CPhPtAFVpyjfpQML6g9acuvpdZ9god-wlmRv/exec" method="POST" target="_self">'
++'<form id="contactForm" onsubmit="submitForm(event)">'
 +'<div class="form-row">'
 +'<div class="form-group"><label for="cf-name">שם מלא *</label><input type="text" id="cf-name" name="name" required placeholder="ישראל ישראלי" autocomplete="name"></div>'
 +'<div class="form-group"><label for="cf-phone">טלפון *</label><input type="tel" id="cf-phone" name="phone" required placeholder="05X-XXX-XXXX" autocomplete="tel"></div>'
@@ -776,11 +776,16 @@ function updateActiveNav(){
   });
 }
 
+var GAS_URL='https://script.google.com/macros/s/AKfycbx7onMA1nGK3Bh4Re1jAaR2jLoBXon1CPhPtAFVpyjfpQML6g9acuvpdZ9god-wlmRv/exec';
+
 function submitForm(e){
   e.preventDefault();
   var form=e.target;
   var name=form.querySelector('#cf-name').value.trim();
   var phone=form.querySelector('#cf-phone').value.trim();
+  var type=form.querySelector('#cf-type').value;
+  var emailVal=form.querySelector('#cf-email').value.trim();
+  var msgVal=form.querySelector('#cf-msg').value.trim();
   var btn=form.querySelector('.form-submit');
   var note=form.querySelector('.form-note');
   if(!name||!phone){
@@ -788,7 +793,11 @@ function submitForm(e){
     return;
   }
   btn.textContent='שולח...';btn.disabled=true;
-  form.submit();
+  var successUrl='https://y6765809-art.github.io/chaya-photography-website/success.html?n='+encodeURIComponent(name);
+  var body='name='+encodeURIComponent(name)+'&phone='+encodeURIComponent(phone)+'&type='+encodeURIComponent(type)+'&email='+encodeURIComponent(emailVal)+'&message='+encodeURIComponent(msgVal);
+  fetch(GAS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body})
+    .then(function(){window.location.href=successUrl;})
+    .catch(function(){window.location.href=successUrl;});
 }
 
 // Read gallery.json (admin-managed) and content.json, then merge with fallback
