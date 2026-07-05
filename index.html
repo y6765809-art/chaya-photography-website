@@ -867,26 +867,23 @@ async function submitForm(e){
 
     +'</table></td></tr></table></body></html>';
 
-    // Send to owner + auto-reply to client via formsubmit
-    var details='שם: '+name
-      +'\nטלפון: '+phone
-      +'\nסוג צילום: '+(type||'לא צוין')
-      +'\nאימייל: '+(emailVal||'לא צוין')
-      +(msg?'\nהודעה: '+msg:'');
-    var autoReply='שלום '+name+','
-      +'\n\nתודה שפנית אלינו! קיבלנו את פנייתך ושמחנו לשמוע ממך.'
-      +'\nחיה סגל תחזור אליך בהקדם לתיאום מועד הצילום.'
-      +'\n\nלשאלות נוספות ניתן לפנות בטלפון: '+PHONE
-      +'\n\nחיה סגל צילום — טבריה, ישראל'
-      +'\n________________________________________'
-      +'\nמייל זה נשלח אוטומטית, אין צורך להשיב.';
+    // Send to owner (table format) + auto-reply to client
     var payload={
       _subject:'פנייה חדשה מהאתר — '+name,
-      message:details
+      _template:'table',
+      name:name,
+      phone:phone,
+      type:type||'לא צוין',
+      email:emailVal||'לא צוין',
+      message:msg||'—'
     };
     if(emailVal){
       payload._replyto=emailVal;
-      payload._autoresponse=autoReply;
+      payload._autoresponse='שלום '+name+','
+        +'\n\nתודה שפנית אלינו! קיבלנו את פנייתך ושמחנו לשמוע ממך.'
+        +'\nחיה סגל תחזור אליך בהקדם לתיאום מועד הצילום.'
+        +'\n\nלשאלות נוספות: '+PHONE
+        +'\n\nחיה סגל צילום | טבריה';
     }
     var res=await fetch('https://formsubmit.co/ajax/'+EMAIL,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)});
     btn.disabled=false;btn.textContent='📨 שלחו פנייה';
