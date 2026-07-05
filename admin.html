@@ -586,16 +586,25 @@ function confirmDelete(name,sha,e){
 
 async function doDelete(name,sha){
   closeModal();
+  toast('מוחק...');
   try{
-    await ghDelete('/repos/'+IMAGE_REPO+'/contents/'+name,{message:'מחיקת תמונה: '+name,sha:sha});
-    // Clear from gallery if used
+    // Fetch fresh SHA to avoid stale-SHA 404/409 errors
+    try{
+      var fresh=await ghGet('/repos/'+IMAGE_REPO+'/contents/'+encodeURIComponent(name));
+      sha=fresh.sha;
+    }catch(e){ /* use original sha if fetch fails */ }
+    await ghDelete('/repos/'+IMAGE_REPO+'/contents/'+encodeURIComponent(name),{message:'מחיקת תמונה: '+name,sha:sha});
     gallery.forEach(function(s){if(s.file===name)s.file='';});
     await loadLibrary();
     renderLibrary();
     renderSlots();
     markChanged();
-    toast(name+' נמחקה');
-  }catch(e){toast('שגיאה: '+e.message);}
+    toast(name+' נמחקה ✓');
+  }catch(e){
+    var msg=e.message||'';
+    if(msg.indexOf('404')!==-1) toast('שגיאה: הקובץ לא נמצא — אולי כבר נמחק?');
+    else toast('שגיאה: '+msg);
+  }
 }
 
 // ─── SAVE ────────────────────────────────
@@ -654,16 +663,20 @@ function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').
 
 // ─── CONTENT EDITOR ────────────────────────────────
 var CONTENT_FIELDS=[
-  {key:'logo',label:'לוגו',wide:true,uploadBtn:true},
-  {key:'ejs_public',label:'EmailJS — Public Key (למיילים מעוצבים ללקוחות)',wide:true},
-  {key:'ejs_service',label:'EmailJS — Service ID',wide:true},
-  {key:'ejs_template',label:'EmailJS — Template ID',wide:true},
+  {sectionTitle:'🖼️ לוגו ותמונות'},
+  {key:'logo',label:'לוגו האתר',wide:true,uploadBtn:true,uploadFileName:'logo',uploadLabel:'📤 העלה לוגו'},
+  {key:'camera_image',label:'תמונת אייקון 1 — מצלמה/חלאקה',wide:true,uploadBtn:true,uploadFileName:'camera-icon',uploadLabel:'📤 העלה תמונה'},
+  {key:'album_image',label:'תמונת אייקון 2 — אלבום',wide:true,uploadBtn:true,uploadFileName:'album-icon',uploadLabel:'📤 העלה תמונה'},
+  {key:'studio_image',label:'תמונת אייקון 3 — סטודיו',wide:true,uploadBtn:true,uploadFileName:'studio-icon',uploadLabel:'📤 העלה תמונה'},
+  {sectionTitle:'🏠 אזור פתיחה (Hero)'},
   {key:'hero_tagline',label:'שורת תיאור קטנה'},
   {key:'hero_highlight',label:'כותרת ראשית זהובה'},
   {key:'hero_subline',label:'שורה קטנה מתחת'},
+  {sectionTitle:'📞 פרטי קשר'},
   {key:'contact_phone',label:'טלפון'},
   {key:'contact_email',label:'מייל'},
   {key:'contact_location',label:'מיקום / כתובת'},
+  {sectionTitle:'📊 מונים'},
   {key:'stat1_num',label:'מונה 1 — מספר (ריק = הסתר)'},
   {key:'stat1_label',label:'מונה 1 — תווית (ברירת מחדל: משפחות מרוצות)'},
   {key:'stat2_num',label:'מונה 2 — מספר'},
@@ -673,17 +686,33 @@ var CONTENT_FIELDS=[
   {key:'stat4_num',label:'מונה 4 — מספר'},
   {key:'stat4_label',label:'מונה 4 — תווית (ברירת מחדל: % שביעות רצון)'},
   {key:'hide_stats',label:'הסתר את כל סקשן המונים (true / false)'},
+  {sectionTitle:'🖼️ גלריה'},
+  {key:'gallery_title',label:'כותרת סקשן גלריה'},
+  {key:'gallery_subtitle',label:'כיתוב גלריה (מתחת לכותרת)',wide:true},
+  {key:'hide_all_photos',label:'הסתר כרטיס "כל התמונות" (true / false)'},
+  {key:'all_photos_title',label:'כותרת כרטיס "כל התמונות"'},
+  {key:'all_photos_subtitle',label:'כיתוב קטן (ריק = מציג מספר תמונות אוטומטי)',wide:true},
+  {sectionTitle:'💬 המלצות'},
   {key:'hide_testimonials',label:'הסתר סקשן המלצות (true / false)'},
+  {key:'testimonials_title',label:'כותרת סקשן המלצות'},
+  {key:'testimonials_subtitle',label:'כיתוב המלצות (מתחת לכותרת)',wide:true},
+  {sectionTitle:'❓ שאלות נפוצות (FAQ)'},
   {key:'hide_faq',label:'הסתר סקשן שאלות נפוצות (true / false)'},
+  {key:'faq_title',label:'כותרת סקשן שאלות נפוצות'},
+  {key:'faq_subtitle',label:'כיתוב שאלות נפוצות (מתחת לכותרת)',wide:true},
   {key:'faq1_q',label:'שאלה 1 (ריק = הסתר)',wide:true},{key:'faq1_a',label:'תשובה 1',wide:true},
   {key:'faq2_q',label:'שאלה 2 (ריק = הסתר)',wide:true},{key:'faq2_a',label:'תשובה 2',wide:true},
   {key:'faq3_q',label:'שאלה 3 (ריק = הסתר)',wide:true},{key:'faq3_a',label:'תשובה 3',wide:true},
   {key:'faq4_q',label:'שאלה 4 (ריק = הסתר)',wide:true},{key:'faq4_a',label:'תשובה 4',wide:true},
   {key:'faq5_q',label:'שאלה 5 (ריק = הסתר)',wide:true},{key:'faq5_a',label:'תשובה 5',wide:true},
   {key:'faq6_q',label:'שאלה 6 (ריק = הסתר)',wide:true},{key:'faq6_a',label:'תשובה 6',wide:true},
+  {sectionTitle:'🎁 מבצע'},
   {key:'sale_active',label:'מבצע פעיל? (true / false)'},
   {key:'sale_text',label:'טקסט המבצע'},
   {key:'sale_emoji',label:'אמוג׳י מבצע (לדוג׳: 🎉)'},
+  {sectionTitle:'💰 מחירון'},
+  {key:'packages_title',label:'כותרת סקשן מחירון'},
+  {key:'packages_subtitle',label:'כיתוב מחירון (מתחת לכותרת)',wide:true},
   {key:'pkg1_name',label:'חבילה 1 — שם'},{key:'pkg1_price',label:'חבילה 1 — מחיר'},
   {key:'pkg1_subtitle',label:'חבילה 1 — כיתוב מתחת למחיר'},
   {key:'pkg1_features',label:'חבילה 1 — פיצ׳רים (מופרדים ב-|)',wide:true},
@@ -705,19 +734,66 @@ var CONTENT_FIELDS=[
   {key:'pkg5_subtitle',label:'חבילה 5 — כיתוב מתחת למחיר'},
   {key:'pkg5_features',label:'חבילה 5 — פיצ׳רים (מופרדים ב-|)',wide:true},
   {key:'pkg5_bonus',label:'חבילה 5 — הערת בונוס'},
+  {key:'test1_stars',label:'המלצה 1 — כוכבים (לדוג׳: ⭐⭐⭐⭐⭐)'},
   {key:'test1_text',label:'המלצה 1 — טקסט',wide:true},{key:'test1_author',label:'המלצה 1 — שם'},
+  {key:'test2_stars',label:'המלצה 2 — כוכבים'},
   {key:'test2_text',label:'המלצה 2 — טקסט',wide:true},{key:'test2_author',label:'המלצה 2 — שם'},
+  {key:'test3_stars',label:'המלצה 3 — כוכבים'},
   {key:'test3_text',label:'המלצה 3 — טקסט',wide:true},{key:'test3_author',label:'המלצה 3 — שם'},
+  {key:'test4_stars',label:'המלצה 4 — כוכבים'},
   {key:'test4_text',label:'המלצה 4 — טקסט (אופציונלי)',wide:true},{key:'test4_author',label:'המלצה 4 — שם'},
+  {key:'test5_stars',label:'המלצה 5 — כוכבים'},
   {key:'test5_text',label:'המלצה 5 — טקסט (אופציונלי)',wide:true},{key:'test5_author',label:'המלצה 5 — שם'},
 ];
+var DEFAULTS={
+  logo:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/logo.png",
+  camera_image:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/camera-haircut.png",
+  album_image:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/album.png",
+  studio_image:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/1.jpeg",
+  hero_tagline:"צילום אומנותי לחלאקה ומשפחות",
+  hero_highlight:"אני חיה סגל, צלמת ילדים ומשפחה",
+  hero_subline:"הופכת כל מבט ליצירת אומנות",
+  gallery_title:"הגלריה שלנו",
+  gallery_subtitle:"סוגי הצילומים שאנחנו מציעים",
+  packages_title:"מחירון 2026",
+  packages_subtitle:"חבילות צילום מהממות לחוויה בלתי נשכחת",
+  pkg1_name:"מיני",pkg1_price:"499₪",pkg1_subtitle:"ללא אלבום",
+  pkg1_features:"חצי שעה צילומים|סט בגדים אחד|8 תמונות מעובדות",
+  pkg1_bonus:"תמונה נוספת - 25₪",
+  pkg2_name:"בייסיק",pkg2_price:"820₪",pkg2_subtitle:"ללא אלבום",
+  pkg2_features:"שעה צילומים|3 סטי בגדים|15 תמונות מעובדות",
+  pkg2_bonus:"תמונה נוספת - 25₪",
+  pkg3_name:"גולד",pkg3_price:"1,390₪",pkg3_subtitle:"כולל אלבום",
+  pkg3_features:"שעתיים צילומים|4 סטי בגדים|25 תמונות מעובדות|אלבום 21×56",
+  pkg3_bonus:"תמונה/עמוד נוסף - 25₪",pkg3_featured:"true",
+  pkg4_name:"פרימיום",pkg4_price:"1,750₪",pkg4_subtitle:"אלבום פרימיום",
+  pkg4_features:"2.5 שעות צילומים|4 סטי בגדים|35 תמונות מעובדות|אלבום 21×56 פרימיום",
+  pkg4_bonus:"תמונה/עמוד נוסף - 25₪",
+  testimonials_title:"מה הלקוחות אומרים",
+  testimonials_subtitle:"המלצות מלקוחות מרוצים מרחבי הצפון",
+  test1_stars:"⭐⭐⭐⭐⭐",test1_text:"צילומי החלאקה מדהימים! חיה מקצועית ונעימה, הילדים אהבו אותה מיד!",test1_author:"ר.כ. — טבריה",
+  test2_stars:"⭐⭐⭐⭐⭐",test2_text:"הסטודיו יפהפה! התמונות מושלמות, האלבום יצא מהמם!",test2_author:"ש.ל. — צפת",
+  test3_stars:"⭐⭐⭐⭐⭐",test3_text:"צילומי הניובורן חלומיים! חיה סבלנית ומקצועית בצורה מדהימה!",test3_author:"מ.ר. — כרמיאל",
+  faq_title:"שאלות נפוצות",faq_subtitle:"כל מה שרציתם לדעת",
+  faq1_q:"כמה זמן לוקח צילום?",faq1_a:"מיני - חצי שעה, בייסיק - שעה, גולד - שעתיים, פרימיום - 2.5 שעות.",
+  faq2_q:"מתי מקבלים את התמונות?",faq2_a:"בדרך כלל תוך חודשיים. בעונות עומס עלול להיות מעט יותר — נעדכן מראש.",
+  faq3_q:"איפה מתקיימים הצילומים?",faq3_a:"בסטודיו שלנו בטבריה, או בצילומי חוץ בטבע. אפשר גם שילוב.",
+  faq4_q:"האם צריך להביא בגדים?",faq4_a:"מומלץ להביא 2-4 חליפות/שמלות. יש לנו גם אביזרים ורקעים מגוונים.",
+  faq5_q:"איך משלמים?",faq5_a:"מזומן, העברה בנקאית, ביט, פייבוקס, ואשראי.",
+  faq6_q:"מה אם הילד לא משתף פעולה?",faq6_a:"אנחנו סבלניים ואוהבים ילדים. מתאימים את הקצב לילד ועושים הפסקות לפי הצורך.",
+  contact_phone:"054-846-3238",contact_email:"chaya054846@gmail.com",contact_location:"טבריה, ישראל"
+};
+
 var contentData={};
 
 async function loadContent(){
+  var saved={};
   try{
     var r=await fetch('https://raw.githubusercontent.com/'+SITE_REPO+'/main/content.json?v='+Date.now());
-    if(r.ok) contentData=await r.json();
-  }catch(e){contentData={};}
+    if(r.ok) saved=await r.json();
+  }catch(e){}
+  // Merge: defaults fill empty fields, saved values override
+  contentData=Object.assign({},DEFAULTS,saved);
   renderContent();
 }
 
@@ -726,16 +802,25 @@ function renderContent(){
   if(!wrap) return;
   wrap.innerHTML='';
   CONTENT_FIELDS.forEach(function(f){
+    if(f.sectionTitle){
+      var sec=document.createElement('div');
+      sec.style.cssText='grid-column:1/-1;margin:18px 0 6px;padding:10px 16px;background:linear-gradient(to left,#FEF8F0,#FDF2E4);border-right:3px solid #D4A574;border-radius:8px;font-size:0.95rem;font-weight:700;color:#8B6340';
+      sec.textContent=f.sectionTitle;
+      wrap.appendChild(sec);
+      return;
+    }
     var div=document.createElement('div');
     div.style.cssText='display:flex;flex-direction:column;gap:5px'+(f.wide?';grid-column:1/-1':'');
     var inputId='cf_'+f.key;
     var uploadHtml='';
     if(f.uploadBtn){
+      var ufn='uploadImageField(\''+inputId+'\',\''+f.key+'\',\''+(f.uploadFileName||f.key)+'\')';
+      var ulabel=f.uploadLabel||'📤 העלה תמונה';
       uploadHtml='<div style="display:flex;gap:8px;align-items:center">'
         +'<input class="token-input" style="margin-bottom:0;flex:1" id="'+inputId+'" data-key="'+f.key+'" value="'+escHtml(contentData[f.key]||'')+'" placeholder="יועלה אוטומטית אחרי בחירת קובץ">'
-        +'<button class="slot-btn upload" style="white-space:nowrap;padding:10px 14px;border-radius:10px" onclick="uploadLogoBtn(\''+inputId+'\')">📤 העלה לוגו</button>'
+        +'<button class="slot-btn upload" style="white-space:nowrap;padding:10px 14px;border-radius:10px" onclick="'+ufn+'">'+escHtml(ulabel)+'</button>'
         +'</div>'
-        +(contentData[f.key]?'<img src="'+escHtml(contentData[f.key])+'" style="max-height:55px;max-width:200px;object-fit:contain;border-radius:6px;margin-top:4px" onerror="this.style.display=\'none\'">':'');
+        +(contentData[f.key]?'<img src="'+escHtml(contentData[f.key])+'" style="max-height:80px;max-width:220px;object-fit:contain;border-radius:6px;margin-top:4px" onerror="this.style.display=\'none\'">':'');
     }else{
       uploadHtml='<input class="token-input" style="margin-bottom:0" id="'+inputId+'" data-key="'+f.key+'" value="'+escHtml(contentData[f.key]||'')+'" placeholder="ריק">';
     }
@@ -744,44 +829,43 @@ function renderContent(){
   });
 }
 
-var logoFileInput=null;
-var logoInputId='';
-function uploadLogoBtn(inputId){
-  logoInputId=inputId;
-  if(!logoFileInput){
-    logoFileInput=document.createElement('input');
-    logoFileInput.type='file';
-    logoFileInput.accept='image/*';
-    logoFileInput.style.display='none';
-    document.body.appendChild(logoFileInput);
-    logoFileInput.addEventListener('change',function(){
-      if(logoFileInput.files.length) doUploadLogo(logoFileInput.files[0]);
-      logoFileInput.value='';
+var imgUploadInputId='', imgUploadFieldKey='', imgUploadFilePrefix='';
+var imgFileInput=null;
+function uploadImageField(inputId, fieldKey, filePrefix){
+  imgUploadInputId=inputId; imgUploadFieldKey=fieldKey; imgUploadFilePrefix=filePrefix;
+  if(!imgFileInput){
+    imgFileInput=document.createElement('input');
+    imgFileInput.type='file'; imgFileInput.accept='image/*'; imgFileInput.style.display='none';
+    document.body.appendChild(imgFileInput);
+    imgFileInput.addEventListener('change',function(){
+      if(imgFileInput.files.length) doUploadImageField(imgFileInput.files[0]);
+      imgFileInput.value='';
     });
   }
-  logoFileInput.click();
+  imgFileInput.click();
 }
-async function doUploadLogo(file){
-  toast('מעלה לוגו...');
+async function doUploadImageField(file){
+  var isLogo=imgUploadFieldKey==='logo';
+  toast(isLogo?'מעלה לוגו...':'מעלה תמונה...');
   try{
     var compressed=await compressImage(file);
-    var fname='logo'+file.name.replace(/.*(\.[^.]+)$/,'$1').toLowerCase();
-    var b64=await toBase64(compressed);b64=b64.split(',')[1];
+    var ext=file.name.replace(/.*(\.[^.]+)$/,'$1').toLowerCase();
+    var fname=imgUploadFilePrefix+ext;
+    var b64=await toBase64(compressed); b64=b64.split(',')[1];
     var sha='';
-    try{var ex=await ghGet('/repos/'+IMAGE_REPO+'/contents/'+fname);sha=ex.sha;}catch(e){}
-    await ghPut('/repos/'+IMAGE_REPO+'/contents/'+fname,{message:'עדכון לוגו',content:b64,sha:sha||undefined});
+    try{var ex=await ghGet('/repos/'+IMAGE_REPO+'/contents/'+fname); sha=ex.sha;}catch(e){}
+    await ghPut('/repos/'+IMAGE_REPO+'/contents/'+fname,{message:'עדכון תמונה: '+fname,content:b64,sha:sha||undefined});
     var url=RAW_BASE+fname+'?v='+Date.now();
-    var inp=document.getElementById(logoInputId);
-    if(inp){inp.value=RAW_BASE+fname;contentData['logo']=RAW_BASE+fname;}
-    // update preview
+    var inp=document.getElementById(imgUploadInputId);
+    if(inp){inp.value=RAW_BASE+fname; contentData[imgUploadFieldKey]=RAW_BASE+fname;}
     var preview=inp&&inp.parentElement&&inp.parentElement.parentElement&&inp.parentElement.parentElement.querySelector('img');
-    if(preview){preview.src=url;preview.style.display='';}
+    if(preview){preview.src=url; preview.style.display='';}
     else{
       var prev=document.createElement('img');
-      prev.src=url;prev.style.cssText='max-height:55px;max-width:200px;object-fit:contain;border-radius:6px;margin-top:4px';
+      prev.src=url; prev.style.cssText='max-height:80px;max-width:220px;object-fit:contain;border-radius:6px;margin-top:4px';
       inp&&inp.parentElement&&inp.parentElement.parentElement&&inp.parentElement.parentElement.appendChild(prev);
     }
-    toast('הלוגו הועלה ✓ — לחצו "שמור תוכן" לשמירה');
+    toast((isLogo?'הלוגו':'התמונה')+' הועלה/ה ✓ — לחצו "שמור תוכן" לשמירה');
   }catch(e){toast('שגיאה: '+e.message);}
 }
 

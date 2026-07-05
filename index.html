@@ -8,7 +8,41 @@
 <meta property="og:title" content="חיה סגל צילום">
 <meta property="og:description" content="צלמת ילדים ומשפחה בטבריה | חלאקה | ניובורן | סמאש קייק | משפחה">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://chaya-segal.netlify.app/">
+<meta property="og:image" content="https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/logo.png">
+<link rel="canonical" href="https://chaya-segal.netlify.app/">
 <title>חיה סגל צילום - צלמת ילדים ומשפחה בטבריה</title>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"LocalBusiness",
+  "name":"חיה סגל צילום",
+  "url":"https://chaya-segal.netlify.app",
+  "telephone":"+972-54-846-3238",
+  "image":"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/logo.png",
+  "priceRange":"₪₪",
+  "description":"צלמת ילדים ומשפחה בטבריה. מתמחה בצילומי חלאקה, ניובורן, סמאש קייק ומשפחה.",
+  "address":{
+    "@type":"PostalAddress",
+    "addressLocality":"טבריה",
+    "addressRegion":"צפון",
+    "addressCountry":"IL"
+  },
+  "geo":{
+    "@type":"GeoCoordinates",
+    "latitude":32.7922,
+    "longitude":35.5312
+  },
+  "openingHoursSpecification":{
+    "@type":"OpeningHoursSpecification",
+    "dayOfWeek":["Sunday","Monday","Tuesday","Wednesday","Thursday"],
+    "opens":"09:00",
+    "closes":"20:00"
+  },
+  "hasMap":"https://maps.google.com/?q=טבריה",
+  "areaServed":["טבריה","כנרת","גליל","צפון"]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700&family=Frank+Ruhl+Libre:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
@@ -95,6 +129,15 @@ body.has-banner #home{padding-top:122px}
 .hero-icon img{width:82px;height:82px;object-fit:contain;margin-bottom:8px;filter:drop-shadow(0 4px 10px rgba(0,0,0,0.1))}
 .hero-icon p{font-size:0.85rem;color:#888;font-weight:500}
 
+/* HERO SLIDESHOW */
+.hero-slides{position:absolute;inset:0;overflow:hidden;z-index:0}
+.hero-slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.8s ease}
+.hero-slide.hs-on{opacity:1;animation:kBurns 8s ease-in-out forwards}
+@keyframes kBurns{from{transform:scale(1) translate(0,0)}to{transform:scale(1.08) translate(-1%,-0.5%)}}
+.hero-veil{position:absolute;inset:0;z-index:1;background:linear-gradient(160deg,rgba(242,223,206,0.58) 0%,rgba(255,255,255,0.18) 50%,rgba(245,198,208,0.48) 100%);pointer-events:none}
+#heroCanvas{position:absolute;inset:0;z-index:2;pointer-events:none;width:100%;height:100%}
+.hero .hero-inner{position:relative;z-index:3}
+
 /* SECTION COMMON */
 .sec-wrap{text-align:center;margin-bottom:55px}
 .sec-title{font-family:'Cormorant Garamond','Frank Ruhl Libre',Georgia,serif;font-size:clamp(2.2rem,4.5vw,3.4rem);margin-bottom:10px;line-height:1.12;font-weight:600;letter-spacing:0.01em}
@@ -115,22 +158,55 @@ body.has-banner #home{padding-top:122px}
 
 /* GALLERY */
 .gallery{padding:100px 20px 80px}
-.gal-grid{columns:3 260px;column-gap:20px;max-width:1180px;margin:0 auto;padding:0 20px}
-.gal-card{break-inside:avoid;margin-bottom:20px;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);transition:transform var(--tr),box-shadow var(--tr);cursor:pointer;position:relative;background:var(--c);display:block;width:100%}
-.gal-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-h)}
-.gal-img-wrap{overflow:hidden}
-.gal-card:nth-child(3n+1) .gal-img-wrap{height:310px}
-.gal-card:nth-child(3n+2) .gal-img-wrap{height:240px}
-.gal-card:nth-child(3n) .gal-img-wrap{height:275px}
-.gal-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 0.65s ease;display:block}
-.gal-card:hover .gal-img-wrap img{transform:scale(1.08)}
-.gal-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.52) 0%,transparent 55%);opacity:0;transition:opacity var(--tr);display:flex;align-items:flex-end;justify-content:center;padding-bottom:18px}
-.gal-card:hover .gal-overlay{opacity:1}
-.gal-overlay-txt{color:var(--white);font-size:0.9rem;font-weight:600;background:rgba(255,255,255,0.18);backdrop-filter:blur(4px);padding:6px 16px;border-radius:20px;transform:translateY(8px);transition:transform var(--tr)}
-.gal-card:hover .gal-overlay-txt{transform:translateY(0)}
-.gal-info{padding:18px 22px 22px}
-.gal-name{font-family:'Frank Ruhl Libre',Georgia,serif;font-size:1.45rem;margin-bottom:4px}
-.gal-desc{color:#888;font-size:0.88rem}
+.gal-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:18px;max-width:1180px;margin:0 auto;padding:0 20px}
+.gal-card{border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);transition:transform var(--tr),box-shadow var(--tr);cursor:pointer;position:relative;background:#c8b09a;flex:0 0 calc(33.333% - 12px);width:calc(33.333% - 12px);aspect-ratio:1/1}
+.gal-card:hover{transform:translateY(-7px);box-shadow:0 20px 52px rgba(0,0,0,0.18)}
+.gal-card::after{content:'';position:absolute;inset:0;border-radius:var(--r);border:2px solid transparent;transition:border-color 0.35s ease;pointer-events:none;z-index:3}
+.gal-card:hover::after{border-color:rgba(212,165,116,0.7)}
+.gal-img-wrap{overflow:hidden;width:100%;height:100%;position:absolute;inset:0}
+.gal-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 0.7s ease;display:block}
+.gal-card:hover .gal-img-wrap img{transform:scale(1.07)}
+.gal-info-overlay{position:absolute;bottom:0;left:0;right:0;padding:52px 20px 18px;background:linear-gradient(to top,rgba(0,0,0,0.68) 0%,rgba(0,0,0,0.28) 55%,transparent 100%);transform:translateY(4px);transition:transform 0.35s ease;z-index:2}
+.gal-card:hover .gal-info-overlay{transform:translateY(0)}
+.gal-name{font-family:'Cormorant Garamond','Frank Ruhl Libre',Georgia,serif;font-size:1.3rem;font-weight:600;color:var(--white);text-shadow:0 2px 10px rgba(0,0,0,0.5);line-height:1.2;margin-bottom:5px}
+.gal-desc{color:rgba(255,255,255,0.72);font-size:0.8rem;margin-bottom:10px;opacity:0;transform:translateY(5px);transition:opacity 0.3s ease,transform 0.3s ease}
+.gal-card:hover .gal-desc{opacity:1;transform:translateY(0)}
+.gal-zoom-pill{display:inline-flex;align-items:center;gap:5px;color:rgba(255,255,255,0.88);font-size:0.76rem;background:rgba(255,255,255,0.16);backdrop-filter:blur(6px);padding:4px 13px;border-radius:20px;opacity:0;transform:translateY(5px);transition:opacity 0.3s 0.05s ease,transform 0.3s 0.05s ease}
+.gal-card:hover .gal-zoom-pill{opacity:1;transform:translateY(0)}
+
+/* ALL-PHOTOS CARD */
+.gal-all{display:block;width:100%;border-radius:var(--r);overflow:hidden;cursor:pointer;position:relative;height:220px;background:linear-gradient(135deg,#3a2a1a 0%,#2a1f12 50%,#1e1610 100%);margin-bottom:28px;box-shadow:var(--shadow);transition:box-shadow var(--tr)}
+.gal-all:hover{box-shadow:var(--shadow-h)}
+.gal-all-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform 0.7s ease}
+.gal-all:hover .gal-all-bg{transform:scale(1.04)}
+.gal-all-overlay{position:absolute;inset:0;background:linear-gradient(160deg,rgba(20,12,4,0.48) 0%,rgba(10,6,2,0.32) 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;transition:background var(--tr)}
+.gal-all:hover .gal-all-overlay{background:linear-gradient(160deg,rgba(20,12,4,0.32) 0%,rgba(10,6,2,0.18) 100%)}
+.gal-all-play{width:66px;height:66px;border-radius:50%;border:2.5px solid rgba(212,165,116,0.75);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:var(--gl);transition:all var(--tr);background:rgba(212,165,116,0.18)}
+.gal-all:hover .gal-all-play{background:rgba(212,165,116,0.55);border-color:var(--gl);transform:scale(1.12)}
+.gal-all-label{color:var(--gl);font-family:'Cormorant Garamond',Georgia,serif;font-size:1.65rem;font-weight:600;text-shadow:0 2px 12px rgba(0,0,0,0.6);letter-spacing:0.04em}
+.gal-all-sub{color:rgba(212,165,116,0.82);font-size:0.84rem;letter-spacing:0.04em}
+
+/* SLIDESHOW */
+.slideshow{position:fixed;inset:0;background:#000;z-index:9995;display:none;flex-direction:column}
+.slideshow.ss-open{display:flex}
+.ss-bar{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);flex-shrink:0}
+.ss-counter{color:rgba(255,255,255,0.55);font-size:0.82rem;min-width:56px;font-variant-numeric:tabular-nums}
+.ss-title-bar{color:var(--white);font-family:'Cormorant Garamond',Georgia,serif;font-size:1.1rem;font-weight:600;letter-spacing:0.03em}
+.ss-ctrls{display:flex;gap:9px}
+.ss-ctrl{background:rgba(255,255,255,0.1);border:none;color:var(--white);width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.95rem;transition:background var(--tr);flex-shrink:0}
+.ss-ctrl:hover{background:rgba(255,255,255,0.22)}
+.ss-speed-btn{width:auto;padding:0 12px;border-radius:18px;font-size:0.78rem;font-weight:700;letter-spacing:0.04em;background:rgba(212,165,116,0.28);color:var(--gl)}
+.ss-speed-btn:hover{background:rgba(212,165,116,0.5)}
+.ss-body{flex:1;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;min-height:0}
+.ss-img{max-width:96vw;max-height:80vh;object-fit:contain;display:block;transition:opacity 0.35s ease;border-radius:4px}
+.ss-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.1);border:none;color:white;width:50px;height:50px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.55rem;transition:background var(--tr);z-index:2;flex-shrink:0}
+.ss-nav:hover{background:rgba(212,165,116,0.5)}
+.ss-nav-r{right:14px}
+.ss-nav-l{left:14px}
+.ss-cap{position:absolute;bottom:0;left:0;right:0;padding:16px 24px;background:linear-gradient(to top,rgba(0,0,0,0.65),transparent);color:rgba(255,255,255,0.82);text-align:center;font-size:0.93rem;font-weight:600;pointer-events:none}
+.ss-foot{padding:10px 20px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);flex-shrink:0}
+.ss-prog{height:3px;background:rgba(255,255,255,0.15);border-radius:2px;width:100%;max-width:380px;overflow:hidden}
+.ss-prog-fill{height:100%;background:linear-gradient(to right,var(--g),var(--pt));border-radius:2px;width:0%}
 
 /* LIGHTBOX */
 .lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.93);z-index:9990;display:none;align-items:center;justify-content:center}
@@ -154,27 +230,45 @@ body.has-banner #home{padding-top:122px}
 .pkg{background:var(--white);border-radius:22px;padding:40px 32px 36px;box-shadow:0 4px 28px rgba(0,0,0,0.07);transition:transform var(--tr),box-shadow var(--tr);position:relative;border:1.5px solid #EDE5DC;overflow:hidden}
 .pkg::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--g),var(--pt))}
 .pkg:hover{transform:translateY(-10px);box-shadow:0 24px 56px rgba(0,0,0,0.13)}
-.pkg.featured{background:linear-gradient(160deg,#2C2318 0%,#3a2c20 100%);border-color:var(--g);transform:scale(1.04)}
-.pkg.featured::after{height:0}
+.pkg.featured{background:linear-gradient(160deg,#FEF6EC 0%,#F9EDDA 100%);border-color:var(--g);border-width:2px;transform:scale(1.04);box-shadow:0 12px 48px rgba(212,165,116,0.22)}
 .pkg.featured:hover{transform:scale(1.04) translateY(-8px)}
 .pkg-badge{position:absolute;top:20px;left:20px;background:linear-gradient(135deg,var(--g),var(--gd));color:var(--white);padding:5px 16px;border-radius:20px;font-size:0.75rem;font-weight:700;white-space:nowrap;box-shadow:0 4px 14px rgba(212,165,116,0.5);letter-spacing:0.03em}
 .pkg-name{font-family:'Cormorant Garamond','Frank Ruhl Libre',Georgia,serif;font-size:2rem;margin-bottom:10px;font-weight:600;line-height:1}
-.pkg.featured .pkg-name{color:var(--gl)}
+.pkg.featured .pkg-name{color:var(--gd)}
 .pkg-price{font-size:3rem;color:var(--g);font-weight:700;margin-bottom:3px;line-height:1;letter-spacing:-0.02em}
-.pkg.featured .pkg-price{color:var(--gl)}
+.pkg.featured .pkg-price{color:var(--gd)}
 .pkg-sub{color:#aaa;margin-bottom:22px;font-size:0.85rem;padding-bottom:20px;border-bottom:1px solid #f0ece8}
-.pkg.featured .pkg-sub{color:rgba(255,255,255,0.45);border-bottom-color:rgba(255,255,255,0.1)}
+.pkg.featured .pkg-sub{color:#9a7a5a;border-bottom-color:rgba(212,165,116,0.25)}
 .pkg-feat{list-style:none;margin-bottom:20px}
 .pkg-feat li{padding:10px 0;border-bottom:1px solid #f8f5f2;font-size:0.91rem;display:flex;align-items:center;gap:10px;color:#555}
-.pkg.featured .pkg-feat li{border-bottom-color:rgba(255,255,255,0.08);color:rgba(255,255,255,0.82)}
+.pkg.featured .pkg-feat li{border-bottom-color:rgba(212,165,116,0.18);color:#4a3520}
 .pkg-feat li::before{content:'✦';color:var(--g);font-size:0.72rem;flex-shrink:0}
-.pkg.featured .pkg-feat li::before{color:var(--gl)}
+.pkg.featured .pkg-feat li::before{color:var(--g)}
 .pkg-bonus{font-size:0.82rem;font-weight:600;margin-bottom:22px;padding:10px 14px;background:rgba(212,165,116,0.09);border-radius:10px;color:var(--gd);border:1px solid rgba(212,165,116,0.2)}
-.pkg.featured .pkg-bonus{background:rgba(255,255,255,0.07);color:var(--gl);border-color:rgba(212,165,116,0.3)}
+.pkg.featured .pkg-bonus{background:rgba(212,165,116,0.12);color:var(--gd);border-color:rgba(212,165,116,0.35)}
 .pkg-btn{display:block;width:100%;text-align:center;background:linear-gradient(135deg,var(--g),var(--gd));color:var(--white);padding:14px 20px;border-radius:30px;text-decoration:none;font-weight:700;font-size:0.93rem;transition:all var(--tr);letter-spacing:0.02em;box-shadow:0 4px 16px rgba(212,165,116,0.3);cursor:pointer;border:none;font-family:inherit}
 .pkg-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(212,165,116,0.45)}
-.pkg.featured .pkg-btn{background:var(--g);box-shadow:0 6px 22px rgba(212,165,116,0.5)}
+.pkg.featured .pkg-btn{background:linear-gradient(135deg,var(--gd),#9a7050);box-shadow:0 6px 22px rgba(212,165,116,0.45)}
 
+/* GALLERY CTA BAR */
+.gal-cta-bar{max-width:1180px;margin:28px auto 0;padding:0 20px;cursor:pointer}
+.gal-cta-bar-inner{display:flex;align-items:center;background:linear-gradient(to left,#FEF8F0,#FDF2E4);border:1px solid rgba(212,165,116,0.35);border-right:4px solid var(--g);border-radius:var(--r);padding:26px 32px;justify-content:space-between;box-shadow:0 4px 18px rgba(212,165,116,0.12);transition:box-shadow var(--tr),transform var(--tr);direction:rtl;gap:18px}
+.gal-cta-bar:hover .gal-cta-bar-inner{box-shadow:0 8px 30px rgba(212,165,116,0.22);transform:translateY(-3px)}
+.gal-cta-bar-left{display:flex;align-items:center;gap:18px}
+.gal-cta-bar-icon{font-size:1.4rem;color:var(--g);opacity:0.85;line-height:1;flex-shrink:0}
+.gal-cta-bar-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.45rem;font-weight:600;color:var(--gd);line-height:1.2;margin-bottom:4px}
+.gal-cta-bar-sub{color:#9a7a6a;font-size:0.84rem}
+.gal-cta-bar-btn{background:linear-gradient(135deg,var(--g),var(--gd));color:white;border:none;padding:12px 30px;border-radius:25px;font-weight:700;cursor:pointer;font-size:0.87rem;font-family:'Assistant',sans-serif;white-space:nowrap;transition:all var(--tr);box-shadow:0 4px 16px rgba(212,165,116,0.38);flex-shrink:0}
+.gal-cta-bar-btn:hover{box-shadow:0 8px 24px rgba(212,165,116,0.5);transform:translateY(-2px)}
+@media(max-width:600px){.gal-cta-bar-inner{flex-direction:column;align-items:flex-start;gap:16px}.gal-cta-bar-btn{width:100%;text-align:center}}
+
+/* SKELETON LOADING */
+@keyframes skShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.sk-hero{width:100%;height:100vh;background:linear-gradient(135deg,#2a1f12,#1e1610);position:relative;overflow:hidden}
+.sk-gal{display:flex;flex-wrap:wrap;justify-content:center;gap:18px;max-width:1180px;margin:60px auto;padding:0 20px}
+.sk-card{flex:0 0 calc(33.333% - 12px);aspect-ratio:1/1;border-radius:var(--r);overflow:hidden}
+.sk-shimmer{background:linear-gradient(90deg,rgba(212,165,116,0.06) 0%,rgba(212,165,116,0.18) 20%,rgba(212,165,116,0.06) 40%,rgba(212,165,116,0.06) 100%);background-size:200% 100%;animation:skShimmer 1.8s ease-in-out infinite}
+@media(max-width:768px){.sk-card{flex:0 0 calc(50% - 6px)}}
 /* TESTIMONIALS */
 .testimonials{padding:90px 20px;background:var(--white)}
 .test-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(275px,1fr));gap:22px;max-width:1050px;margin:0 auto}
@@ -267,8 +361,8 @@ body.has-banner #home{padding-top:122px}
   .hero-icons{gap:20px}
   .hero-icon img{width:65px;height:65px}
   .stats-grid{grid-template-columns:1fr 1fr;gap:28px}
-  .gal-grid{columns:1}
-  .gal-card:nth-child(n) .gal-img-wrap{height:260px}
+  .gal-grid{gap:12px}
+  .gal-card{flex:0 0 calc(50% - 6px);width:calc(50% - 6px)}
   .pkgs-grid{grid-template-columns:1fr}
   .pkg.featured{transform:scale(1)}
   .test-grid{grid-template-columns:1fr}
@@ -283,7 +377,7 @@ body.has-banner #home{padding-top:122px}
 }
 @media(min-width:769px) and (max-width:1100px){
   .stats-grid{grid-template-columns:repeat(4,1fr)}
-  .gal-grid{columns:2}
+  .gal-card{flex:0 0 calc(50% - 9px);width:calc(50% - 9px)}
   .pkgs-grid{grid-template-columns:repeat(2,1fr)}
   .test-grid{grid-template-columns:repeat(2,1fr)}
 }
@@ -302,6 +396,28 @@ body.has-banner #home{padding-top:122px}
 
 <!-- SCROLL PROGRESS -->
 <div id="scrollProg"></div>
+
+<!-- SLIDESHOW -->
+<div id="slideshow" class="slideshow" role="dialog" aria-modal="true" aria-label="סלייד-שואו">
+  <div class="ss-bar">
+    <span id="ssCounter" class="ss-counter"></span>
+    <span id="ssTitleBar" class="ss-title-bar">כל התמונות</span>
+    <div class="ss-ctrls">
+      <button class="ss-ctrl ss-speed-btn" id="ssSpeedBtn" onclick="cycleSSSpeed()" aria-label="מהירות" title="החלף מהירות">רגיל</button>
+      <button class="ss-ctrl" id="ssPlayBtn" onclick="toggleSSPlay()" aria-label="השהה/הפעל">⏸</button>
+      <button class="ss-ctrl" onclick="closeSS()" aria-label="סגור">✕</button>
+    </div>
+  </div>
+  <div class="ss-body">
+    <button class="ss-nav ss-nav-r" onclick="moveSS(-1)" aria-label="הקודם">&#8250;</button>
+    <img id="ssImg" class="ss-img" src="" alt="">
+    <div id="ssCap" class="ss-cap"></div>
+    <button class="ss-nav ss-nav-l" onclick="moveSS(1)" aria-label="הבא">&#8249;</button>
+  </div>
+  <div class="ss-foot">
+    <div class="ss-prog"><div id="ssProgFill" class="ss-prog-fill"></div></div>
+  </div>
+</div>
 
 <!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="תמונה מוגדלת">
@@ -324,7 +440,13 @@ body.has-banner #home{padding-top:122px}
   <a onclick="navTo('contact')" class="mob-cta">📞 יצירת קשר</a>
 </nav>
 
-<div id="app"></div>
+<div id="app">
+  <div class="sk-hero"><div class="sk-shimmer"></div></div>
+  <div class="sk-gal">
+    <div class="sk-card sk-shimmer"></div><div class="sk-card sk-shimmer"></div><div class="sk-card sk-shimmer"></div>
+    <div class="sk-card sk-shimmer"></div><div class="sk-card sk-shimmer"></div><div class="sk-card sk-shimmer"></div>
+  </div>
+</div>
 
 <script>
 var WA_NUM='972548463238';
@@ -452,8 +574,11 @@ function render(d){
       var delay='rd'+(Math.min(i,4));
       cats+='<div class="gal-card reveal '+delay+'" onclick="openLb('+idx+')" tabindex="0" role="button" aria-label="פתח תמונה: '+n+'" onkeydown="if(event.key===\'Enter\'||event.key===\' \')openLb('+idx+')">'
         +'<div class="gal-img-wrap"><img src="'+img+'" alt="'+n+'" loading="lazy" onerror="this.src=imgFb(\''+n+'\')"></div>'
-        +'<div class="gal-overlay"><div class="gal-overlay-txt">🔍 הגדל</div></div>'
-        +'<div class="gal-info"><div class="gal-name">'+n+'</div><div class="gal-desc">'+(desc||'')+'</div></div>'
+        +'<div class="gal-info-overlay">'
+        +'<div class="gal-name">'+n+'</div>'
+        +(desc?'<div class="gal-desc">'+desc+'</div>':'')
+        +'<div class="gal-zoom-pill">&#128269; לחצו להגדלה</div>'
+        +'</div>'
         +'</div>';
     }
   }
@@ -522,6 +647,9 @@ function render(d){
 +'</nav>'
 
 +'<section id="home" class="hero">'
++'<div class="hero-slides" id="heroSlides"></div>'
++'<div class="hero-veil"></div>'
++'<canvas id="heroCanvas"></canvas>'
 +'<div class="hero-inner">'
 +'<img class="logo-big" src="'+logo+'" alt="חיה סגל צילום" onerror="this.style.display=\'none\'">'
 +'<div class="hero-tagline">'+(d.hero_tagline||'')+'</div>'
@@ -545,7 +673,27 @@ function render(d){
 
 +'<section id="gallery" class="gallery">'
 +'<div class="sec-wrap"><h2 class="sec-title">'+(d.gallery_title||'הגלריה שלנו')+'</h2><p class="sec-sub">'+(d.gallery_subtitle||'')+'</p><div class="sec-line"></div></div>'
++(d.hide_all_photos!=='true'&&galItems.length>0
+  ?'<div class="gal-all reveal" onclick="openSS(0)" role="button" tabindex="0" aria-label="הצג את כל התמונות" onkeydown="if(event.key===\'Enter\')openSS(0)">'
+    +'<div class="gal-all-bg" style="background-image:url('+galItems[0].src+')"></div>'
+    +'<div class="gal-all-overlay">'
+      +'<div class="gal-all-play">&#9654;</div>'
+      +'<div class="gal-all-label">'+(d.all_photos_title||'כל התמונות')+'</div>'
+      +'<div class="gal-all-sub">'+(d.all_photos_subtitle||(galItems.length+' תמונות • לחצו לפתיחת המצגת'))+'</div>'
+    +'</div>'
+  +'</div>'
+  :'')
 +'<div class="gal-grid">'+cats+'</div>'
++'<div class="gal-cta-bar reveal" role="button" tabindex="0" aria-label="צרו קשר לצילום" onclick="navTo(\'contact\')" onkeydown="if(event.key===\'Enter\')navTo(\'contact\')">'
++'<div class="gal-cta-bar-inner">'
++'<div class="gal-cta-bar-left">'
++'<span class="gal-cta-bar-icon">✦</span>'
++'<div><div class="gal-cta-bar-title">רוצים צילום מיוחד?</div>'
++'<div class="gal-cta-bar-sub">חלאקה · ניובורן · סמאש קייק · משפחה · בת מצווה</div></div>'
++'</div>'
++'<button class="gal-cta-bar-btn" type="button" onclick="event.stopPropagation();navTo(\'contact\')">📞 צרו קשר</button>'
++'</div>'
++'</div>'
 +'</section>'
 
 +'<section id="pkgs" class="pkgs">'
@@ -575,13 +723,7 @@ function render(d){
 +'</div>'
 +'<div class="contact-divider">או השאירו פרטים ונחזור אליכם</div>'
 +'<div class="contact-form">'
-+'<form id="contactForm" onsubmit="submitForm(event)" action="https://formsubmit.co/'+email+'" method="POST">'
-+'<input type="hidden" name="_template" value="table">'
-+'<input type="hidden" name="_captcha" value="false">'
-+'<input type="hidden" id="fs-subject" name="_subject" value="פנייה חדשה מהאתר">'
-+'<input type="hidden" id="fs-next" name="_next" value="https://y6765809-art.github.io/chaya-photography-website/success.html">'
-+'<input type="hidden" id="fs-replyto" name="_replyto" value="">'
-+'<input type="hidden" id="fs-cc" name="_cc" value="">'
++'<form id="contactForm" onsubmit="submitForm(event)">'
 +'<div class="form-row">'
 +'<div class="form-group"><label for="cf-name">שם מלא *</label><input type="text" id="cf-name" name="name" required placeholder="ישראל ישראלי" autocomplete="name"></div>'
 +'<div class="form-group"><label for="cf-phone">טלפון *</label><input type="tel" id="cf-phone" name="phone" required placeholder="05X-XXX-XXXX" autocomplete="tel"></div>'
@@ -635,6 +777,9 @@ function render(d){
 
   renderLbDots();
   initApp();
+  initSS();
+  initHeroSlideshow();
+  initParticles();
 }
 
 function renderLbDots(){
@@ -782,12 +927,16 @@ function updateActiveNav(){
   });
 }
 
+var GAS_URL='https://script.google.com/macros/s/AKfycbx7onMA1nGK3Bh4Re1jAaR2jLoBXon1CPhPtAFVpyjfpQML6g9acuvpdZ9god-wlmRv/exec';
+
 function submitForm(e){
   e.preventDefault();
   var form=e.target;
   var name=form.querySelector('#cf-name').value.trim();
   var phone=form.querySelector('#cf-phone').value.trim();
+  var type=form.querySelector('#cf-type').value;
   var emailVal=form.querySelector('#cf-email').value.trim();
+  var msgVal=form.querySelector('#cf-msg').value.trim();
   var btn=form.querySelector('.form-submit');
   var note=form.querySelector('.form-note');
   if(!name||!phone){
@@ -795,13 +944,184 @@ function submitForm(e){
     return;
   }
   btn.textContent='שולח...';btn.disabled=true;
-  document.getElementById('fs-subject').value='פנייה חדשה מהאתר — '+name;
-  document.getElementById('fs-next').value='https://y6765809-art.github.io/chaya-photography-website/success.html?n='+encodeURIComponent(name);
-  if(emailVal){
-    document.getElementById('fs-replyto').value=emailVal;
-    document.getElementById('fs-cc').value=emailVal;
+  var successUrl='https://chaya-segal.netlify.app/success.html?n='+encodeURIComponent(name);
+  var body='name='+encodeURIComponent(name)+'&phone='+encodeURIComponent(phone)+'&type='+encodeURIComponent(type)+'&email='+encodeURIComponent(emailVal)+'&message='+encodeURIComponent(msgVal);
+  fetch(GAS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body})
+    .then(function(){window.location.href=successUrl;})
+    .catch(function(){window.location.href=successUrl;});
+}
+
+// ─── SLIDESHOW ─────────────────────────────────────────
+var ssIndex=0, ssTimer=null, ssPlaying=true, ssSpeedIdx=0;
+var SS_SPEEDS=[{label:'רגיל',delay:4200},{label:'מהיר',delay:1800},{label:'ידני',delay:0}];
+var SS_DELAY=SS_SPEEDS[0].delay;
+
+function openSS(startIdx){
+  if(!galItems.length) return;
+  ssIndex=(startIdx||0);
+  ssPlaying=true;
+  var el=document.getElementById('slideshow');
+  if(el) el.classList.add('ss-open');
+  document.body.style.overflow='hidden';
+  ssShow(ssIndex);
+  ssAutoPlay();
+  var tb=document.getElementById('ssTitleBar');
+  if(tb) tb.textContent='כל התמונות';
+}
+
+function closeSS(){
+  var el=document.getElementById('slideshow');
+  if(el) el.classList.remove('ss-open');
+  document.body.style.overflow='';
+  if(ssTimer){clearInterval(ssTimer);ssTimer=null;}
+}
+
+function ssShow(i){
+  if(!galItems.length) return;
+  ssIndex=((i%galItems.length)+galItems.length)%galItems.length;
+  var img=document.getElementById('ssImg');
+  var cap=document.getElementById('ssCap');
+  var counter=document.getElementById('ssCounter');
+  if(img){
+    img.onerror=function(){moveSS(1);};
+    img.style.opacity='0';
+    setTimeout(function(){
+      if(galItems[ssIndex]){img.src=galItems[ssIndex].src;img.alt=galItems[ssIndex].name||'';}
+      img.style.opacity='1';
+    },220);
   }
-  form.submit();
+  if(cap&&galItems[ssIndex]) cap.textContent=galItems[ssIndex].name||'';
+  if(counter) counter.textContent=(ssIndex+1)+' / '+galItems.length;
+  var fill=document.getElementById('ssProgFill');
+  if(fill){
+    fill.style.transition='none';fill.style.width='0%';
+    void fill.offsetWidth;
+    fill.style.transition='width '+SS_DELAY+'ms linear';fill.style.width='100%';
+  }
+}
+
+function moveSS(dir){
+  if(ssTimer){clearInterval(ssTimer);ssTimer=null;}
+  ssShow(ssIndex+dir);
+  if(ssPlaying) ssAutoPlay();
+}
+
+function ssAutoPlay(){
+  if(ssTimer){clearInterval(ssTimer);ssTimer=null;}
+  ssTimer=setInterval(function(){ssShow(ssIndex+1);},SS_DELAY);
+  var btn=document.getElementById('ssPlayBtn');
+  if(btn) btn.textContent='⏸';
+}
+
+function ssPause(){
+  if(ssTimer){clearInterval(ssTimer);ssTimer=null;}
+  var fill=document.getElementById('ssProgFill');
+  if(fill){fill.style.transition='none';}
+  var btn=document.getElementById('ssPlayBtn');
+  if(btn) btn.textContent='▶';
+}
+
+function toggleSSPlay(){
+  if(SS_DELAY===0) return; // manual mode — play button has no effect
+  ssPlaying=!ssPlaying;
+  ssPlaying?ssAutoPlay():ssPause();
+}
+
+function cycleSSSpeed(){
+  ssSpeedIdx=(ssSpeedIdx+1)%SS_SPEEDS.length;
+  var sp=SS_SPEEDS[ssSpeedIdx];
+  SS_DELAY=sp.delay;
+  var btn=document.getElementById('ssSpeedBtn');
+  if(btn) btn.textContent=sp.label;
+  var playBtn=document.getElementById('ssPlayBtn');
+  if(sp.delay===0){
+    ssPause();
+    ssPlaying=false;
+    if(playBtn) playBtn.style.opacity='0.35';
+  }else{
+    ssPlaying=true;
+    ssAutoPlay();
+    if(playBtn) playBtn.style.opacity='1';
+  }
+}
+
+function initSS(){
+  var ssEl=document.getElementById('slideshow');
+  if(!ssEl) return;
+  document.addEventListener('keydown',function(e){
+    if(!ssEl.classList.contains('ss-open')) return;
+    if(e.key==='Escape') closeSS();
+    else if(e.key==='ArrowLeft'||e.key==='ArrowDown') moveSS(1);
+    else if(e.key==='ArrowRight'||e.key==='ArrowUp') moveSS(-1);
+    else if(e.key===' '){e.preventDefault();toggleSSPlay();}
+  });
+  var tx=0;
+  ssEl.addEventListener('touchstart',function(e){tx=e.touches[0].clientX;},{passive:true});
+  ssEl.addEventListener('touchend',function(e){
+    var dx=e.changedTouches[0].clientX-tx;
+    if(Math.abs(dx)>45) moveSS(dx>0?-1:1);
+  });
+}
+
+function initHeroSlideshow(){
+  var container=document.getElementById('heroSlides');
+  if(!container||galItems.length===0) return;
+  var photos=galItems.filter(function(p){return p.src&&!p.src.includes('svg');}).slice(0,6);
+  if(photos.length===0) return;
+  var slides=photos.map(function(p){
+    var div=document.createElement('div');
+    div.className='hero-slide';
+    div.style.backgroundImage='url('+p.src+')';
+    container.appendChild(div);
+    return div;
+  });
+  var cur=0;
+  function show(i){
+    var el=slides[i];
+    el.classList.remove('hs-on');
+    void el.offsetWidth;
+    el.classList.add('hs-on');
+    slides.forEach(function(s,j){if(j!==i) s.classList.remove('hs-on');});
+  }
+  show(0);
+  setInterval(function(){cur=(cur+1)%slides.length;show(cur);},5500);
+}
+
+function initParticles(){
+  var canvas=document.getElementById('heroCanvas');
+  if(!canvas) return;
+  var ctx=canvas.getContext('2d');
+  function resize(){
+    var hero=document.getElementById('home');
+    canvas.width=hero?hero.offsetWidth:window.innerWidth;
+    canvas.height=hero?hero.offsetHeight:window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize',resize,{passive:true});
+  var ps=[];
+  for(var i=0;i<26;i++){
+    ps.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,
+      r:Math.random()*2.2+0.8,op:Math.random()*0.18+0.07,
+      sp:Math.random()*0.3+0.12,dx:(Math.random()-0.5)*0.2,ph:Math.random()*Math.PI*2});
+  }
+  function frame(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ps.forEach(function(p){
+      p.y-=p.sp; p.ph+=0.007; p.x+=p.dx+Math.sin(p.ph)*0.25;
+      if(p.y<-8){p.y=canvas.height+8;p.x=Math.random()*canvas.width;}
+      if(p.x<-8) p.x=canvas.width+8;
+      if(p.x>canvas.width+8) p.x=-8;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      var g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*2.5);
+      g.addColorStop(0,'rgba(212,165,116,'+p.op+')');
+      g.addColorStop(1,'rgba(212,165,116,0)');
+      ctx.fillStyle=g;
+      ctx.fill();
+    });
+    requestAnimationFrame(frame);
+  }
+  frame();
 }
 
 // Read gallery.json (admin-managed) and content.json, then merge with fallback
@@ -844,6 +1164,12 @@ async function loadAll(){
 }
 
 var RAW_BASE='https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/';
+
+// Basic copy deterrent (F12/DevTools always works — browser-level)
+document.addEventListener('contextmenu',function(e){e.preventDefault();});
+document.addEventListener('keydown',function(e){
+  if(e.ctrlKey&&(e.key==='u'||e.key==='U'||e.key==='s'||e.key==='S'||e.key==='p'||e.key==='P'))e.preventDefault();
+});
 
 loadAll().then(function(d){
   render(d);
