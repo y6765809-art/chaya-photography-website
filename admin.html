@@ -110,11 +110,17 @@ body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--
 .add-slot-icon{font-size:1.4rem;opacity:0.45}
 
 /* IMAGE LIBRARY */
-.lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;margin-bottom:28px}
+#libGrid{display:flex;flex-direction:column;margin-bottom:28px}
+.lib-grid-inner{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;margin-bottom:8px}
+.lib-section-head{font-size:0.88rem;font-weight:700;color:var(--text);margin:14px 0 8px;padding-bottom:6px;border-bottom:1.5px solid var(--border)}
+.lib-section-head .lib-sc{font-weight:400;color:var(--m);font-size:0.8rem}
 .lib-img{border-radius:10px;overflow:hidden;cursor:grab;position:relative;aspect-ratio:1;background:var(--c);box-shadow:var(--shadow)}
 .lib-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.2s}
 .lib-img:hover img{transform:scale(1.05)}
 .lib-img.dragging{opacity:0.4}
+.lib-img.assigned{box-shadow:0 0 0 2.5px #5aaa5a,var(--shadow);opacity:0.72}
+.lib-img.assigned:hover{opacity:1}
+.lib-assigned-badge{position:absolute;top:4px;right:4px;background:rgba(60,160,60,0.88);color:#fff;font-size:0.62rem;padding:2px 5px;border-radius:8px;max-width:72%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;pointer-events:none}
 .lib-img-name{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.55);color:#fff;font-size:0.7rem;padding:4px 6px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .lib-img-del{position:absolute;top:4px;left:4px;width:22px;height:22px;background:rgba(0,0,0,0.55);border:none;border-radius:50%;color:#fff;font-size:0.75rem;cursor:pointer;display:none;align-items:center;justify-content:center}
 .lib-img:hover .lib-img-del{display:flex}
@@ -151,7 +157,7 @@ body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--
 pb-20{padding-bottom:80px}
 @media(max-width:600px){
   .slots-grid{grid-template-columns:repeat(2,1fr)}
-  .lib-grid{grid-template-columns:repeat(3,1fr)}
+  .lib-grid-inner{grid-template-columns:repeat(3,1fr)}
 }
 </style>
 </head>
@@ -218,7 +224,7 @@ pb-20{padding-bottom:80px}
 
   <!-- LIBRARY -->
   <div class="section-title">📁 כל התמונות <span id="libCount" style="font-size:0.82rem;color:var(--m);font-weight:400"></span></div>
-  <div class="lib-grid" id="libGrid">
+  <div id="libGrid">
     <div style="color:var(--m);font-size:0.9rem;grid-column:1/-1;padding:20px 0">טוען תמונות...</div>
   </div>
 
@@ -362,28 +368,45 @@ async function loadLibrary(){
 }
 
 function renderLibrary(){
-  var grid=document.getElementById('libGrid');
-  if(!allImages.length){grid.innerHTML='<div style="color:var(--m);font-size:0.9rem;grid-column:1/-1;padding:20px 0">עדיין אין תמונות — העלו למעלה</div>';return;}
-  grid.innerHTML='';
-  allImages.forEach(function(img){
+  var container=document.getElementById('libGrid');
+  if(!allImages.length){container.innerHTML='<div style="color:var(--m);font-size:0.9rem;padding:20px 0">עדיין אין תמונות — העלו למעלה</div>';return;}
+  // build map: filename → category name
+  var assignedMap={};
+  gallery.forEach(function(slot){
+    if(!slot.name) return;
+    [slot.file].concat(slot.images||[]).filter(Boolean).forEach(function(f){assignedMap[f]=slot.name;});
+  });
+  var unassigned=allImages.filter(function(img){return !assignedMap[img.name];});
+  var assigned=allImages.filter(function(img){return !!assignedMap[img.name];});
+  container.innerHTML='';
+  function mkCard(img){
+    var isAssigned=!!assignedMap[img.name];
     var div=document.createElement('div');
-    div.className='lib-img';
+    div.className='lib-img'+(isAssigned?' assigned':'');
     div.draggable=true;
     div.dataset.file=img.name;
     div.innerHTML='<img src="'+img.url+'?v='+Date.now()+'" alt="'+img.name+'" loading="lazy" onerror="this.src=\'data:image/svg+xml,<svg xmlns=\\\'http://www.w3.org/2000/svg\\\' width=\\\'120\\\' height=\\\'120\\\'><rect fill=\\\'%23f2dfce\\\'/></svg>\'">'
+      +(isAssigned?'<div class="lib-assigned-badge">✓ '+assignedMap[img.name]+'</div>':'')
       +'<div class="lib-img-name">'+img.name+'</div>'
       +'<button class="lib-img-del" onclick="confirmDelete(\''+img.name+'\',\''+img.sha+'\',event)" title="מחק">✕</button>';
-    div.addEventListener('dragstart',function(e){
-      e.dataTransfer.setData('text/plain',img.name);
-      div.classList.add('dragging');
-    });
+    div.addEventListener('dragstart',function(e){e.dataTransfer.setData('text/plain',img.name);div.classList.add('dragging');});
     div.addEventListener('dragend',function(){div.classList.remove('dragging');});
-    div.addEventListener('click',function(e){
-      if(e.target.classList.contains('lib-img-del')) return;
-      assignToFirstEmpty(img.name);
-    });
-    grid.appendChild(div);
-  });
+    div.addEventListener('click',function(e){if(e.target.classList.contains('lib-img-del')) return;assignToFirstEmpty(img.name);});
+    return div;
+  }
+  function mkSection(title,items){
+    if(!items.length) return;
+    var head=document.createElement('div');
+    head.className='lib-section-head';
+    head.innerHTML=title+' <span class="lib-sc">('+items.length+')</span>';
+    container.appendChild(head);
+    var grid=document.createElement('div');
+    grid.className='lib-grid-inner';
+    items.forEach(function(img){grid.appendChild(mkCard(img));});
+    container.appendChild(grid);
+  }
+  mkSection('📤 טרם שוייכו',unassigned);
+  mkSection('✅ מאורגנות בקטגוריה',assigned);
 }
 
 // ─── GALLERY ────────────────────────────────
