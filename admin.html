@@ -776,16 +776,16 @@ var CONTENT_FIELDS=[
   {key:'contact_phone',label:'טלפון'},
   {key:'contact_email',label:'מייל'},
   {key:'contact_location',label:'מיקום / כתובת'},
-  {sectionTitle:'📊 מונים'},
-  {key:'stat1_num',label:'מונה 1 — מספר (ריק = הסתר)'},
-  {key:'stat1_label',label:'מונה 1 — תווית (ברירת מחדל: משפחות מרוצות)'},
-  {key:'stat2_num',label:'מונה 2 — מספר'},
-  {key:'stat2_label',label:'מונה 2 — תווית (ברירת מחדל: שנות ניסיון)'},
-  {key:'stat3_num',label:'מונה 3 — מספר'},
-  {key:'stat3_label',label:'מונה 3 — תווית (ברירת מחדל: תמונות מעובדות)'},
-  {key:'stat4_num',label:'מונה 4 — מספר'},
-  {key:'stat4_label',label:'מונה 4 — תווית (ברירת מחדל: % שביעות רצון)'},
-  {key:'hide_stats',label:'הסתר את כל סקשן המונים (true / false)'},
+  {sectionTitle:'📊 מונים (4 תיבות מספרים עם כיתוב)'},
+  {key:'stat1_num',label:'מונה 1 — מספר',placeholder:'לדוג׳: 150'},
+  {key:'stat1_label',label:'מונה 1 — כיתוב',placeholder:'לדוג׳: משפחות מרוצות'},
+  {key:'stat2_num',label:'מונה 2 — מספר',placeholder:'לדוג׳: 7'},
+  {key:'stat2_label',label:'מונה 2 — כיתוב',placeholder:'לדוג׳: שנות ניסיון'},
+  {key:'stat3_num',label:'מונה 3 — מספר',placeholder:'לדוג׳: 300'},
+  {key:'stat3_label',label:'מונה 3 — כיתוב',placeholder:'לדוג׳: תמונות מעובדות'},
+  {key:'stat4_num',label:'מונה 4 — מספר',placeholder:'לדוג׳: 100'},
+  {key:'stat4_label',label:'מונה 4 — כיתוב',placeholder:'לדוג׳: % שביעות רצון'},
+  {key:'hide_stats',label:'הסתר את סקשן המונים',type:'checkbox'},
   {sectionTitle:'🖼️ גלריה'},
   {key:'gallery_title',label:'כותרת סקשן גלריה'},
   {key:'gallery_subtitle',label:'כיתוב גלריה (מתחת לכותרת)',wide:true},
@@ -921,8 +921,16 @@ function renderContent(){
         +'<button class="slot-btn upload" style="white-space:nowrap;padding:10px 14px;border-radius:10px" onclick="'+ufn+'">'+escHtml(ulabel)+'</button>'
         +'</div>'
         +(contentData[f.key]?'<img src="'+escHtml(contentData[f.key])+'" style="max-height:80px;max-width:220px;object-fit:contain;border-radius:6px;margin-top:4px" onerror="this.style.display=\'none\'">':'');
+    }else if(f.type==='checkbox'){
+      var isChecked=contentData[f.key]==='true';
+      uploadHtml='<label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:6px 0">'
+        +'<input type="checkbox" id="'+inputId+'" data-key="'+f.key+'" data-type="checkbox"'+(isChecked?' checked':'')
+        +' style="width:18px;height:18px;cursor:pointer;accent-color:var(--g)">'
+        +'<span style="font-size:0.9rem;color:var(--t)">מסומן = מוסתר</span>'
+        +'</label>';
     }else{
-      uploadHtml='<input class="token-input" style="margin-bottom:0" id="'+inputId+'" data-key="'+f.key+'" value="'+escHtml(contentData[f.key]||'')+'" placeholder="ריק">';
+      var ph=f.placeholder||'ריק';
+      uploadHtml='<input class="token-input" style="margin-bottom:0" id="'+inputId+'" data-key="'+f.key+'" value="'+escHtml(contentData[f.key]||'')+'" placeholder="'+escHtml(ph)+'">';
     }
     div.innerHTML='<label style="font-size:0.82rem;font-weight:700;color:var(--m)">'+escHtml(f.label)+'</label>'+uploadHtml;
     wrap.appendChild(div);
@@ -971,7 +979,9 @@ async function doUploadImageField(file){
 
 async function saveContent(){
   var inputs=document.querySelectorAll('#contentFields input[data-key]');
-  inputs.forEach(function(inp){contentData[inp.dataset.key]=inp.value;});
+  inputs.forEach(function(inp){
+    contentData[inp.dataset.key]=inp.dataset.type==='checkbox'?(inp.checked?'true':''):inp.value;
+  });
   var msg=document.getElementById('contentMsg');
   msg.textContent='שומר...';msg.style.color='var(--m)';
   try{
