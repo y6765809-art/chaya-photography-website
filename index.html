@@ -1125,6 +1125,12 @@ async function loadAll(){
 
 var RAW_BASE='https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/';
 
+// Basic copy deterrent (F12/DevTools always works — browser-level)
+document.addEventListener('contextmenu',function(e){e.preventDefault();});
+document.addEventListener('keydown',function(e){
+  if(e.ctrlKey&&(e.key==='u'||e.key==='U'||e.key==='s'||e.key==='S'||e.key==='p'||e.key==='P'))e.preventDefault();
+});
+
 loadAll().then(function(d){
   render(d);
   setTimeout(function(){
