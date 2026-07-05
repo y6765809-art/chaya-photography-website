@@ -586,16 +586,25 @@ function confirmDelete(name,sha,e){
 
 async function doDelete(name,sha){
   closeModal();
+  toast('מוחק...');
   try{
-    await ghDelete('/repos/'+IMAGE_REPO+'/contents/'+name,{message:'מחיקת תמונה: '+name,sha:sha});
-    // Clear from gallery if used
+    // Fetch fresh SHA to avoid stale-SHA 404/409 errors
+    try{
+      var fresh=await ghGet('/repos/'+IMAGE_REPO+'/contents/'+encodeURIComponent(name));
+      sha=fresh.sha;
+    }catch(e){ /* use original sha if fetch fails */ }
+    await ghDelete('/repos/'+IMAGE_REPO+'/contents/'+encodeURIComponent(name),{message:'מחיקת תמונה: '+name,sha:sha});
     gallery.forEach(function(s){if(s.file===name)s.file='';});
     await loadLibrary();
     renderLibrary();
     renderSlots();
     markChanged();
-    toast(name+' נמחקה');
-  }catch(e){toast('שגיאה: '+e.message);}
+    toast(name+' נמחקה ✓');
+  }catch(e){
+    var msg=e.message||'';
+    if(msg.indexOf('404')!==-1) toast('שגיאה: הקובץ לא נמצא — אולי כבר נמחק?');
+    else toast('שגיאה: '+msg);
+  }
 }
 
 // ─── SAVE ────────────────────────────────
