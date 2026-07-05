@@ -564,7 +564,9 @@ async function loadData(){
 function mkStat(d,nk,lk,defN,defL){
   var n=d[nk],l=d[lk];
   if(n===''||l==='') return '';
-  var val=n||defN; var lab=l||defL;
+  var val=n||defN;
+  // If label looks like a pure number, fall back to default label
+  var lab=(l&&!/^\d+$/.test((l||'').trim()))?l:defL;
   return '<div class="stat"><span class="stat-num" data-target="'+val+'">0</span><span class="stat-label">'+lab+'</span></div>';
 }
 function render(d){
@@ -683,7 +685,7 @@ function render(d){
 +'<circle cx="85" cy="85" r="79" fill="none" stroke="#C9953C" stroke-width="1.4" opacity="0.85"/>'
 +'<circle cx="85" cy="85" r="77" fill="none" stroke="#E0B86A" stroke-width="0.4" opacity="0.55"/>'
 +'<circle cx="85" cy="85" r="72" fill="none" stroke="#C9953C" stroke-width="0.45" opacity="0.35"/>'
-+'<text id="badge-text" font-family="\'Arial Hebrew\',Arial,sans-serif" font-size="10.8" font-weight="700" fill="#8B5C20">'
++'<text id="badge-text" font-family="\'Arial Hebrew\',Arial,sans-serif" font-size="9.6" font-weight="700" fill="#8B5C20">'
 +'<textPath id="badge-tp" href="#badge-path" startOffset="0%">מנציחים רגעים של אושר · חיה סגל צילום · צילום משפחה וילדים</textPath>'
 +'</text>'
 +'<g font-size="5" fill="#C9953C" opacity="0.65" text-anchor="middle">'
@@ -825,17 +827,23 @@ function render(d){
   setTimeout(fitBadgeText,120);
 }
 
-function fitBadgeText(){
-  var pathEl=document.getElementById('badge-path');
+function fitBadgeText(retry){
+  var textEl=document.getElementById('badge-text');
   var tpEl=document.getElementById('badge-tp');
-  if(!pathEl||!tpEl) return;
+  if(!textEl||!tpEl) return;
   tpEl.style.letterSpacing='';
-  var C=pathEl.getTotalLength();
-  var L=tpEl.getComputedTextLength();
-  if(L<=0||C<=0) return;
-  var n=(tpEl.textContent||'').length;
+  var C=477.5; // 2π×76 — hardcoded circumference so getTotalLength() on defs path is not needed
+  var L=textEl.getComputedTextLength();
+  if(L<=0){
+    // Not yet rendered — retry up to 5 times with increasing delay
+    if((retry||0)<5) setTimeout(function(){fitBadgeText((retry||0)+1);},100*(((retry||0)+1)));
+    return;
+  }
+  var n=(tpEl.textContent||'').trim().length;
   if(n<2) return;
-  tpEl.style.letterSpacing=((C-L)/n).toFixed(4)+'px';
+  var spacing=(C-L)/n;
+  if(spacing<-1) spacing=-1; // prevent extreme crunch
+  tpEl.style.letterSpacing=spacing.toFixed(4)+'px';
 }
 
 function renderLbDots(){
