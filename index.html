@@ -231,26 +231,33 @@ body.has-banner #home{padding-top:122px}
 .pkg{background:var(--white);border-radius:22px;padding:40px 32px 36px;box-shadow:0 4px 28px rgba(0,0,0,0.07);transition:transform var(--tr),box-shadow var(--tr);position:relative;border:1.5px solid #EDE5DC;overflow:hidden}
 .pkg::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--g),var(--pt))}
 .pkg:hover{transform:translateY(-10px);box-shadow:0 24px 56px rgba(0,0,0,0.13)}
-.pkg.featured{background:linear-gradient(160deg,#2C2318 0%,#3a2c20 100%);border-color:var(--g);transform:scale(1.04)}
-.pkg.featured::after{height:0}
+.pkg.featured{background:linear-gradient(160deg,#FEF6EC 0%,#F9EDDA 100%);border-color:var(--g);border-width:2px;transform:scale(1.04);box-shadow:0 12px 48px rgba(212,165,116,0.22)}
 .pkg.featured:hover{transform:scale(1.04) translateY(-8px)}
 .pkg-badge{position:absolute;top:20px;left:20px;background:linear-gradient(135deg,var(--g),var(--gd));color:var(--white);padding:5px 16px;border-radius:20px;font-size:0.75rem;font-weight:700;white-space:nowrap;box-shadow:0 4px 14px rgba(212,165,116,0.5);letter-spacing:0.03em}
 .pkg-name{font-family:'Cormorant Garamond','Frank Ruhl Libre',Georgia,serif;font-size:2rem;margin-bottom:10px;font-weight:600;line-height:1}
-.pkg.featured .pkg-name{color:var(--gl)}
+.pkg.featured .pkg-name{color:var(--gd)}
 .pkg-price{font-size:3rem;color:var(--g);font-weight:700;margin-bottom:3px;line-height:1;letter-spacing:-0.02em}
-.pkg.featured .pkg-price{color:var(--gl)}
+.pkg.featured .pkg-price{color:var(--gd)}
 .pkg-sub{color:#aaa;margin-bottom:22px;font-size:0.85rem;padding-bottom:20px;border-bottom:1px solid #f0ece8}
-.pkg.featured .pkg-sub{color:rgba(255,255,255,0.45);border-bottom-color:rgba(255,255,255,0.1)}
+.pkg.featured .pkg-sub{color:#9a7a5a;border-bottom-color:rgba(212,165,116,0.25)}
 .pkg-feat{list-style:none;margin-bottom:20px}
 .pkg-feat li{padding:10px 0;border-bottom:1px solid #f8f5f2;font-size:0.91rem;display:flex;align-items:center;gap:10px;color:#555}
-.pkg.featured .pkg-feat li{border-bottom-color:rgba(255,255,255,0.08);color:rgba(255,255,255,0.82)}
+.pkg.featured .pkg-feat li{border-bottom-color:rgba(212,165,116,0.18);color:#4a3520}
 .pkg-feat li::before{content:'✦';color:var(--g);font-size:0.72rem;flex-shrink:0}
-.pkg.featured .pkg-feat li::before{color:var(--gl)}
+.pkg.featured .pkg-feat li::before{color:var(--g)}
 .pkg-bonus{font-size:0.82rem;font-weight:600;margin-bottom:22px;padding:10px 14px;background:rgba(212,165,116,0.09);border-radius:10px;color:var(--gd);border:1px solid rgba(212,165,116,0.2)}
-.pkg.featured .pkg-bonus{background:rgba(255,255,255,0.07);color:var(--gl);border-color:rgba(212,165,116,0.3)}
+.pkg.featured .pkg-bonus{background:rgba(212,165,116,0.12);color:var(--gd);border-color:rgba(212,165,116,0.35)}
 .pkg-btn{display:block;width:100%;text-align:center;background:linear-gradient(135deg,var(--g),var(--gd));color:var(--white);padding:14px 20px;border-radius:30px;text-decoration:none;font-weight:700;font-size:0.93rem;transition:all var(--tr);letter-spacing:0.02em;box-shadow:0 4px 16px rgba(212,165,116,0.3);cursor:pointer;border:none;font-family:inherit}
 .pkg-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(212,165,116,0.45)}
-.pkg.featured .pkg-btn{background:var(--g);box-shadow:0 6px 22px rgba(212,165,116,0.5)}
+.pkg.featured .pkg-btn{background:linear-gradient(135deg,var(--gd),#9a7050);box-shadow:0 6px 22px rgba(212,165,116,0.45)}
+
+/* GALLERY CTA CARD */
+.gal-cta{break-inside:avoid;margin-bottom:20px;border-radius:var(--r);padding:36px 24px;background:linear-gradient(145deg,var(--c) 0%,var(--p) 100%);text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:13px;min-height:200px;box-shadow:var(--shadow);cursor:pointer;transition:transform var(--tr),box-shadow var(--tr)}
+.gal-cta:hover{transform:translateY(-6px);box-shadow:var(--shadow-h)}
+.gal-cta-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.45rem;font-weight:600;color:var(--gd)}
+.gal-cta-sub{color:#888;font-size:0.88rem;line-height:1.6}
+.gal-cta-btn{background:var(--g);color:white;border:none;padding:11px 28px;border-radius:25px;font-weight:700;cursor:pointer;font-size:0.88rem;font-family:'Assistant',sans-serif;transition:all var(--tr);box-shadow:0 4px 14px rgba(212,165,116,0.32)}
+.gal-cta-btn:hover{background:var(--gd);transform:translateY(-2px)}
 
 /* TESTIMONIALS */
 .testimonials{padding:90px 20px;background:var(--white)}
@@ -657,7 +664,13 @@ function render(d){
     +'</div>'
   +'</div>'
   :'')
-+'<div class="gal-grid">'+cats+'</div>'
++'<div class="gal-grid">'+cats
++'<div class="gal-cta reveal" onclick="navTo(\'contact\')" role="button" tabindex="0" aria-label="צרו קשר לצילום">'
++'<div class="gal-cta-title">רוצים צילום מיוחד?</div>'
++'<div class="gal-cta-sub">צלמת ילדים ומשפחה<br>חלאקה · ניובורן · סמאש קייק</div>'
++'<button class="gal-cta-btn" type="button">📞 צרו קשר</button>'
++'</div>'
++'</div>'
 +'</section>'
 
 +'<section id="pkgs" class="pkgs">'
