@@ -867,14 +867,15 @@ async function submitForm(e){
 
     +'</table></td></tr></table></body></html>';
 
-    // Send to owner via formsubmit (English keys — Hebrew keys cause delivery issues)
+    // Send to owner via formsubmit — all Hebrew content in one message field
+    var details='שם: '+name
+      +'\nטלפון: '+phone
+      +'\nסוג צילום: '+(type||'לא צוין')
+      +'\nאימייל: '+(emailVal||'לא צוין')
+      +(msg?'\nהודעה: '+msg:'');
     var payload={
       _subject:'פנייה חדשה מהאתר — '+name,
-      name:name,
-      phone:phone,
-      type:type||'לא צוין',
-      email:emailVal||'לא צוין',
-      message:msg||'—'
+      message:details
     };
     if(emailVal){payload._replyto=emailVal;}
     var res=await fetch('https://formsubmit.co/ajax/'+EMAIL,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)});
