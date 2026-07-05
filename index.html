@@ -575,13 +575,7 @@ function render(d){
 +'</div>'
 +'<div class="contact-divider">או השאירו פרטים ונחזור אליכם</div>'
 +'<div class="contact-form">'
-+'<form id="contactForm" onsubmit="submitForm(event)" action="https://formsubmit.co/'+email+'" method="POST">'
-+'<input type="hidden" name="_template" value="table">'
-+'<input type="hidden" name="_captcha" value="false">'
-+'<input type="hidden" id="fs-subject" name="_subject" value="פנייה חדשה מהאתר">'
-+'<input type="hidden" id="fs-next" name="_next" value="https://y6765809-art.github.io/chaya-photography-website/success.html">'
-+'<input type="hidden" id="fs-replyto" name="_replyto" value="">'
-+'<input type="hidden" id="fs-cc" name="_cc" value="">'
++'<form id="contactForm" onsubmit="submitForm(event)" action="https://script.google.com/macros/s/AKfycbx7onMA1nGK3Bh4Re1jAaR2jLoBXon1CPhPtAFVpyjfpQML6g9acuvpdZ9god-wlmRv/exec" method="POST" target="_self">'
 +'<div class="form-row">'
 +'<div class="form-group"><label for="cf-name">שם מלא *</label><input type="text" id="cf-name" name="name" required placeholder="ישראל ישראלי" autocomplete="name"></div>'
 +'<div class="form-group"><label for="cf-phone">טלפון *</label><input type="tel" id="cf-phone" name="phone" required placeholder="05X-XXX-XXXX" autocomplete="tel"></div>'
@@ -787,7 +781,6 @@ function submitForm(e){
   var form=e.target;
   var name=form.querySelector('#cf-name').value.trim();
   var phone=form.querySelector('#cf-phone').value.trim();
-  var emailVal=form.querySelector('#cf-email').value.trim();
   var btn=form.querySelector('.form-submit');
   var note=form.querySelector('.form-note');
   if(!name||!phone){
@@ -795,12 +788,6 @@ function submitForm(e){
     return;
   }
   btn.textContent='שולח...';btn.disabled=true;
-  document.getElementById('fs-subject').value='פנייה חדשה מהאתר — '+name;
-  document.getElementById('fs-next').value='https://y6765809-art.github.io/chaya-photography-website/success.html?n='+encodeURIComponent(name);
-  if(emailVal){
-    document.getElementById('fs-replyto').value=emailVal;
-    document.getElementById('fs-cc').value=emailVal;
-  }
   form.submit();
 }
 
