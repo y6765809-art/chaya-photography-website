@@ -137,6 +137,11 @@ body.has-banner #home{padding-top:122px}
 .hero-veil{position:absolute;inset:0;z-index:1;background:linear-gradient(160deg,rgba(242,223,206,0.58) 0%,rgba(255,255,255,0.18) 50%,rgba(245,198,208,0.48) 100%);pointer-events:none}
 #heroCanvas{position:absolute;inset:0;z-index:2;pointer-events:none;width:100%;height:100%}
 .hero .hero-inner{position:relative;z-index:3}
+.hero-badge{position:absolute;bottom:28px;left:28px;z-index:4;width:148px;height:148px;filter:drop-shadow(0 5px 16px rgba(140,90,30,0.20));pointer-events:none}
+.badge-ring{transform-origin:85px 85px;animation:badge-spin 18s linear infinite}
+@keyframes badge-spin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.badge-ring{animation:none}}
+@media(max-width:600px){.hero-badge{width:96px;height:96px;bottom:14px;left:10px}}
 
 /* SECTION COMMON */
 .sec-wrap{text-align:center;margin-bottom:55px}
@@ -662,6 +667,37 @@ function render(d){
 +(d.studio_image?'<div class="hero-icon"><img src="'+d.studio_image+'" alt="סטודיו" onerror="this.parentElement.style.display=\'none\'"><p>סטודיו מלבב</p></div>':'')
 +'</div>'
 +'</div>'
++'<div class="hero-badge" aria-hidden="true">'
++'<svg viewBox="0 0 170 170" xmlns="http://www.w3.org/2000/svg">'
++'<defs>'
++'<path id="badge-path" d="M 85,9 a 76,76 0 0,1 0,152 a 76,76 0 0,1 0,-152" fill="none"/>'
++'</defs>'
++'<g class="badge-ring">'
++'<circle cx="85" cy="85" r="83" fill="none" stroke="#C9953C" stroke-width="0.55" stroke-dasharray="2 3.5" opacity="0.5"/>'
++'<circle cx="85" cy="85" r="79" fill="none" stroke="#C9953C" stroke-width="1.4" opacity="0.85"/>'
++'<circle cx="85" cy="85" r="77" fill="none" stroke="#E0B86A" stroke-width="0.4" opacity="0.55"/>'
++'<circle cx="85" cy="85" r="72" fill="none" stroke="#C9953C" stroke-width="0.45" opacity="0.35"/>'
++'<text id="badge-text" font-family="\'Arial Hebrew\',Arial,sans-serif" font-size="10.8" font-weight="700" fill="#8B5C20">'
++'<textPath id="badge-tp" href="#badge-path" startOffset="0%">מנציחים רגעים של אושר · חיה סגל צילום · צילום משפחה וילדים</textPath>'
++'</text>'
++'<g font-size="5" fill="#C9953C" opacity="0.65" text-anchor="middle">'
++'<text x="85" y="13">◆</text><text x="162" y="88">◆</text><text x="85" y="163">◆</text><text x="8" y="88">◆</text>'
++'</g>'
++'</g>'
++'<circle cx="85" cy="85" r="68" fill="#FBF6EE"/>'
++'<circle cx="85" cy="85" r="64" fill="none" stroke="#1C1410" stroke-width="1.3"/>'
++'<circle cx="85" cy="85" r="60" fill="none" stroke="#1C1410" stroke-width="0.4" opacity="0.3"/>'
++'<g fill="none" stroke="#1C1410" stroke-linecap="round" stroke-linejoin="round">'
++'<rect x="59" y="73" width="52" height="33" rx="5" stroke-width="1.65"/>'
++'<rect x="65" y="66" width="14" height="8" rx="3" stroke-width="1.5"/>'
++'<circle cx="85" cy="90" r="12" stroke-width="1.65"/>'
++'<circle cx="85" cy="90" r="7" stroke-width="1.1"/>'
++'<path d="M 81,86 a 5,5 0 0,1 5,-2" stroke-width="0.8" opacity="0.4"/>'
++'<circle cx="103" cy="80" r="3" stroke-width="1.35"/>'
++'<line x1="82" y1="73" x2="82" y2="70" stroke-width="1.1"/>'
++'</g>'
++'</svg>'
++'</div>'
 +'</section>'
 
 +(d.hide_stats==='true'?'':'<div class="stats"><div class="stats-grid">'
@@ -780,6 +816,20 @@ function render(d){
   initSS();
   initHeroSlideshow();
   initParticles();
+  setTimeout(fitBadgeText,120);
+}
+
+function fitBadgeText(){
+  var pathEl=document.getElementById('badge-path');
+  var tpEl=document.getElementById('badge-tp');
+  if(!pathEl||!tpEl) return;
+  tpEl.style.letterSpacing='';
+  var C=pathEl.getTotalLength();
+  var L=tpEl.getComputedTextLength();
+  if(L<=0||C<=0) return;
+  var n=(tpEl.textContent||'').length;
+  if(n<2) return;
+  tpEl.style.letterSpacing=((C-L)/n).toFixed(4)+'px';
 }
 
 function renderLbDots(){
@@ -1220,12 +1270,18 @@ document.addEventListener('keydown',function(e){
     if(!cachedD){
       render(d);
     } else {
-      // Silent refresh: only re-render if gallery images changed
-      var galChanged=false;
+      // Silent refresh: re-render if any visible content changed
+      var contentChanged=false;
       for(var i=1;i<=8;i++){
-        if((d['cat'+i+'_image']||'')!==(cachedD['cat'+i+'_image']||'')){galChanged=true;break;}
+        if((d['cat'+i+'_image']||'')!==(cachedD['cat'+i+'_image']||'')){contentChanged=true;break;}
       }
-      if(galChanged) render(d);
+      if(!contentChanged){
+        var checkKeys=['stat1_num','stat1_label','stat2_num','stat2_label','stat3_num','stat3_label','stat4_num','stat4_label','hero_tagline','hero_highlight','hero_subline'];
+        for(var k=0;k<checkKeys.length;k++){
+          if((d[checkKeys[k]]||'')!==(cachedD[checkKeys[k]]||'')){contentChanged=true;break;}
+        }
+      }
+      if(contentChanged) render(d);
     }
     var loading=document.getElementById('loading');
     if(loading) loading.classList.add('hidden');
