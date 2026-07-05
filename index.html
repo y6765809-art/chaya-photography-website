@@ -255,6 +255,11 @@ body.has-banner #home{padding-top:122px}
 .pkg-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(212,165,116,0.45)}
 .pkg.featured .pkg-btn{background:linear-gradient(135deg,var(--gd),#9a7050);box-shadow:0 6px 22px rgba(212,165,116,0.45)}
 
+/* GALLERY FILTERS */
+.gal-filters{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:32px}
+.gal-filter-btn{padding:9px 24px;border-radius:25px;border:1.5px solid var(--g);background:transparent;color:var(--gd);cursor:pointer;font-size:0.88rem;font-weight:700;font-family:'Assistant',sans-serif;transition:all var(--tr)}
+.gal-filter-btn.active{background:var(--g);color:white;box-shadow:0 4px 14px rgba(212,165,116,0.35)}
+.gal-filter-btn:hover:not(.active){background:rgba(212,165,116,0.12)}
 /* GALLERY CTA BAR */
 .gal-cta-bar{max-width:1180px;margin:28px auto 0;padding:0 20px;cursor:pointer}
 .gal-cta-bar-inner{display:flex;align-items:center;background:linear-gradient(to left,#FEF8F0,#FDF2E4);border:1px solid rgba(212,165,116,0.35);border-right:4px solid var(--g);border-radius:var(--r);padding:26px 32px;justify-content:space-between;box-shadow:0 4px 18px rgba(212,165,116,0.12);transition:box-shadow var(--tr),transform var(--tr);direction:rtl;gap:18px}
@@ -563,36 +568,48 @@ async function loadData(){
 
 function mkStat(d,nk,lk,defN,defL){
   var n=d[nk],l=d[lk];
-  if(n===''||l==='') return '';
   var val=n||defN;
-  // If label looks like a pure number, fall back to default label
   var lab=(l&&!/^\d+$/.test((l||'').trim()))?l:defL;
   return '<div class="stat"><span class="stat-num" data-target="'+val+'">0</span><span class="stat-label">'+lab+'</span></div>';
 }
 function render(d){
-  // Gallery
+  // Build gallery from _gallerySlots (all photos per category) or fall back to flat cat keys
   galItems=[];
-  var cats='';
-  for(var i=1;i<=8;i++){
-    var n=d['cat'+i+'_name'],img=d['cat'+i+'_image'],desc=d['cat'+i+'_desc'];
-    if(n&&img){
-      galItems.push({src:img,name:n});
-      var idx=galItems.length-1;
-      var delay='rd'+(Math.min(i,4));
-      cats+='<div class="gal-card reveal '+delay+'" onclick="openLb('+idx+')" tabindex="0" role="button" aria-label="פתח תמונה: '+n+'" onkeydown="if(event.key===\'Enter\'||event.key===\' \')openLb('+idx+')">'
-        +'<div class="gal-img-wrap"><img src="'+img+'" alt="'+n+'" loading="lazy" onerror="this.src=imgFb(\''+n+'\')"></div>'
-        +'<div class="gal-info-overlay">'
-        +'<div class="gal-name">'+n+'</div>'
-        +(desc?'<div class="gal-desc">'+desc+'</div>':'')
-        +'<div class="gal-zoom-pill">&#128269; לחצו להגדלה</div>'
-        +'</div>'
-        +'</div>';
+  var filterBtns='';
+  var gridCards='';
+  var slots=d._gallerySlots;
+  if(!slots||!slots.length){
+    slots=[];
+    for(var fi=1;fi<=8;fi++){
+      var fcn=d['cat'+fi+'_name'],fci=d['cat'+fi+'_image'];
+      if(fcn&&fci) slots.push({cat:fcn,photos:[{src:fci,name:fcn}]});
     }
   }
-
-  // Extra slideshow images from slot.images[]
-  if(d._galImages&&d._galImages.length){
-    d._galImages.forEach(function(item){galItems.push(item);});
+  slots.forEach(function(slot){slot.photos.forEach(function(p){galItems.push(p);});});
+  if(slots.length){
+    filterBtns='<div class="gal-filters">'
+      +'<button class="gal-filter-btn active" data-cat="all" onclick="filterGal(\'all\')">הכל ('+galItems.length+')</button>';
+    slots.forEach(function(slot){
+      if(slot.photos.length){
+        filterBtns+='<button class="gal-filter-btn" data-cat="'+slot.cat+'" onclick="filterGal(\''+slot.cat+'\')">'+slot.cat+'</button>';
+      }
+    });
+    filterBtns+='</div>';
+    var pidx=0;
+    slots.forEach(function(slot){
+      slot.photos.forEach(function(p){
+        var ci=pidx++;
+        var delay='rd'+(ci%4+1);
+        gridCards+='<div class="gal-card reveal '+delay+'" data-cat="'+slot.cat+'" onclick="openLb('+ci+')" tabindex="0" role="button" aria-label="'+slot.cat+'">'
+          +'<div class="gal-img-wrap"><img src="'+p.src+'" alt="'+slot.cat+'" loading="lazy" onerror="this.src=imgFb(\''+slot.cat+'\')">'
+          +'</div>'
+          +'<div class="gal-info-overlay">'
+          +'<div class="gal-name">'+slot.cat+'</div>'
+          +'<div class="gal-zoom-pill">&#128269; לחצו להגדלה</div>'
+          +'</div>'
+          +'</div>';
+      });
+    });
   }
 
   // Packages
@@ -717,17 +734,8 @@ function render(d){
 
 +'<section id="gallery" class="gallery">'
 +'<div class="sec-wrap"><h2 class="sec-title">'+(d.gallery_title||'הגלריה שלנו')+'</h2><p class="sec-sub">'+(d.gallery_subtitle||'')+'</p><div class="sec-line"></div></div>'
-+(d.hide_all_photos!=='true'&&galItems.length>0
-  ?'<div class="gal-all reveal" onclick="openSS(0)" role="button" tabindex="0" aria-label="הצג את כל התמונות" onkeydown="if(event.key===\'Enter\')openSS(0)">'
-    +'<div class="gal-all-bg" style="background-image:url('+galItems[0].src+')"></div>'
-    +'<div class="gal-all-overlay">'
-      +'<div class="gal-all-play">&#9654;</div>'
-      +'<div class="gal-all-label">'+(d.all_photos_title||'כל התמונות')+'</div>'
-      +'<div class="gal-all-sub">'+(d.all_photos_subtitle||(galItems.length+' תמונות • לחצו לפתיחת המצגת'))+'</div>'
-    +'</div>'
-  +'</div>'
-  :'')
-+'<div class="gal-grid">'+cats+'</div>'
++filterBtns
++'<div class="gal-grid" id="galGrid">'+gridCards+'</div>'
 +'<div class="gal-cta-bar reveal" role="button" tabindex="0" aria-label="צרו קשר לצילום" onclick="navTo(\'contact\')" onkeydown="if(event.key===\'Enter\')navTo(\'contact\')">'
 +'<div class="gal-cta-bar-inner">'
 +'<div class="gal-cta-bar-left">'
@@ -825,6 +833,15 @@ function render(d){
   initHeroSlideshow();
   initParticles();
   setTimeout(fitBadgeText,120);
+}
+
+function filterGal(cat){
+  document.querySelectorAll('.gal-filter-btn').forEach(function(b){
+    b.classList.toggle('active',b.dataset.cat===cat);
+  });
+  document.querySelectorAll('#galGrid .gal-card').forEach(function(c){
+    c.style.display=(cat==='all'||c.dataset.cat===cat)?'':'none';
+  });
 }
 
 function fitBadgeText(retry){
@@ -1240,20 +1257,24 @@ async function loadAll(){
     var gr=results[2];
     if(gr.status==='fulfilled'&&gr.value.ok){
       var gal=await gr.value.json();
-      var extraImgs=[];
-      gal.forEach(function(slot,i){
-        var n=i+1;
+      // Build _gallerySlots: all photos per category for filtered gallery
+      var slots=[];
+      gal.forEach(function(slot,si){
+        var n=si+1;
         if(slot.name) d['cat'+n+'_name']=slot.name;
         if(slot.file) d['cat'+n+'_image']=RAW_BASE+slot.file;
         if(slot.desc) d['cat'+n+'_desc']=slot.desc;
-        if(slot.images&&slot.images.length){
-          slot.images.forEach(function(img){
-            if(img) extraImgs.push({src:RAW_BASE+img,name:slot.name||''});
-          });
+        if(slot.name){
+          var photos=[];
+          if(slot.file) photos.push({src:RAW_BASE+slot.file,name:slot.name});
+          if(slot.images&&slot.images.length){
+            slot.images.forEach(function(img){if(img)photos.push({src:RAW_BASE+img,name:slot.name});});
+          }
+          if(photos.length) slots.push({cat:slot.name,photos:photos});
         }
       });
       for(var x=gal.length+1;x<=8;x++){d['cat'+x+'_name']='';d['cat'+x+'_image']='';}
-      if(extraImgs.length) d._galImages=extraImgs;
+      if(slots.length) d._gallerySlots=slots;
     }
   }catch(e){}
 
@@ -1303,9 +1324,9 @@ document.addEventListener('keydown',function(e){
         }
       }
       if(!contentChanged){
-        // Check extra images changed
-        var dLen=(d._galImages||[]).length, cLen=(cachedD._galImages||[]).length;
-        if(dLen!==cLen) contentChanged=true;
+        // Check gallery photos changed — count total photos across all slots
+        var countPhotos=function(obj){return (obj._gallerySlots||[]).reduce(function(s,sl){return s+(sl.photos||[]).length;},0);};
+        if(countPhotos(d)!==countPhotos(cachedD)) contentChanged=true;
       }
       if(contentChanged) render(d);
     }

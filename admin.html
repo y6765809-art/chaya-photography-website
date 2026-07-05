@@ -456,8 +456,7 @@ function renderSlots(){
     var infoDiv=document.createElement('div');
     infoDiv.className='slot-info';
     infoDiv.innerHTML='<div class="slot-name">'+escHtml(slot.name)+'</div>'
-      +(slot.file?'<div class="slot-file">'+escHtml(slot.file)+'</div>':'<div class="slot-file" style="color:#bbb">ריק — גרור תמונה לכאן</div>')
-      +'<div class="slot-actions"><button class="slot-btn upload" onclick="uploadToSlot('+i+',event)">📤 תמונה ראשית</button></div>';
+      +(slot.file?'<div class="slot-file">'+escHtml(slot.file)+'</div>':'<div class="slot-file" style="color:#bbb">ריק — גרור תמונה לכאן</div>');
 
     // Extra images strip
     var extras=slot.images||[];
@@ -473,10 +472,9 @@ function renderSlots(){
           +'</div>';
       }
     });
-    extraDiv.innerHTML='<div class="slot-extra-label">תמונות נוספות לסלייד-שואו ('+(extras.length)+')</div>'
-      +'<div class="slot-extra-row" id="extraRow'+i+'">'
+    extraDiv.innerHTML='<div class="slot-extra-row" id="extraRow'+i+'">'
       +thumbsHtml
-      +'<button class="slot-add-imgs" onclick="addImagesToSlot('+i+',event)">➕ הוסף</button>'
+      +'<button class="slot-add-imgs" onclick="addImagesToSlot('+i+',event)">📤 הוסף תמונות</button>'
       +'</div>';
 
     div.appendChild(handleDiv);
@@ -1081,7 +1079,12 @@ async function uploadExtraImage(idx,file){
     item.setProgress(100);
     item.setStatus('ok','✓ הועלה');
     await loadLibrary();
-    gallery[idx].images.push(fname);
+    if(!gallery[idx].file){
+      // First photo uploaded → becomes main thumbnail automatically
+      gallery[idx].file=fname;
+    } else {
+      gallery[idx].images.push(fname);
+    }
     markChanged();
     renderSlots();
     renderLibrary();
