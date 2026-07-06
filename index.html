@@ -133,9 +133,11 @@ body.has-banner #home{padding-top:122px}
 
 /* HERO SLIDESHOW */
 .hero-slides{position:absolute;inset:0;overflow:hidden;z-index:0}
-.hero-slide{position:absolute;inset:0;background-size:contain;background-position:center center;background-repeat:no-repeat;opacity:0;transition:opacity 2s ease}
-.hero-slide.hs-on{opacity:1;transition:opacity 2s ease}
-@keyframes kBurns{from{transform:scale(1)}to{transform:scale(1.06)}}
+.hero-slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 2s ease}
+.hero-slide.hs-on{opacity:1}
+.scroll-ind{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);width:26px;height:42px;border:2px solid rgba(255,255,255,0.55);border-radius:13px;z-index:4;cursor:pointer}
+.scroll-ind::after{content:'';display:block;width:4px;height:8px;background:rgba(255,255,255,0.75);border-radius:2px;margin:6px auto 0;animation:scrollDot 1.8s ease-in-out infinite}
+@keyframes scrollDot{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(16px)}}
 .hero-veil{display:none}
 #heroCanvas{position:absolute;inset:0;z-index:2;pointer-events:none;width:100%;height:100%}
 .hero .hero-inner{display:none}
@@ -732,6 +734,7 @@ function render(d){
 
 +'<section id="home" class="hero">'
 +'<div class="hero-slides" id="heroSlides"></div>'
++'<div class="scroll-ind" onclick="navTo(\'gallery\')" aria-label="גלול למטה"></div>'
 +'</section>'
 +'<div class="hero-intro">'
 +(d.hero_tagline?'<p class="hero-intro-tag">'+d.hero_tagline+'</p>':'')
