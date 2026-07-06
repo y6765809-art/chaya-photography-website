@@ -811,6 +811,12 @@ function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').
 
 // ─── CONTENT EDITOR ────────────────────────────────
 var CONTENT_FIELDS=[
+  {sectionTitle:'🎨 עיצוב — גופנים וגדלים'},
+  {key:'font_body',label:'גופן טקסט רגיל',type:'font-select-body'},
+  {key:'font_display',label:'גופן כותרות',type:'font-select-display'},
+  {key:'size_hero_title',label:'גודל כותרת פתיחה',type:'size-select'},
+  {key:'size_sec_heading',label:'גודל כותרות סקשן',type:'size-select'},
+  {key:'size_pkg_price',label:'גודל מחירים',type:'size-select'},
   {sectionTitle:'🖼️ לוגו ותמונות'},
   {key:'logo',label:'לוגו האתר',wide:true,uploadBtn:true,uploadFileName:'logo',uploadLabel:'📤 העלה לוגו'},
   {key:'camera_image',label:'תמונת אייקון 1 — מצלמה/חלאקה',wide:true,uploadBtn:true,uploadFileName:'camera-icon',uploadLabel:'📤 העלה תמונה'},
@@ -894,6 +900,11 @@ var CONTENT_FIELDS=[
   {key:'test5_text',label:'המלצה 5 — טקסט (אופציונלי)',wide:true},{key:'test5_author',label:'המלצה 5 — שם'},
 ];
 var DEFAULTS={
+  font_body:"'Heebo', sans-serif",
+  font_display:"'Noto Serif Hebrew', serif",
+  size_hero_title:"medium",
+  size_sec_heading:"medium",
+  size_pkg_price:"medium",
   logo:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/logo.png",
   camera_image:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/camera-haircut.png",
   album_image:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/album.png",
@@ -969,6 +980,37 @@ function renderContent(){
         +'<button class="slot-btn upload" style="white-space:nowrap;padding:10px 14px;border-radius:10px" onclick="'+ufn+'">'+escHtml(ulabel)+'</button>'
         +'</div>'
         +(contentData[f.key]?'<img src="'+escHtml(contentData[f.key])+'" style="max-height:80px;max-width:220px;object-fit:contain;border-radius:6px;margin-top:4px" onerror="this.style.display=\'none\'">':'');
+    }else if(f.type==='font-select-body'){
+      var bodyFonts=[
+        {label:"Heebo — מודרני נקי (מומלץ)",value:"'Heebo', sans-serif"},
+        {label:"Rubik — עגול ידידותי",value:"'Rubik', sans-serif"},
+        {label:"Assistant — ניטרלי",value:"'Assistant', sans-serif"},
+      ];
+      var curFB=contentData[f.key]||"'Heebo', sans-serif";
+      uploadHtml='<select class="token-input" id="'+inputId+'" data-key="'+f.key+'" style="margin-bottom:0">'
+        +bodyFonts.map(function(fo){return '<option value="'+fo.value+'"'+(fo.value===curFB?' selected':'')+'>'+fo.label+'</option>';}).join('')
+        +'</select>';
+    }else if(f.type==='font-select-display'){
+      var displayFonts=[
+        {label:"Noto Serif Hebrew — אלגנטי (מומלץ לכותרות)",value:"'Noto Serif Hebrew', serif"},
+        {label:"Frank Ruhl Libre — קלאסי",value:"'Frank Ruhl Libre', serif"},
+        {label:"Secular One — בולט",value:"'Secular One', sans-serif"},
+        {label:"Suez One — דרמטי",value:"'Suez One', sans-serif"},
+        {label:"Heebo — מינימליסטי",value:"'Heebo', sans-serif"},
+      ];
+      var curFD=contentData[f.key]||"'Noto Serif Hebrew', serif";
+      uploadHtml='<select class="token-input" id="'+inputId+'" data-key="'+f.key+'" style="margin-bottom:0">'
+        +displayFonts.map(function(fo){return '<option value="'+fo.value+'"'+(fo.value===curFD?' selected':'')+'>'+fo.label+'</option>';}).join('')
+        +'</select>';
+    }else if(f.type==='size-select'){
+      var curSz=contentData[f.key]||'medium';
+      uploadHtml='<div style="display:flex;gap:8px" id="'+inputId+'" data-key="'+f.key+'" data-type="size-select" data-value="'+curSz+'">'
+        +['small','medium','large'].map(function(sz){
+          var lbl=sz==='small'?'קטן':sz==='medium'?'רגיל':'גדול';
+          var active=curSz===sz;
+          return '<button type="button" data-sz="'+sz+'" onclick="setSizeField(\''+inputId+'\',\''+sz+'\')" style="flex:1;padding:9px;border-radius:10px;border:1.5px solid '+(active?'var(--g)':'var(--border)')+';background:'+(active?'var(--g)':'var(--card)')+';color:'+(active?'#fff':'var(--t)')+';font-weight:700;cursor:pointer;font-size:0.88rem;transition:all 0.15s">'+lbl+'</button>';
+        }).join('')
+        +'</div>';
     }else if(f.type==='checkbox'){
       var isChecked=contentData[f.key]==='true';
       uploadHtml='<label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:6px 0">'
@@ -982,6 +1024,18 @@ function renderContent(){
     }
     div.innerHTML='<label style="font-size:0.82rem;font-weight:700;color:var(--m)">'+escHtml(f.label)+'</label>'+uploadHtml;
     wrap.appendChild(div);
+  });
+}
+
+function setSizeField(containerId,sz){
+  var container=document.getElementById(containerId);
+  if(!container) return;
+  container.dataset.value=sz;
+  container.querySelectorAll('button[data-sz]').forEach(function(btn){
+    var active=btn.dataset.sz===sz;
+    btn.style.borderColor=active?'var(--g)':'var(--border)';
+    btn.style.background=active?'var(--g)':'var(--card)';
+    btn.style.color=active?'#fff':'var(--t)';
   });
 }
 
@@ -1026,9 +1080,14 @@ async function doUploadImageField(file){
 }
 
 async function saveContent(){
-  var inputs=document.querySelectorAll('#contentFields input[data-key]');
-  inputs.forEach(function(inp){
+  document.querySelectorAll('#contentFields input[data-key]').forEach(function(inp){
     contentData[inp.dataset.key]=inp.dataset.type==='checkbox'?(inp.checked?'true':''):inp.value;
+  });
+  document.querySelectorAll('#contentFields select[data-key]').forEach(function(sel){
+    contentData[sel.dataset.key]=sel.value;
+  });
+  document.querySelectorAll('#contentFields div[data-type="size-select"]').forEach(function(div){
+    if(div.dataset.value) contentData[div.dataset.key]=div.dataset.value;
   });
   var msg=document.getElementById('contentMsg');
   msg.textContent='שומר...';msg.style.color='var(--m)';
