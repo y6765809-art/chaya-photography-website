@@ -401,11 +401,14 @@ body.has-banner #home{padding-top:122px}
   .gal-card{flex:0 0 calc(50% - 10px);width:calc(50% - 10px)}
   .test-grid{max-width:580px}
 }
+#navOverlay{position:fixed;inset:0;background:var(--white);opacity:0;pointer-events:none;z-index:9990;transition:opacity 0.18s ease}
+#navOverlay.active{opacity:1;pointer-events:all}
 </style>
 </head>
 <body>
 
 <!-- LOADING -->
+<div id="navOverlay"></div>
 <div id="loading">
   <div class="spinner"></div>
   <div class="loading-text">חיה סגל צילום</div>
@@ -1016,9 +1019,20 @@ function toggleFaq(el){
 }
 
 function navTo(id){
-  var el=document.getElementById(id);
-  if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
   closeMenu();
+  var ov=document.getElementById('navOverlay');
+  if(ov) ov.classList.add('active');
+  setTimeout(function(){
+    if(id==='home'){
+      window.scrollTo({top:0});
+    } else {
+      var el=document.getElementById(id);
+      if(el) window.scrollTo({top: el.getBoundingClientRect().top + window.pageYOffset - 80});
+    }
+    if(ov){
+      setTimeout(function(){ov.classList.remove('active');},40);
+    }
+  },180);
 }
 
 function toggleMenu(){
