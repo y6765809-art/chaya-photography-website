@@ -62,8 +62,8 @@
   --sz-sec-heading:clamp(1.7rem,3.2vw,2.6rem);
   --sz-price:clamp(1.8rem,3vw,2.5rem);
 }
-html{scroll-behavior:smooth;scroll-padding-top:80px}
-#gallery,#pkgs,#testimonials,#faq,#contact{scroll-margin-top:80px}
+html{scroll-behavior:smooth;scroll-padding-top:120px}
+#gallery,#pkgs,#testimonials,#faq,#contact{scroll-margin-top:120px}
 body{font-family:var(--font-body);background:var(--c);color:var(--t);line-height:1.78;overflow-x:hidden}
 
 /* SALE BANNER */
@@ -85,9 +85,9 @@ body.has-banner #home{padding-top:122px}
 #scrollProg{position:fixed;top:0;left:0;right:0;height:2px;background:var(--g);transform-origin:right;transform:scaleX(0);z-index:9998;transition:transform 0.08s linear}
 
 /* NAVBAR */
-.navbar{position:fixed;top:0;left:0;right:0;height:80px;background:rgba(240,234,224,0.97);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,0);z-index:999;padding:0 40px;display:flex;justify-content:space-between;align-items:center;transition:border-color var(--tr)}
+.navbar{position:fixed;top:0;left:0;right:0;height:120px;background:rgba(240,234,224,0.97);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,0);z-index:999;padding:0 40px;display:flex;justify-content:space-between;align-items:center;transition:border-color var(--tr)}
 .navbar.scrolled{border-bottom-color:rgba(0,0,0,0.07)}
-.nav-logo{height:76px;cursor:pointer;object-fit:contain;transition:opacity var(--tr)}
+.nav-logo{height:110px;cursor:pointer;object-fit:contain;transition:opacity var(--tr)}
 .nav-logo:hover{opacity:0.72}
 .nav-menu{display:flex;gap:26px;list-style:none;align-items:center}
 .nav-menu a{text-decoration:none;color:var(--t);font-weight:400;cursor:pointer;font-size:0.8rem;transition:color var(--tr);padding:4px 0;position:relative;letter-spacing:0.06em}
@@ -1056,7 +1056,7 @@ function navTo(id){
       window.scrollTo({top:0});
     } else {
       var el=document.getElementById(id);
-      if(el) window.scrollTo({top: el.getBoundingClientRect().top + window.pageYOffset - 80});
+      if(el) window.scrollTo({top: el.getBoundingClientRect().top + window.pageYOffset - 120});
     }
     if(ov){
       setTimeout(function(){ov.classList.remove('active');},40);
