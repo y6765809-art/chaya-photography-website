@@ -242,6 +242,47 @@ body.has-banner #home{padding-top:122px}
 }
 #heroCanvas{position:absolute;inset:0;z-index:2;pointer-events:none;width:100%;height:100%}
 
+/* ── HERO CAMERA WHEEL ── */
+.hero-cam{
+  position:absolute;
+  right:clamp(20px,6vw,80px);
+  top:50%;
+  width:clamp(130px,20vw,210px);
+  height:clamp(130px,20vw,210px);
+  z-index:4;pointer-events:none;
+  transform:translateY(-50%);
+}
+.hero-cam-ring{
+  position:absolute;inset:0;
+  border-radius:50%;
+  border:3px solid rgba(184,148,98,.55);
+  box-shadow:0 0 0 1px rgba(184,148,98,.18),inset 0 0 0 1px rgba(184,148,98,.18);
+  animation:camRingSpin 12s linear infinite;
+}
+.hero-cam-ring::before,
+.hero-cam-ring::after{
+  content:'';position:absolute;
+  background:var(--champagne);
+  border-radius:50%;
+}
+.hero-cam-ring::before{width:8px;height:8px;top:-4px;left:50%;margin-left:-4px}
+.hero-cam-ring::after{width:8px;height:8px;bottom:-4px;left:50%;margin-left:-4px}
+.hero-cam-img{
+  position:absolute;
+  inset:14px;
+  display:flex;align-items:center;justify-content:center;
+}
+.hero-cam-img img{
+  width:100%;height:100%;
+  object-fit:contain;
+  filter:drop-shadow(0 4px 16px rgba(0,0,0,.55)) brightness(.95);
+}
+@keyframes camRingSpin{
+  from{transform:rotate(0deg)}
+  to{transform:rotate(360deg)}
+}
+@media(max-width:768px){.hero-cam{right:8px;width:90px;height:90px}}
+
 /* ── SCROLL INDICATOR ── */
 .scroll-ind{
   position:absolute;
@@ -1145,6 +1186,7 @@ function render(d){
 
 +'<section id="home" class="hero">'
 +'<div class="hero-slides" id="heroSlides"></div>'
++(d.camera_image?'<div class="hero-cam"><div class="hero-cam-ring"></div><div class="hero-cam-img"><img src="'+d.camera_image+'" alt="מצלמה" loading="eager"></div></div>':'')
 +'<div class="scroll-ind" onclick="navTo(\'gallery\')" aria-label="גלול למטה"></div>'
 +'</section>'
 
