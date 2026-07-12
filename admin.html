@@ -84,6 +84,9 @@ body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--
 .slot-head-arrows{display:flex;gap:3px;flex-shrink:0}
 .slot-arr{width:22px;height:22px;background:transparent;border:1px solid var(--border);border-radius:5px;color:var(--m);font-size:0.72rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s}
 .slot-arr:hover{background:var(--g);border-color:var(--g);color:#fff}
+.slot-hero-btn{font-size:0.72rem;padding:2px 9px;border-radius:12px;border:1px solid var(--border);background:transparent;color:var(--m);cursor:pointer;transition:all 0.15s;white-space:nowrap;flex-shrink:0}
+.slot-hero-btn.hero-on{background:var(--g);border-color:var(--g);color:#fff;font-weight:700}
+.slot-hero-btn:hover{border-color:var(--g);color:var(--gd)}
 .slot-expand-icon{color:var(--m);font-size:0.85rem;transition:transform 0.2s;flex-shrink:0}
 .slot.expanded .slot-expand-icon{transform:rotate(180deg)}
 /* Slot body */
@@ -476,16 +479,18 @@ function renderSlots(){
     // ── Header ──
     var headDiv=document.createElement('div');
     headDiv.className='slot-head';
+    var heroOn=slot.hero!==false;
     headDiv.innerHTML='<span class="slot-head-grip">⠿⠿</span>'
       +'<span class="slot-head-name">'+escHtml(slot.name)+'</span>'
       +'<span class="slot-head-count">'+count+' תמונות</span>'
+      +'<button class="slot-hero-btn'+(heroOn?' hero-on':'')+'" onclick="toggleHero('+i+',event)" title="הצג בפתיחה">🏠 פתיחה</button>'
       +'<span class="slot-head-arrows">'
       +(i>0?'<button class="slot-arr" onclick="moveSlot('+i+',-1,event)" title="הזז למעלה">▲</button>':'')
       +(i<gallery.length-1?'<button class="slot-arr" onclick="moveSlot('+i+',1,event)" title="הזז למטה">▼</button>':'')
       +'</span>'
       +'<span class="slot-expand-icon">▾</span>';
     headDiv.addEventListener('click',function(e){
-      if(e.target.classList.contains('slot-arr')) return;
+      if(e.target.classList.contains('slot-arr')||e.target.classList.contains('slot-hero-btn')) return;
       div.classList.toggle('expanded');
     });
 
@@ -600,6 +605,15 @@ function clearSlot(idx,e){
 function addSlot(){
   showModal('<h3>קטגוריה חדשה</h3><p>מה שם הקטגוריה?</p><input class="rename-input" id="newSlotName" placeholder="לדוג׳: הריון"><div class="modal-btns"><button class="btn-primary" style="padding:10px 24px;width:auto" onclick="doAddSlot()">הוסף</button><button class="btn-cancel" onclick="closeModal()">ביטול</button></div>');
   setTimeout(function(){document.getElementById('newSlotName')&&document.getElementById('newSlotName').focus();},50);
+}
+
+function toggleHero(idx,e){
+  if(e) e.stopPropagation();
+  gallery[idx].hero=!(gallery[idx].hero!==false);
+  markChanged();
+  renderSlots();
+  scheduleAutoSave();
+  toast((gallery[idx].hero?'נוסף':'הוסר')+' מסליידשואו הפתיחה');
 }
 
 function moveSlot(idx,dir,e){

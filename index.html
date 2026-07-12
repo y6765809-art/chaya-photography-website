@@ -1094,7 +1094,7 @@ function render(d){
       if(fcn&&fci) slots.push({cat:fcn,photos:[{src:fci,name:fcn}]});
     }
   }
-  slots.forEach(function(slot){slot.photos.forEach(function(p){galItems.push({src:p.src,name:p.name,cat:slot.cat});});});
+  slots.forEach(function(slot){slot.photos.forEach(function(p){galItems.push({src:p.src,name:p.name,cat:slot.cat,hero:!!p.hero});});});
   if(slots.length){
     filterBtns='<div class="gal-filters">'
       +'<button class="gal-filter-btn active" data-cat="all" onclick="filterGal(\'all\')">הכל ('+galItems.length+')</button>';
@@ -1545,7 +1545,9 @@ function initSS(){
 
 function initHeroSlideshow(){
   var container=document.getElementById('heroSlides');if(!container||galItems.length===0) return;
-  var photos=galItems.filter(function(p){return p.src&&!p.src.includes('svg');});if(photos.length===0) return;
+  var photos=galItems.filter(function(p){return p.src&&!p.src.includes('svg')&&p.hero;});
+  if(!photos.length) photos=galItems.filter(function(p){return p.src&&!p.src.includes('svg');});
+  if(photos.length===0) return;
   var slides=photos.map(function(p){
     var div=document.createElement('div');div.className='hero-slide';
     div.style.backgroundImage='url('+p.src+')';container.appendChild(div);return div;
@@ -1601,8 +1603,8 @@ async function loadAll(){
         if(slot.desc) d['cat'+n+'_desc']=slot.desc;
         if(slot.name){
           var photos=[];
-          if(slot.file) photos.push({src:RAW_BASE+slot.file,name:slot.name});
-          if(slot.images&&slot.images.length) slot.images.forEach(function(img){if(img)photos.push({src:RAW_BASE+img,name:slot.name});});
+          if(slot.file) photos.push({src:RAW_BASE+slot.file,name:slot.name,hero:slot.hero!==false});
+          if(slot.images&&slot.images.length) slot.images.forEach(function(img){if(img)photos.push({src:RAW_BASE+img,name:slot.name,hero:false});});
           if(photos.length) slots.push({cat:slot.name,photos:photos});
         }
       });

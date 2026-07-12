@@ -3,6 +3,7 @@
     "name": "חלאקה",
     "file": "yl4a4345-copy.jpg",
     "desc": "צילום מרגש ליום המיוחד",
+    "hero": true,
     "images": [
       "yl4a5943.jpg",
       "yl4a7447-copy.jpg"
@@ -12,6 +13,7 @@
     "name": "ניובורן",
     "file": "yl4a7527-copy.jpg",
     "desc": "הרגעים הראשונים",
+    "hero": true,
     "images": [
       "yl4a8442-copy-ai.jpg",
       "yl4a8277-copy.jpg"
@@ -21,6 +23,7 @@
     "name": "סמאש קייק",
     "file": "yl4a9133-copy.jpg",
     "desc": "יום הולדת ראשון",
+    "hero": true,
     "images": [
       "yl4a9158-copy.jpg",
       "yl4a9190-copy.jpg"
@@ -30,6 +33,7 @@
     "name": "משפחה",
     "file": "yl4a9191-copy.jpg",
     "desc": "צילומי משפחה מרגשים",
+    "hero": true,
     "images": [
       "yl4a9370-copy.jpg",
       "yl4a9676-copy-2.jpg"
@@ -39,6 +43,7 @@
     "name": "בת מצווה",
     "file": "-copy-2.jpg",
     "desc": "יום שלא תשכחו",
+    "hero": true,
     "images": [
       "yl4a4345-copy.jpg",
       "yl4a9829-copy.jpg"
