@@ -245,25 +245,31 @@ body.has-banner #home{padding-top:122px}
 /* ── SCROLL INDICATOR ── */
 .scroll-ind{
   position:absolute;
-  bottom:calc(48px + env(safe-area-inset-bottom,0px));
-  left:50%;transform:translateX(-50%);
-  width:32px;height:52px;
-  border:2px solid rgba(255,255,255,.92);
-  border-radius:16px;z-index:6;cursor:pointer;
-  transition:opacity var(--tr);
-  box-shadow:0 0 0 0 rgba(255,255,255,.4),0 2px 12px rgba(0,0,0,.25);
-  animation:scrollPulse 2.2s ease-out infinite;
+  bottom:calc(44px + env(safe-area-inset-bottom,0px));
+  left:50%;
+  transform:translateX(-50%);
+  width:46px;height:46px;border-radius:50%;
+  border:1.5px solid rgba(255,255,255,.75);
+  background:rgba(255,255,255,.08);
+  backdrop-filter:blur(4px);
+  z-index:6;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(0,0,0,.35);
+  animation:scrollBounce 2s ease-in-out infinite;
 }
-.scroll-ind:hover{opacity:.7}
+.scroll-ind:hover{background:rgba(255,255,255,.16)}
 .scroll-ind::after{
-  content:'';display:block;
-  width:5px;height:10px;
-  background:#fff;
-  border-radius:3px;margin:7px auto 0;
-  animation:scrollDot 1.7s ease-in-out infinite;
+  content:'';
+  width:11px;height:11px;
+  border-right:2px solid rgba(255,255,255,.92);
+  border-bottom:2px solid rgba(255,255,255,.92);
+  transform:rotate(45deg) translateY(-3px);
+  display:block;
 }
-@keyframes scrollDot{0%,100%{opacity:1;transform:translateY(0)}55%{opacity:0;transform:translateY(19px)}}
-@keyframes scrollPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.4),0 2px 12px rgba(0,0,0,.25)}55%{box-shadow:0 0 0 10px rgba(255,255,255,0),0 2px 12px rgba(0,0,0,.25)}}
+@keyframes scrollBounce{
+  0%,100%{transform:translateX(-50%) translateY(0)}
+  50%{transform:translateX(-50%) translateY(9px)}
+}
 
 /* ── HERO INTRO ── */
 .hero-intro{
