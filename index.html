@@ -759,7 +759,7 @@ body.has-banner #home{padding-top:122px}
 .cq-wa{background:#25D366;color:#fff}.cq-wa:hover{background:#1da851}
 .cq-phone{background:var(--espresso);color:#fff}.cq-phone:hover{background:var(--champagne)}
 .contact-aside,.contact-cols,.contact-divider,.contact-aside-label{display:none}
-.contact-details{display:flex;flex-direction:column;gap:14px;margin-top:32px;align-items:center}
+.contact-details{display:flex;flex-direction:column;gap:4px;margin-top:16px;align-items:center}
 .contact-row{display:flex;align-items:center;gap:13px;font-family:var(--sans);font-size:.92rem;font-weight:300}
 .icon-circle{
   width:36px;height:36px;border-radius:50%;
@@ -1276,9 +1276,9 @@ function render(d){
 +'<a href="tel:'+phoneClean+'" class="cq-btn cq-phone">'+phone+'</a>'
 +'</div>'
 +'<div class="contact-details">'
-+'<div class="contact-row"><div class="icon-circle">📞</div><a href="tel:'+phoneClean+'">'+phone+'</a></div>'
-+'<div class="contact-row"><div class="icon-circle">✉</div><a href="mailto:'+email+'">'+email+'</a></div>'
-+'<div class="contact-row"><div class="icon-circle">📍</div><span>'+loc+'</span></div>'
++'<div class="contact-row"><a href="tel:'+phoneClean+'">'+phone+'</a></div>'
++'<div class="contact-row"><a href="mailto:'+email+'">'+email+'</a></div>'
++'<div class="contact-row"><span>'+loc+'</span></div>'
 +'</div>'
 +'</div>'
 +'</section>'
