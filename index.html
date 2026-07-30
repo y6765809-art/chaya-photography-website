@@ -312,6 +312,14 @@ body.has-banner #home{padding-top:122px}
   100%{opacity:1;transform:translateX(-50%) translateY(0)}
 }
 
+/* ── MARQUEE STRIP ── */
+.marquee-strip{overflow:hidden;background:var(--espresso);padding:13px 0}
+.mq-track{display:flex;width:max-content;animation:mqRun 24s linear infinite}
+.mq-inner{display:flex;align-items:center;white-space:nowrap}
+.mq-item{font-family:var(--serif);color:var(--champagne);font-size:.82rem;font-weight:400;letter-spacing:.14em;padding:0 22px}
+.mq-sep{color:rgba(184,148,98,.4);font-size:.65rem;padding:0 2px}
+@keyframes mqRun{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
 /* ── HERO INTRO ── */
 .hero-intro{
   padding:clamp(80px,11vw,128px) 28px clamp(88px,12vw,140px);
@@ -1197,6 +1205,11 @@ function render(d){
 +(d.hero_subline?'<p class="hero-intro-sub">'+d.hero_subline+'</p>':'')
 +'<a onclick="navTo(\'contact\');return false;" href="#contact" class="hero-intro-cta"><span>הזמינו עכשיו</span></a>'
 +'</div>'
+
++(slots.length?(function(){
+  var itms=slots.map(function(s){return '<span class="mq-item">✦ '+s.cat+'</span>';}).join('<span class="mq-sep"> · </span>');
+  return '<div class="marquee-strip"><div class="mq-track"><span class="mq-inner">'+itms+'</span><span class="mq-inner" aria-hidden="true">'+itms+'</span></div></div>';
+})():'')
 
 +(d.hide_stats==='true'?'':'<div class="stats"><div class="stats-grid">'
 +mkStat(d,'stat1_num','stat1_label','500','משפחות מרוצות')
