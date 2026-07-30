@@ -194,31 +194,51 @@ body.has-banner #home{padding-top:122px}
 .hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
 .hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
 
-/* ── MOBILE NAV ── */
-.mobile-nav{
+/* ── MOBILE NAV DRAWER ── */
+.nav-backdrop{
   position:fixed;inset:0;
-  background:rgba(253,250,246,.98);
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  background:rgba(18,14,11,.55);
+  z-index:999;
+  opacity:0;visibility:hidden;
+  transition:opacity .38s ease,visibility .38s ease;
+}
+.nav-backdrop.open{opacity:1;visibility:visible}
+.mobile-nav{
+  position:fixed;top:0;right:0;bottom:0;
+  width:78%;max-width:300px;
+  background:var(--off-white);
   z-index:1000;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:36px;
-  transform:translateX(100%);transition:transform .44s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;align-items:flex-start;
+  justify-content:center;
+  gap:0;
+  padding:80px 32px 40px;
+  transform:translateX(100%);transition:transform .42s cubic-bezier(.4,0,.2,1);
+  box-shadow:-8px 0 40px rgba(18,14,11,.18);
 }
 .mobile-nav.open{transform:translateX(0)}
 .mobile-nav a{
-  font-family:var(--serif);font-size:1.6rem;font-weight:200;
+  font-family:var(--serif);font-size:1.45rem;font-weight:300;
   color:var(--espresso);text-decoration:none;
   transition:color var(--tr);cursor:pointer;letter-spacing:.03em;
+  padding:14px 0;
+  border-bottom:1px solid rgba(30,22,18,.07);
+  width:100%;
 }
+.mobile-nav a:last-child{border-bottom:none}
 .mobile-nav a:hover{color:var(--champagne)}
 .mob-cta{
-  font-family:var(--sans)!important;font-size:.82rem!important;
-  font-weight:400!important;color:var(--champagne)!important;
-  border:1px solid rgba(184,148,98,.45)!important;
-  padding:13px 48px!important;letter-spacing:.18em!important;
+  font-family:var(--sans)!important;font-size:.78rem!important;
+  font-weight:500!important;color:#fff!important;
+  background:var(--champagne)!important;
+  border:none!important;
+  border-radius:6px!important;
+  padding:14px 28px!important;letter-spacing:.14em!important;
   text-transform:uppercase!important;
+  text-align:center!important;
+  margin-top:12px!important;
+  border-bottom:none!important;
 }
-.mob-cta:hover{border-color:var(--champagne)!important;background:rgba(184,148,98,.07)!important}
+.mob-cta:hover{background:var(--champ-lt)!important;color:#fff!important}
 
 /* ── HERO ── */
 .hero{
@@ -979,6 +999,7 @@ body.has-banner #home{padding-top:122px}
 </div>
 
 <!-- MOBILE NAV -->
+<div class="nav-backdrop" id="navBackdrop" onclick="closeMenu()"></div>
 <nav class="mobile-nav" id="mobileNav" aria-label="תפריט נייד">
   <a onclick="navTo('home')">דף הבית</a>
   <a onclick="navTo('gallery')">גלריה</a>
@@ -1464,16 +1485,23 @@ function navTo(id){
 }
 
 function toggleMenu(){
-  var h=document.getElementById('hamburger');var m=document.getElementById('mobileNav');
+  var h=document.getElementById('hamburger');
+  var m=document.getElementById('mobileNav');
+  var bd=document.getElementById('navBackdrop');
   if(!h||!m) return;
   var isOpen=m.classList.toggle('open');
-  h.classList.toggle('open',isOpen);h.setAttribute('aria-expanded',String(isOpen));
+  h.classList.toggle('open',isOpen);
+  h.setAttribute('aria-expanded',String(isOpen));
+  if(bd) bd.classList.toggle('open',isOpen);
   document.body.style.overflow=isOpen?'hidden':'';
 }
 function closeMenu(){
-  var h=document.getElementById('hamburger');var m=document.getElementById('mobileNav');
+  var h=document.getElementById('hamburger');
+  var m=document.getElementById('mobileNav');
+  var bd=document.getElementById('navBackdrop');
   if(h){h.classList.remove('open');h.setAttribute('aria-expanded','false');}
   if(m) m.classList.remove('open');
+  if(bd) bd.classList.remove('open');
   document.body.style.overflow='';
 }
 
