@@ -314,7 +314,7 @@ body.has-banner #home{padding-top:122px}
 
 /* ── MARQUEE STRIP ── */
 .marquee-strip{overflow:hidden;padding:16px 0}
-.mq-track{display:flex;width:max-content;will-change:transform}
+.mq-track{display:flex;width:max-content;will-change:transform;direction:ltr}
 .mq-inner{display:inline-flex;align-items:center;white-space:nowrap;flex-shrink:0}
 .mq-item{font-family:var(--serif);color:var(--champagne);font-size:1.2rem;font-weight:400;letter-spacing:.1em;padding:0 28px}
 .mq-sep{color:rgba(184,148,98,.4);font-size:.65rem;padding:0 4px}
@@ -1224,7 +1224,7 @@ function render(d){
 
 +(slots.length?(function(){
   var single=slots.map(function(s){return '<span class="mq-item">'+s.cat+'</span>';}).join('<span class="mq-sep"> — </span>');
-  var repeated=Array(8).fill(single).join('<span class="mq-sep"> — </span>');
+  var repeated=Array(20).fill(single).join('<span class="mq-sep"> — </span>');
   return '<div class="marquee-strip"><div class="mq-track" id="mqTrack"><span class="mq-inner">'+repeated+'</span><span class="mq-inner" aria-hidden="true">'+repeated+'</span></div></div>';
 })():'')
 
