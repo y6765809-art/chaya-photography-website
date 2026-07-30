@@ -313,7 +313,7 @@ body.has-banner #home{padding-top:122px}
 }
 
 /* ── MARQUEE STRIP ── */
-.marquee-strip{overflow:hidden;padding:16px 0}
+.marquee-strip{overflow:hidden;padding:16px 0;direction:ltr}
 .mq-track{display:flex;width:max-content;will-change:transform;direction:ltr}
 .mq-inner{display:inline-flex;align-items:center;white-space:nowrap;flex-shrink:0}
 .mq-item{font-family:var(--serif);color:var(--champagne);font-size:1.2rem;font-weight:400;letter-spacing:.1em;padding:0 28px}
@@ -1575,12 +1575,13 @@ function initHeroSlideshow(){
 
 function initMarquee(){
   var track=document.getElementById('mqTrack');if(!track) return;
-  var pos=0;var speed=0.55;
+  var speed=1;
   var half=track.scrollWidth/2;
-  if(!half){setTimeout(initMarquee,200);return;}
+  if(!half){setTimeout(initMarquee,300);return;}
+  var pos=0;
   function step(){
     pos-=speed;
-    if(-pos>=half) pos+=half;
+    if(pos<=-half) pos=0;
     track.style.transform='translateX('+pos+'px)';
     requestAnimationFrame(step);
   }
