@@ -17,7 +17,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Hebrew:wght@200;300;400;500;600&family=Frank+Ruhl+Libre:wght@300;400;500&family=Heebo:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Hebrew:wght@200;300;400;500;600;700&family=Frank+Ruhl+Libre:wght@300;400;500&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════
    CHAYA SEGAL — LUXURY EDITORIAL v2
@@ -478,9 +478,14 @@ body.has-banner #home{padding-top:122px}
 }
 .about-name{
   font-family:var(--serif);
-  font-size:clamp(2.2rem,4.5vw,3.4rem);
-  font-weight:700;color:var(--espresso);
+  font-size:clamp(2.4rem,5vw,3.8rem);
+  font-weight:700;
+  background:linear-gradient(135deg,#C4A265 0%,#E8C97A 45%,#B89462 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
   margin-bottom:6px;line-height:1.05;letter-spacing:.01em;
+  text-shadow:none;
+  filter:drop-shadow(0 2px 10px rgba(184,148,98,.28));
 }
 .about-role{
   font-family:var(--sans);font-size:.7rem;
