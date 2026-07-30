@@ -313,12 +313,11 @@ body.has-banner #home{padding-top:122px}
 }
 
 /* ── MARQUEE STRIP ── */
-.marquee-strip{overflow:hidden;background:var(--espresso);padding:13px 0}
-.mq-track{display:flex;width:max-content;animation:mqRun 24s linear infinite}
-.mq-inner{display:flex;align-items:center;white-space:nowrap}
+.marquee-strip{overflow:hidden;background:var(--espresso);padding:16px 0}
+.mq-track{display:flex;width:max-content;will-change:transform}
+.mq-inner{display:inline-flex;align-items:center;white-space:nowrap;flex-shrink:0}
 .mq-item{font-family:var(--serif);color:var(--champagne);font-size:1.2rem;font-weight:400;letter-spacing:.1em;padding:0 28px}
-.mq-sep{color:rgba(184,148,98,.4);font-size:.65rem;padding:0 2px}
-@keyframes mqRun{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.mq-sep{color:rgba(184,148,98,.4);font-size:.65rem;padding:0 4px}
 
 /* ── HERO INTRO ── */
 .hero-intro{
@@ -1225,8 +1224,8 @@ function render(d){
 
 +(slots.length?(function(){
   var single=slots.map(function(s){return '<span class="mq-item">'+s.cat+'</span>';}).join('<span class="mq-sep"> — </span>');
-  var repeated=Array(6).fill(single).join('<span class="mq-sep"> — </span>');
-  return '<div class="marquee-strip"><div class="mq-track"><span class="mq-inner">'+repeated+'</span><span class="mq-inner" aria-hidden="true">'+repeated+'</span></div></div>';
+  var repeated=Array(8).fill(single).join('<span class="mq-sep"> — </span>');
+  return '<div class="marquee-strip"><div class="mq-track" id="mqTrack"><span class="mq-inner">'+repeated+'</span><span class="mq-inner" aria-hidden="true">'+repeated+'</span></div></div>';
 })():'')
 
 +'<section id="gallery" class="gallery">'
@@ -1331,6 +1330,7 @@ function render(d){
   initSS();
   initHeroSlideshow();
   initParticles();
+  initMarquee();
 }
 
 function filterGal(cat){
@@ -1571,6 +1571,19 @@ function initHeroSlideshow(){
   var cur=0;
   function show(i){var el=slides[i];el.classList.remove('hs-on');void el.offsetWidth;el.classList.add('hs-on');slides.forEach(function(s,j){if(j!==i) s.classList.remove('hs-on');});}
   show(0);setInterval(function(){cur=(cur+1)%slides.length;show(cur);},2200);
+}
+
+function initMarquee(){
+  var track=document.getElementById('mqTrack');if(!track) return;
+  var pos=0;var speed=0.55;var half=0;
+  function step(){
+    if(!half) half=track.scrollWidth/2;
+    pos-=speed;
+    if(-pos>=half) pos=0;
+    track.style.transform='translateX('+pos+'px)';
+    requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
 }
 
 function initParticles(){
