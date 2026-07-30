@@ -921,7 +921,7 @@ var DEFAULTS={
   size_sec_heading:"medium",
   size_pkg_price:"medium",
   logo:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/logo.png",
-  camera_image:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/camera-haircut.png",
+  camera_image:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/camera-transparent.png",
   album_image:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/album.png",
   studio_image:"https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/1.jpeg",
   hero_tagline:"צילום אומנותי לחלאקה ומשפחות",
@@ -963,10 +963,20 @@ var contentData={};
 async function loadContent(){
   var saved={};
   try{
-    var r=await fetch('https://raw.githubusercontent.com/'+SITE_REPO+'/main/content.json?v='+Date.now());
-    if(r.ok) saved=await r.json();
-  }catch(e){}
-  // Merge: defaults fill empty fields, saved values override
+    // Use authenticated API (not raw CDN) to get always-fresh data
+    var r=await ghGet('/repos/'+SITE_REPO+'/contents/content.json');
+    if(r.content){
+      var json=decodeURIComponent(escape(atob(r.content.replace(/\n/g,''))));
+      saved=JSON.parse(json);
+      if(r.sha) window._contentSha=r.sha;
+    }
+  }catch(e){
+    // Fallback to raw URL if API fails
+    try{
+      var r2=await fetch('https://raw.githubusercontent.com/'+SITE_REPO+'/main/content.json?t='+Date.now(),{cache:'no-store'});
+      if(r2.ok) saved=await r2.json();
+    }catch(e2){}
+  }
   contentData=Object.assign({},DEFAULTS,saved);
   renderContent();
 }
@@ -1109,9 +1119,14 @@ async function saveContent(){
   try{
     var json=JSON.stringify(contentData,null,2);
     var b64=btoa(unescape(encodeURIComponent(json)));
-    var sha='';
-    try{var cur=await ghGet('/repos/'+SITE_REPO+'/contents/content.json');sha=cur.sha;}catch(e){}
-    await ghPut('/repos/'+SITE_REPO+'/contents/content.json',{message:'עדכון תוכן',content:b64,sha:sha||undefined});
+    // Use cached SHA — fall back to fetching only if missing
+    var sha=window._contentSha||'';
+    if(!sha){
+      try{var cur=await ghGet('/repos/'+SITE_REPO+'/contents/content.json');sha=cur.sha;}catch(e){}
+    }
+    var putResult=await ghPut('/repos/'+SITE_REPO+'/contents/content.json',{message:'עדכון תוכן',content:b64,sha:sha||undefined});
+    // Cache updated SHA so next save doesn't need a round-trip
+    if(putResult&&putResult.content&&putResult.content.sha) window._contentSha=putResult.content.sha;
     msg.textContent='נשמר!';msg.style.color='var(--green)';
     setTimeout(function(){msg.textContent='';},3000);
     toast('התוכן עודכן ✓');
