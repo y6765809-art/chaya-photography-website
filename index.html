@@ -1207,8 +1207,9 @@ function render(d){
 +'</div>'
 
 +(slots.length?(function(){
-  var itms=slots.map(function(s){return '<span class="mq-item">✦ '+s.cat+'</span>';}).join('<span class="mq-sep"> · </span>');
-  return '<div class="marquee-strip"><div class="mq-track"><span class="mq-inner">'+itms+'</span><span class="mq-inner" aria-hidden="true">'+itms+'</span></div></div>';
+  var single=slots.map(function(s){return '<span class="mq-item">'+s.cat+'</span>';}).join('<span class="mq-sep"> — </span>');
+  var repeated=Array(6).fill(single).join('<span class="mq-sep"> — </span>');
+  return '<div class="marquee-strip"><div class="mq-track"><span class="mq-inner">'+repeated+'</span><span class="mq-inner" aria-hidden="true">'+repeated+'</span></div></div>';
 })():'')
 
 +(d.hide_stats==='true'?'':'<div class="stats"><div class="stats-grid">'
