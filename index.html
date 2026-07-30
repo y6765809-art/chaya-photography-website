@@ -1206,12 +1206,6 @@ function render(d){
 +'<a onclick="navTo(\'contact\');return false;" href="#contact" class="hero-intro-cta"><span>הזמינו עכשיו</span></a>'
 +'</div>'
 
-+(slots.length?(function(){
-  var single=slots.map(function(s){return '<span class="mq-item">'+s.cat+'</span>';}).join('<span class="mq-sep"> — </span>');
-  var repeated=Array(6).fill(single).join('<span class="mq-sep"> — </span>');
-  return '<div class="marquee-strip"><div class="mq-track"><span class="mq-inner">'+repeated+'</span><span class="mq-inner" aria-hidden="true">'+repeated+'</span></div></div>';
-})():'')
-
 +(d.hide_stats==='true'?'':'<div class="stats"><div class="stats-grid">'
 +mkStat(d,'stat1_num','stat1_label','500','משפחות מרוצות')
 +mkStat(d,'stat2_num','stat2_label','7','שנות ניסיון')
@@ -1228,6 +1222,12 @@ function render(d){
 +'<p class="about-role">צלמת ילדים ומשפחה · טבריה</p>'
 +'<div class="about-text">'+(d.about_text||'<p>שמי חיה סגל, צלמת ילדים ומשפחה מטבריה. מזה למעלה מ-7 שנים אני מנציחה רגעים — הרגעים הקטנים שהופכים עם השנים לזיכרונות הגדולים ביותר.</p><p>אני מאמינה שצילום אמיתי הוא כזה שמרגישים בו: את ריח התינוק הטרי, את צחוק הילד, את ההתרגשות שבעיניים ביום המיוחד. כל תמונה שאני מצלמת היא שיר אהבה קטן לרגע שהיה.</p>')+'</div>'
 +'</div></div></section>')
+
++(slots.length?(function(){
+  var single=slots.map(function(s){return '<span class="mq-item">'+s.cat+'</span>';}).join('<span class="mq-sep"> — </span>');
+  var repeated=Array(6).fill(single).join('<span class="mq-sep"> — </span>');
+  return '<div class="marquee-strip"><div class="mq-track"><span class="mq-inner">'+repeated+'</span><span class="mq-inner" aria-hidden="true">'+repeated+'</span></div></div>';
+})():'')
 
 +'<section id="gallery" class="gallery">'
 +'<div class="sec-wrap reveal"><h2 class="sec-title">'+(d.gallery_title||'הגלריה שלנו')+'</h2><p class="sec-sub">'+(d.gallery_subtitle||'')+'</p><div class="sec-line"></div></div>'
