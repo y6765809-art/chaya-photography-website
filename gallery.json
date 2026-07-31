@@ -1,52 +1,52 @@
 [
   {
     "name": "חלאקה",
-    "file": "yl4a4345-copy.jpg",
+    "file": "yl4a4345-copy.webp",
     "desc": "צילום מרגש ליום המיוחד",
     "hero": true,
     "images": [
-      "yl4a5943.jpg",
-      "yl4a7447-copy.jpg"
+      "yl4a5943.webp",
+      "yl4a7447-copy.webp"
     ]
   },
   {
     "name": "ניובורן",
-    "file": "yl4a7527-copy.jpg",
+    "file": "yl4a7527-copy.webp",
     "desc": "הרגעים הראשונים",
     "hero": true,
     "images": [
-      "yl4a8442-copy-ai.jpg",
-      "yl4a8277-copy.jpg"
+      "yl4a8442-copy-ai.webp",
+      "yl4a8277-copy.webp"
     ]
   },
   {
     "name": "סמאש קייק",
-    "file": "yl4a9133-copy.jpg",
+    "file": "yl4a9133-copy.webp",
     "desc": "יום הולדת ראשון",
     "hero": true,
     "images": [
-      "yl4a9158-copy.jpg",
-      "yl4a9190-copy.jpg"
+      "yl4a9158-copy.webp",
+      "yl4a9190-copy.webp"
     ]
   },
   {
     "name": "משפחה",
-    "file": "yl4a9191-copy.jpg",
+    "file": "yl4a9191-copy.webp",
     "desc": "צילומי משפחה מרגשים",
     "hero": true,
     "images": [
-      "yl4a9370-copy.jpg",
-      "yl4a9676-copy-2.jpg"
+      "yl4a9370-copy.webp",
+      "yl4a9676-copy-2.webp"
     ]
   },
   {
     "name": "בת מצווה",
-    "file": "-copy-2.jpg",
+    "file": "-copy-2.webp",
     "desc": "יום שלא תשכחו",
     "hero": true,
     "images": [
-      "yl4a4345-copy.jpg",
-      "yl4a9829-copy.jpg"
+      "yl4a4345-copy.webp",
+      "yl4a9829-copy.webp"
     ]
   }
 ]

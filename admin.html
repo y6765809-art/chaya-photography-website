@@ -707,7 +707,7 @@ async function compressImage(file){
       var c=document.createElement('canvas');
       c.width=w;c.height=h;
       c.getContext('2d').drawImage(img,0,0,w,h);
-      c.toBlob(function(blob){URL.revokeObjectURL(url);resolve(blob);},'image/jpeg',0.88);
+      c.toBlob(function(blob){URL.revokeObjectURL(url);resolve(blob);},'image/webp',0.84);
     };
     img.src=url;
   });
@@ -723,11 +723,10 @@ function toBase64(blob){
 
 function sanitizeName(name){
   var dotIdx=name.lastIndexOf('.');
-  var ext=dotIdx>=0?name.slice(dotIdx).toLowerCase():'.jpg';
   var base=name.slice(0,dotIdx>=0?dotIdx:name.length).toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9._-]/g,'');
   if(!base) base='photo';
-  // Add timestamp to guarantee uniqueness and avoid SHA conflicts on concurrent uploads
-  return base+'-'+Date.now()+ext;
+  // Always save as webp; timestamp guarantees uniqueness
+  return base+'-'+Date.now()+'.webp';
 }
 
 var autoSaveTimer=null;
