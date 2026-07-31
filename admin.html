@@ -237,7 +237,6 @@ pb-20{padding-bottom:80px}
   <div class="section-title" style="margin-top:10px">✏️ עריכת תוכן ומחירים</div>
   <div id="contentEditor" style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:28px;box-shadow:var(--shadow)">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px" id="contentFields"></div>
-    <button class="btn-save" style="margin-top:20px" onclick="saveContent()">💾 שמור תוכן</button>
     <div id="contentMsg" style="margin-top:10px;font-size:0.85rem"></div>
   </div>
 
@@ -247,7 +246,7 @@ pb-20{padding-bottom:80px}
 <div class="save-bar" id="saveBar" style="display:none">
   <div class="save-info" id="saveInfo">שינויים לא שמורים</div>
   <div id="saveMsg"></div>
-  <button class="btn-save" id="saveBtn" onclick="saveGallery()">💾 שמור שינויים</button>
+  <button class="btn-save" id="saveBtn" onclick="saveAll()">💾 שמור הכל</button>
 </div>
 
 <!-- MODAL -->
@@ -808,6 +807,13 @@ async function saveGallery(){
     msg.className='save-msg err';
     msg.textContent='✗ שגיאה: '+e.message;
   }
+}
+
+async function saveAll(){
+  await saveGallery();   // מנהל את saveBtn ו-saveMsg
+  await saveContent();   // מנהל את contentMsg
+  var btn=document.getElementById('saveBtn');
+  if(btn) btn.textContent='💾 שמור הכל';
 }
 
 function markChanged(){
