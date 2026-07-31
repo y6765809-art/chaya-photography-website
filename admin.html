@@ -771,17 +771,30 @@ async function saveGallery(){
   btn.disabled=true;
   btn.textContent='שומר...';
   msg.className='';msg.textContent='';
-  try{
+
+  async function attemptSave(retry){
     var json=JSON.stringify(gallery,null,2);
     var b64=btoa(unescape(encodeURIComponent(json)));
-    // Get current SHA — use cached value first, fallback to API
     var sha=window._gallerySha||'';
     if(!sha){
-      try{var cur=await ghGet('/repos/'+SITE_REPO+'/contents/gallery.json');sha=cur.sha;}catch(e){}
+      try{var cur=await ghGet('/repos/'+SITE_REPO+'/contents/gallery.json');sha=cur.sha;window._gallerySha=sha;}catch(e){}
     }
-    var putResult=await ghPut('/repos/'+SITE_REPO+'/contents/gallery.json',{message:'עדכון גלריה',content:b64,sha:sha||undefined});
-    // Update SHA in memory so next save has the correct SHA without re-fetching
-    if(putResult&&putResult.content&&putResult.content.sha) window._gallerySha=putResult.content.sha;
+    try{
+      var putResult=await ghPut('/repos/'+SITE_REPO+'/contents/gallery.json',{message:'עדכון גלריה',content:b64,sha:sha||undefined});
+      if(putResult&&putResult.content&&putResult.content.sha) window._gallerySha=putResult.content.sha;
+    }catch(e){
+      if(!retry&&(e.message.indexOf('does not match')!==-1||e.message.indexOf('409')!==-1||e.message.indexOf('conflict')!==-1)){
+        window._gallerySha='';
+        var fresh=await ghGet('/repos/'+SITE_REPO+'/contents/gallery.json');
+        window._gallerySha=fresh.sha;
+        return attemptSave(true);
+      }
+      throw e;
+    }
+  }
+
+  try{
+    await attemptSave(false);
     btn.disabled=false;
     btn.textContent='💾 שמור שינויים';
     msg.className='save-msg ok';
@@ -1115,17 +1128,28 @@ async function saveContent(){
   });
   var msg=document.getElementById('contentMsg');
   msg.textContent='שומר...';msg.style.color='var(--m)';
-  try{
+  async function attemptContentSave(retry){
     var json=JSON.stringify(contentData,null,2);
     var b64=btoa(unescape(encodeURIComponent(json)));
-    // Use cached SHA — fall back to fetching only if missing
     var sha=window._contentSha||'';
     if(!sha){
-      try{var cur=await ghGet('/repos/'+SITE_REPO+'/contents/content.json');sha=cur.sha;}catch(e){}
+      try{var cur=await ghGet('/repos/'+SITE_REPO+'/contents/content.json');sha=cur.sha;window._contentSha=sha;}catch(e){}
     }
-    var putResult=await ghPut('/repos/'+SITE_REPO+'/contents/content.json',{message:'עדכון תוכן',content:b64,sha:sha||undefined});
-    // Cache updated SHA so next save doesn't need a round-trip
-    if(putResult&&putResult.content&&putResult.content.sha) window._contentSha=putResult.content.sha;
+    try{
+      var putResult=await ghPut('/repos/'+SITE_REPO+'/contents/content.json',{message:'עדכון תוכן',content:b64,sha:sha||undefined});
+      if(putResult&&putResult.content&&putResult.content.sha) window._contentSha=putResult.content.sha;
+    }catch(e){
+      if(!retry&&(e.message.indexOf('does not match')!==-1||e.message.indexOf('409')!==-1||e.message.indexOf('conflict')!==-1)){
+        window._contentSha='';
+        var fresh=await ghGet('/repos/'+SITE_REPO+'/contents/content.json');
+        window._contentSha=fresh.sha;
+        return attemptContentSave(true);
+      }
+      throw e;
+    }
+  }
+  try{
+    await attemptContentSave(false);
     msg.textContent='נשמר!';msg.style.color='var(--green)';
     setTimeout(function(){msg.textContent='';},3000);
     toast('התוכן עודכן ✓');
