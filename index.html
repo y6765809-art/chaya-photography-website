@@ -1434,12 +1434,14 @@ function initApp(){
   var cObs=new IntersectionObserver(function(entries){
     entries.forEach(function(e){
       if(e.isIntersecting){
-        var el=e.target;var target=+el.dataset.target;
+        var el=e.target;var raw=el.dataset.target||'';
+        var suffix=raw.replace(/^[\d,.\s]+/,'');
+        var target=+(raw.replace(/[^\d.]/g,'')||0);
         var steps=60,dur=1800,cur=0,inc=target/steps;
         var t=setInterval(function(){
           cur=Math.min(cur+inc,target);
-          el.textContent=Math.round(cur).toLocaleString('he-IL');
-          if(cur>=target){clearInterval(t);el.textContent=target.toLocaleString('he-IL');}
+          el.textContent=Math.round(cur).toLocaleString('he-IL')+suffix;
+          if(cur>=target){clearInterval(t);el.textContent=target.toLocaleString('he-IL')+suffix;}
         },dur/steps);
         cObs.unobserve(el);
       }
