@@ -955,6 +955,14 @@ body.has-banner #home{padding-top:122px}
 @media(min-width:769px) and (max-width:1100px){
   .gal-grid{grid-template-columns:repeat(3,1fr)}
 }
+
+/* ── Editorial refinement: clarity first, then decoration ── */
+.hero-copy{position:absolute;z-index:5;inset-inline-end:clamp(22px,7vw,104px);bottom:clamp(104px,14vh,160px);max-width:430px;color:#fff;text-align:right;text-shadow:0 2px 18px rgba(0,0,0,.34)}
+.hero-copy::before{content:'';position:absolute;inset:-32px -34px -28px;background:linear-gradient(135deg,rgba(12,8,4,.42),rgba(12,8,4,.05));backdrop-filter:blur(2px);border-inline-start:1px solid rgba(212,184,122,.8);z-index:-1}.hero-copy-kicker{display:block;color:var(--champ-lt);font-size:.7rem;font-weight:500;letter-spacing:.16em;margin-bottom:11px}.hero-copy-title{font-family:var(--serif);font-size:clamp(2.1rem,4vw,3.7rem);font-weight:500;line-height:1.14;margin:0 0 22px;letter-spacing:normal}.hero-copy-cta{display:inline-flex;align-items:center;gap:10px;color:#fff;border:1px solid rgba(255,255,255,.72);padding:11px 21px;text-decoration:none;font-size:.78rem;font-weight:500;letter-spacing:.04em;transition:background .25s,color .25s,transform .25s}.hero-copy-cta::before{content:'←';font-size:1rem;transition:transform .25s}.hero-copy-cta:hover{background:#fff;color:var(--espresso);transform:translateY(-2px)}.hero-copy-cta:hover::before{transform:translateX(-4px)}
+.hero-cam{display:none}.hero-slide{transition:opacity 1.3s ease}.sec-title,.about-name,.contact-title{letter-spacing:normal}.nav-menu a,.gal-filter-btn{letter-spacing:.035em}
+.gal-grid{grid-auto-flow:dense}.gal-card:first-child{grid-column:span 2;grid-row:span 2}.gal-card:first-child .gal-name{font-size:1.35rem}.gal-card::after{content:'';position:absolute;inset:0;border:1px solid rgba(255,255,255,.18);opacity:0;transition:opacity .35s;z-index:3;pointer-events:none}.gal-card:hover::after{opacity:1}.gal-card:hover .gal-img-wrap img{transform:scale(1.055)}
+@media(max-width:768px){.hero-copy{bottom:105px;inset-inline:28px;max-width:none}.hero-copy::before{inset:-20px -16px}.hero-copy-title{font-size:clamp(2rem,10vw,3rem)}.gal-card:first-child{grid-column:span 2;grid-row:span 2}}
+@media(prefers-reduced-motion:reduce){.hero-slide{transition:none}.hero-copy-cta{transition:none}}
 </style>
 </head>
 <body>
@@ -1216,6 +1224,7 @@ function render(d){
 
 +'<section id="home" class="hero">'
 +'<div class="hero-slides" id="heroSlides"></div>'
++'<div class="hero-copy"><span class="hero-copy-kicker">חיה סגל צילום</span><p class="hero-copy-title">רגעים קטנים,<br>זיכרונות גדולים</p><a onclick="navTo(\'contact\');return false;" href="#contact" class="hero-copy-cta">לתיאום צילום</a></div>'
 +(d.camera_image?'<div class="hero-cam"><div class="hero-cam-ring"></div><div class="hero-cam-img"><img src="'+d.camera_image+'" alt="מצלמה" loading="eager"></div></div>':'')
 +'<div class="scroll-ind" onclick="navTo(\'gallery\')" aria-label="גלול למטה"></div>'
 +'</section>'
@@ -1600,7 +1609,7 @@ function initHeroSlideshow(){
   });
   var cur=0;
   function show(i){var el=slides[i];el.classList.remove('hs-on');void el.offsetWidth;el.classList.add('hs-on');slides.forEach(function(s,j){if(j!==i) s.classList.remove('hs-on');});}
-  show(0);setInterval(function(){cur=(cur+1)%slides.length;show(cur);},2200);
+  show(0);setInterval(function(){cur=(cur+1)%slides.length;show(cur);},6000);
 }
 
 
@@ -1627,8 +1636,6 @@ function initParticles(){
   frame();
 }
 
-document.addEventListener('contextmenu',function(e){e.preventDefault();});
-document.addEventListener('keydown',function(e){if(e.ctrlKey&&(e.key==='u'||e.key==='U'||e.key==='s'||e.key==='S'||e.key==='p'||e.key==='P'))e.preventDefault();});
 
 var CACHE_KEY='cs_site_v2';var CACHE_TTL=5*60*1000;
 async function fetchJ(url,ms){var ac=new AbortController();var tid=setTimeout(function(){ac.abort();},ms||6000);try{var r=await fetch(url,{cache:'no-store',signal:ac.signal});clearTimeout(tid);return r;}catch(e){clearTimeout(tid);throw e;}}
