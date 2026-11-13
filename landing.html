@@ -493,7 +493,7 @@ footer .monogram{width:44px;height:44px;margin:0 auto 10px;display:block}
           <h2>מחכה לשמוע מכם</h2>
           <p>ספרו לי על הילדים ועל מה שאתם אוהבים, ואתכנן לכם צילום שתזכרו שנים.<br>לניו בורן כדאי לשריין מקום כבר בהריון.</p>
           <div class="lines">
-            <div class="cline"><span>טלפון / וואטסאפ</span><strong id="phone">054-8463238</strong><button class="copy" type="button" data-copy="phone">העתקה</button></div>
+            <div class="cline"><span>טלפון / וואטסאפ</span><strong id="phone">054-846-3238</strong><button class="copy" type="button" data-copy="phone">העתקה</button></div>
             <div class="cline"><span>מייל</span><strong id="mail">chaya054846@gmail.com</strong><button class="copy" type="button" data-copy="mail">העתקה</button></div>
             <div class="cline"><span>סטודיו</span><strong>טבריה</strong><span></span></div>
           </div>
@@ -520,7 +520,7 @@ footer .monogram{width:44px;height:44px;margin:0 auto 10px;display:block}
 <a class="btn float-cta" href="#book">לתיאום צילום</a>
 
 <script>
-const PHONE='972548463238';
+let PHONE='972548463238';
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 // gentle reveal (content already visible at rest)
 if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}}),{threshold:.15});document.querySelectorAll('.reveal').forEach(el=>io.observe(el));}else document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));
@@ -531,6 +531,25 @@ function upd(){const t=form.querySelector('[name=type]:checked').value,w=form.qu
  const msg=`היי חיה, אשמח לתאם ${t} ${w}${a.length?', כולל '+a.join(' ו'):''}. מתי יש לך תאריכים פנויים?`;
  wa.href=`https://wa.me/${PHONE}?text=${encodeURIComponent(msg)}`;}
 form.addEventListener('change',upd);form.addEventListener('submit',e=>e.preventDefault());upd();
+// live content from the site's admin panel (content.json): contact details + testimonials
+(function(){
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  function apply(c){
+    if(!c||typeof c!=='object')return;
+    if(c.contact_phone){const p=document.getElementById('phone');if(p)p.textContent=c.contact_phone;
+      let d=c.contact_phone.replace(/\D/g,'');if(d.startsWith('0'))d='972'+d.slice(1);if(d.length>=11){PHONE=d;form&&form.dispatchEvent(new Event('change'));}}
+    if(c.contact_email){const m=document.getElementById('mail');if(m)m.textContent=c.contact_email;}
+    const rev=document.querySelector('.reviews');
+    if(rev){
+      if(String(c.hide_testimonials).toLowerCase()==='true'){document.getElementById('reviews').hidden=true;}
+      else{const items=[1,2,3,4,5].map(i=>({t:c['test'+i+'_text'],a:c['test'+i+'_author']})).filter(x=>x.t&&String(x.t).trim());
+        if(items.length)rev.innerHTML=items.map(x=>'<figure><blockquote>'+esc(x.t)+'</blockquote><figcaption>'+esc(String(x.a||'').replace(/\s*[—–-]\s*/,' · '))+'</figcaption></figure>').join('');}
+    }
+  }
+  fetch('content.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json();})
+    .catch(()=>fetch('https://raw.githubusercontent.com/y6765809-art/chaya-photography-website/main/content.json').then(r=>r.json()))
+    .then(apply).catch(()=>{});
+})();
 // contact form -> email (Google Apps Script, same as the main site)
 const GAS_URL='https://script.google.com/macros/s/AKfycbx7onMA1nGK3Bh4Re1jAaR2jLoBXon1CPhPtAFVpyjfpQML6g9acuvpdZ9god-wlmRv/exec';
 const cf=document.getElementById('cform'),note=document.getElementById('cf-note');
