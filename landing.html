@@ -39,6 +39,7 @@ a{color:inherit}
 :focus-visible{outline:2px solid var(--rust);outline-offset:3px}
 .script{font-family:var(--script);font-style:italic;font-weight:400;line-height:1;direction:ltr;unicode-bidi:isolate;letter-spacing:.02em}
 .monogram{width:54px;height:54px;color:var(--rust);flex:none}
+.l4 .t1{fill:var(--fg)} .l4 .t2{fill:var(--muted)} .l4-head{width:230px;height:71px;display:block} .l4-foot{width:260px;height:80px;display:block;margin:0 auto 12px}
 .wordmark{display:inline-flex;flex-direction:column;align-items:stretch;line-height:1;direction:ltr}
 .wordmark b{font-family:var(--script);font-weight:500;font-size:22px;letter-spacing:.34em;margin-right:-.34em;color:var(--fg);white-space:nowrap}
 .wordmark i{font-family:var(--script);font-style:normal;font-size:11px;color:var(--muted);margin-top:8px;display:flex;justify-content:space-between}
@@ -190,6 +191,7 @@ footer .monogram{width:44px;height:44px;margin:0 auto 10px;display:block}
 .cf-done{text-align:center;padding:40px 10px;display:flex;flex-direction:column;gap:8px}
 .cf-done h3{font-size:28px}
 .cf-done p{color:var(--muted)}
+.cf-done[hidden],.cform[hidden]{display:none!important}
 @media (max-width:520px){.cform{grid-template-columns:1fr}}
 /* lightbox */
 .gallery .ph{cursor:zoom-in}
@@ -325,6 +327,7 @@ html.js .svc.in:hover{transform:translateY(-4px);transition:transform .35s ease}
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs><g id="l4lf"><path d="M0 0 C7 -11 22 -12 32 0 C22 12 7 11 0 0Z" fill="#C9D2C1" stroke="#7E8F76" stroke-width="1"/><path d="M2 0 H26" stroke="#7E8F76" stroke-width=".8" opacity=".7"/></g><g id="l4fl"><g fill="#EBD3CB" stroke="#C7867A" stroke-width=".7"><circle cx="0" cy="-6" r="5"/><circle cx="5.7" cy="-1.9" r="5"/><circle cx="3.5" cy="4.9" r="5"/><circle cx="-3.5" cy="4.9" r="5"/><circle cx="-5.7" cy="-1.9" r="5"/></g><circle r="2.6" fill="#E3C3A8"/></g><g id="logo4"><path d="M150 52 C175 40 205 36 240 42" fill="none" stroke="#7E8F76" stroke-width="1.1"/><use href="#l4lf" transform="translate(166 46) rotate(-110) scale(.4)"/><use href="#l4lf" transform="translate(180 42) rotate(40) scale(.38)"/><use href="#l4lf" transform="translate(198 38) rotate(-100) scale(.42)"/><use href="#l4lf" transform="translate(214 39) rotate(30) scale(.38)"/><use href="#l4lf" transform="translate(230 40) rotate(-80) scale(.38)"/><use href="#l4fl" transform="translate(244 42) scale(.65)"/><text class="t1" x="210" y="110" text-anchor="middle" font-family="Cormorant Garamond, Garamond, serif" font-weight="500" font-size="42" letter-spacing="10">CHAYA SEGAL</text><line x1="40" y1="136" x2="92" y2="136" stroke="#E3C3A8" stroke-width="1.5"/><line x1="328" y1="136" x2="380" y2="136" stroke="#E3C3A8" stroke-width="1.5"/><text class="t2" x="210" y="141" text-anchor="middle" font-family="Cormorant Garamond, Garamond, serif" font-size="14" letter-spacing="6">PHOTOGRAPHY</text></g></defs>
   <symbol id="sprig" viewBox="0 0 120 80">
     <path d="M8 74 C38 52 70 34 112 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
     <g fill="currentColor" opacity=".9">
@@ -339,8 +342,7 @@ html.js .svc.in:hover{transform:translateY(-4px);transition:transform .35s ease}
 
 <header class="wrap nav">
   <a class="logo" href="#" aria-label="Chaya Segal Photography">
-    <svg class="monogram" viewBox="0 0 60 60" aria-hidden="true"><path d="M8 58 V30 a22 22 0 0 1 44 0 V58" fill="none" stroke="currentColor" stroke-width="1"/><path d="M12 58 V30 a18 18 0 0 1 36 0 V58" fill="none" stroke="currentColor" stroke-width=".5" opacity=".6"/><text x="30" y="44" text-anchor="middle" font-family="Cormorant Garamond, Garamond, serif" font-style="italic" font-size="22" fill="currentColor">cs</text></svg>
-    <span class="wordmark"><b>CHAYA SEGAL</b><i aria-hidden="true"><span>P</span><span>H</span><span>O</span><span>T</span><span>O</span><span>G</span><span>R</span><span>A</span><span>P</span><span>H</span><span>Y</span></i></span>
+    <svg class="l4 l4-head" viewBox="0 20 420 130" aria-hidden="true"><use href="#logo4"/></svg>
   </a>
   <nav aria-label="ניווט ראשי"><ul>
     <li><a href="#services">צילומים</a></li><li><a href="#gallery">גלריה</a></li><li><a href="#prices">מחירון</a></li><li><a href="#contact">צרו קשר</a></li>
@@ -553,7 +555,7 @@ html.js .svc.in:hover{transform:translateY(-4px);transition:transform .35s ease}
   </section>
 </main>
 
-<footer><div class="wrap"><svg class="monogram" viewBox="0 0 60 60" aria-hidden="true"><path d="M8 58 V30 a22 22 0 0 1 44 0 V58" fill="none" stroke="currentColor" stroke-width="1"/><text x="30" y="44" text-anchor="middle" font-family="Cormorant Garamond, Garamond, serif" font-style="italic" font-size="22" fill="currentColor">cs</text></svg><span class="script">CHAYA SEGAL</span>צילומי חלאקה, גיל 3 וניו בורן · טבריה</div></footer>
+<footer><div class="wrap"><svg class="l4 l4-foot" viewBox="0 20 420 130" role="img" aria-label="Chaya Segal Photography"><use href="#logo4"/></svg>צילומי חלאקה, גיל 3 וניו בורן · טבריה</div></footer>
 
 <a class="btn float-cta" href="#book">לתיאום צילום</a>
 
@@ -606,7 +608,7 @@ cf.addEventListener('submit',e=>{e.preventDefault();
   const ph='‎'+(d.length===10?d.slice(0,3)+'-'+d.slice(3,6)+'-'+d.slice(6):d)+'‎';
   const vals={name:name,phone:ph,type:v('cf-type'),email:v('cf-email'),message:v('cf-msg')};
   const body=Object.keys(vals).map(k=>k+'='+encodeURIComponent(vals[k])).join('&')+'&source=landing';
-  const done=()=>{cf.reset();cf.style.display='none';note.textContent='';cf.querySelector('.cf-send').disabled=false;const ok=document.getElementById('cf-done');ok.hidden=false;ok.style.display='block';};
+  const done=()=>{cf.reset();cf.style.display='none';note.textContent='';cf.querySelector('.cf-send').disabled=false;const ok=document.getElementById('cf-done');ok.hidden=false;ok.style.display='flex';};
   fetch(GAS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body}).then(done).catch(()=>{note.textContent='השליחה נכשלה. אפשר לכתוב לי בוואטסאפ או במייל.';cf.querySelector('.cf-send').disabled=false;});
 });
 // photo wall: columns drift at different speeds while scrolling
