@@ -532,6 +532,9 @@ a,button,summary,label,[role=tab],.chip label,.svc,.ph,.c-dots button,.s-arrow{c
 @media (hover:none){html,body{cursor:auto}}
 /* no price list on this page */
 .match{display:none!important}
+/* green logo leaves fall from a fast-moving mouse */
+.leaf-fx{position:fixed;pointer-events:none;z-index:70;width:26px;height:20px;line-height:0}
+.leaf-fx svg{display:block;overflow:visible}
 </style>
 <script>document.documentElement.classList.add('js')</script>
 
@@ -965,6 +968,18 @@ document.querySelectorAll('.story .s-more').forEach(row=>{
   document.querySelectorAll('.tabs [data-tab]').forEach(t=>t.addEventListener('click',()=>requestAnimationFrame(upd)));
   upd();
 });
+// fast mouse movement drops a few green leaves like the logo
+(function(){if(reduce||!matchMedia('(hover:hover) and (pointer:fine)').matches)return;
+ let lx=0,ly=0,lt=0,last=0,live=0;
+ const leaf='<svg viewBox="-2 -14 36 28" width="26" height="20"><path d="M0 0 C7 -11 22 -12 32 0 C22 12 7 11 0 0Z" fill="#C9D2C1" stroke="#7E8F76" stroke-width="1.2"/><path d="M2 0 H26" stroke="#7E8F76" stroke-width=".9" opacity=".7"/></svg>';
+ addEventListener('mousemove',e=>{const now=performance.now();const dt=Math.max(now-lt,8);const v=Math.hypot(e.clientX-lx,e.clientY-ly)/dt;lx=e.clientX;ly=e.clientY;lt=now;
+  if(v<1.5||now-last<50||live>=22)return;last=now;live++;
+  const el=document.createElement('span');el.className='leaf-fx';el.innerHTML=leaf;el.style.left=e.clientX+'px';el.style.top=e.clientY+'px';document.body.appendChild(el);
+  const r=Math.random()*360,dx=(Math.random()-.5)*90,dy=50+Math.random()*80,rot=(Math.random()-.5)*260;
+  const a=el.animate([{transform:'translate(-50%,-50%) rotate('+r+'deg) scale(.3)',opacity:0},{transform:'translate(-50%,-50%) rotate('+(r+rot*.2)+'deg) scale(1)',opacity:1,offset:.15},{transform:'translate(calc(-50% + '+dx+'px),calc(-50% + '+dy+'px)) rotate('+(r+rot)+'deg) scale(.75)',opacity:0}],{duration:1300+Math.random()*600,easing:'cubic-bezier(.2,.6,.3,1)'});
+  a.onfinish=()=>{el.remove();live--;};
+ },{passive:true});
+})();
 // photo wall: columns drift at different speeds while scrolling
 const wall=document.querySelector('.wall');if(wall&&!reduce){const cols=[...wall.querySelectorAll('.col')],sp=[-90,70,-130,60,-80];let tick=false;const mv=()=>{tick=false;const r=wall.getBoundingClientRect();const p=(innerHeight-r.top)/(innerHeight+r.height);if(p<-.1||p>1.1)return;cols.forEach((c,i)=>c.style.transform='translateY('+((p-.5)*sp[i%5]*2)+'px)');};addEventListener('scroll',()=>{if(!tick){tick=true;requestAnimationFrame(mv);}},{passive:true});mv();}
 // mobile action bar: whatsapp with a short greeting, phone follows content.json
