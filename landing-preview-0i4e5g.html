@@ -563,7 +563,7 @@ a,button,summary,label,[role=tab],.chip label,.svc,.ph,.c-dots button,.s-arrow{c
 @media (max-width:600px){.gallery-sec .story{grid-template-columns:repeat(2,1fr)!important;gap:6px!important}.gallery-sec .story .s-main{grid-row:span 1;aspect-ratio:4/5!important}}
 /* opening: split layout, the cap-and-strawberries photo at full height on one side, text on cream */
 .hero-full{background:var(--bg);color:var(--fg)}
-.hero-full .hf-img{left:0;right:auto;width:50%;transform-origin:0 50%;background-position:50% 30%!important;animation:hfZoom2 14s cubic-bezier(.2,.6,.2,1) forwards;transform:scale(1.04)}
+.hero-full .hf-img{left:0;right:auto;width:50%;transform-origin:0 50%;background-position:50% 74%!important;animation:hfZoom2 14s cubic-bezier(.2,.6,.2,1) forwards;transform:scale(1.04)}
 @keyframes hfZoom2{to{transform:scale(1)}}
 .hero-full .hf-shade{display:none}
 .hero-full .hf-in{display:flex;justify-content:flex-start}
@@ -582,6 +582,35 @@ a,button,summary,label,[role=tab],.chip label,.svc,.ph,.c-dots button,.s-arrow{c
 html.js .story .ph.curtain{filter:blur(12px) brightness(1.05);transition:clip-path 1.3s cubic-bezier(.7,0,.2,1),filter 2.4s cubic-bezier(.4,0,.2,1) .35s,transform .6s cubic-bezier(.2,.7,.2,1)}
 html.js .story .ph.curtain.in{filter:none}
 @media (prefers-reduced-motion:reduce){.hero-full .hf-img{animation:none;filter:none}html.js .story .ph.curtain{filter:none}}
+/* opening back to full screen width, text in white over the photo */
+.hero-full .hf-img{width:100%;right:0;transform-origin:50% 50%;background-position:50% 42%!important}
+.hero-full .hf-shade{display:block;background:linear-gradient(270deg,rgba(45,35,30,.6) 0%,rgba(45,35,30,.3) 36%,rgba(45,35,30,0) 60%),linear-gradient(0deg,rgba(45,35,30,.22),rgba(45,35,30,0) 30%)}
+.hero-full .hf-text{width:auto;max-width:560px}
+.hero-full .hf-kicker{color:#F3E6DC}
+.hero-full h1{color:#FFFCF9;text-shadow:0 4px 30px rgba(0,0,0,.28)}
+.hero-full h1 span{color:#F6D2C6}
+.hero-full .hf-lead{color:#FBF3EC;text-shadow:0 2px 14px rgba(0,0,0,.25)}
+.hero-full .hf-ghost{background:rgba(255,252,249,.12)!important;border-color:#FFFCF9!important;color:#FFFCF9!important;backdrop-filter:blur(4px)}
+.hero-full .hf-down{left:50%;border-color:rgba(255,252,249,.85)}.hero-full .hf-down span{background:#FFFCF9}
+@media (max-width:720px){.hero-full{flex-direction:row;height:calc(100svh - 90px);align-items:flex-end;padding-bottom:84px}.hero-full .hf-img{position:absolute;height:auto;inset:0;width:100%}.hero-full .hf-shade{background:linear-gradient(0deg,rgba(40,30,25,.7) 0%,rgba(40,30,25,.25) 55%,rgba(40,30,25,.05) 100%)}.hero-full .hf-text{padding-top:0}}
+/* full-width opening that still shows the whole photo: sharp photo on one side, the same photo softly blurred across the full width */
+.hero-full .hf-bg{position:absolute;inset:-60px;background-size:cover;background-position:50% 50%;filter:blur(38px) brightness(.82) saturate(1.15);transform:scale(1.12)}
+.hero-full .hf-img{width:min(46%,760px)!important;left:clamp(16px,4vw,70px)!important;top:clamp(16px,3vh,32px)!important;bottom:clamp(16px,3vh,32px)!important;right:auto!important;border-radius:999px 999px 26px 26px;box-shadow:0 40px 80px -40px rgba(0,0,0,.55);background-position:50% 50%!important}
+.hero-full .hf-shade{background:linear-gradient(270deg,rgba(40,30,25,.35),rgba(40,30,25,.05) 60%)!important}
+@media (max-width:720px){.hero-full .hf-img{width:auto!important;left:16px!important;right:16px!important;top:16px!important;bottom:auto!important;height:58svh!important}}
+/* opening photos crossfade */
+.hero-full .hf-bg,.hero-full .hf-img{transition:opacity 1.8s ease}
+.hero-full .hf-bg.off,.hero-full .hf-img.off{opacity:0}
+/* little camera next to the name that 'takes a photo' every few seconds */
+.cam{display:inline-block;width:1.5em;height:1.25em;vertical-align:-.2em;margin-inline-start:.25em}
+.cam svg{width:100%;height:100%;overflow:visible}
+.cam-lens{transform-box:fill-box;transform-origin:center;animation:camShut 4.5s ease-in-out infinite}
+.cam-flash{opacity:0;animation:camFlash 4.5s ease-out infinite}
+.cam svg{animation:camBob 4.5s ease-in-out infinite;transform-origin:50% 100%}
+@keyframes camShut{0%,70%,82%,100%{transform:scale(1)}75%{transform:scale(.2)}}
+@keyframes camFlash{0%,72%{opacity:0}76%{opacity:1}90%,100%{opacity:0}}
+@keyframes camBob{0%,68%,86%,100%{transform:none}74%{transform:translateY(1px) scale(.97)}}
+@media (prefers-reduced-motion:reduce){.cam-lens,.cam-flash,.cam svg{animation:none}}
 </style>
 <script>document.documentElement.classList.add('js')</script>
 
@@ -614,7 +643,8 @@ html.js .story .ph.curtain.in{filter:none}
 
 <main>
   <section class="hero-full" aria-label="פתיחה">
-    <div class="hf-img" style="background-image:url('images/hero-strawberry.jpg')" role="img" aria-label="ילדה עם כובע ותותים"></div>
+    <div class="hf-img" style="background-image:url('images/hero-olives-wide.jpg')" role="img" aria-label="ילדה עם כובע קש וזיתים"></div>
+    <div class="hf-alt" data-img="images/hero-strawberry.jpg" hidden></div>
     <div class="hf-shade" aria-hidden="true"></div>
     <div class="wrap hf-in">
       <div class="hf-text">
@@ -650,10 +680,10 @@ html.js .story .ph.curtain.in{filter:none}
 
   <section id="about" class="about-sec">
     <div class="wrap about-grid">
-      <div class="about-pics rise" aria-hidden="true"><div class="ph about-main" style="background-image:url('images/about-main.jpg')"></div><div class="ph about-dot" style="background-image:url('images/about-dot.jpg')"></div><svg class="about-sprig" viewBox="0 0 120 80"><use href="#sprig"/></svg></div>
+      <div class="about-pics rise" aria-hidden="true"><div class="ph about-main" style="background-image:url('images/about-main2.jpg')"></div><div class="ph about-dot" style="background-image:url('images/about-dot.jpg')"></div><svg class="about-sprig" viewBox="0 0 120 80"><use href="#sprig"/></svg></div>
       <div class="about-txt">
         <h2>קצת עליי</h2>
-        <p class="about-lines">אני חיה סגל.<br>מצלמת חלאקה, גיל שנה וניו בורן.</p>
+        <p class="about-lines">אני חיה סגל. <span class="cam" aria-hidden="true"><svg viewBox="0 0 48 40"><g class="cam-flash"><path d="M37 3 l2 -3 M41 6 l3 -2 M33 2 l0 -2" stroke="#E3C3A8" stroke-width="1.8" stroke-linecap="round" fill="none"/></g><rect x="3" y="11" width="42" height="26" rx="6" fill="#FCF9F6" stroke="#C7867A" stroke-width="2"/><path d="M15 11 l3 -5 h12 l3 5" fill="#FCF9F6" stroke="#C7867A" stroke-width="2" stroke-linejoin="round"/><rect x="35" y="15" width="5" height="3" rx="1" fill="#E3C3A8"/><circle cx="24" cy="24" r="9" fill="#EBD3CB" stroke="#C7867A" stroke-width="2"/><circle class="cam-lens" cx="24" cy="24" r="5" fill="#7E8F76"/><circle cx="22" cy="22" r="1.5" fill="#FCF9F6" opacity=".9"/></svg></span><br>מצלמת חלאקה, גיל שנה וניו בורן.</p>
         <p class="about-lines">רואה את מה שקורה בין הפוזות:<br>המבט, הצחוק, היד הקטנה.</p>
         <p class="about-lines">ושומרת לכם את זה, לתמיד.</p>
         <p class="about-sig">מחכה לפגוש אתכם,<span>חיה</span></p>
@@ -1027,6 +1057,16 @@ document.querySelectorAll('.story .s-more').forEach(row=>{
    const an=p.animate([{transform:'translate(0,0) rotate('+rot+'deg) scale(.3)',opacity:1},{transform:'translate('+dx+'px,'+dy+'px) rotate('+(rot+40)+'deg) scale(1)',opacity:.95,offset:.55},{transform:'translate('+(dx*1.25)+'px,'+(dy*1.25+8)+'px) rotate('+(rot+70)+'deg) scale(.7)',opacity:0}],{duration:700+Math.random()*200,easing:'cubic-bezier(.2,.7,.3,1)'});
    an.onfinish=()=>p.remove();}
  },{passive:true});
+})();
+// opening: each photo shown sharp in an arch over a soft blurred copy of itself; photos crossfade
+(function(){const i=document.querySelector('.hero-full .hf-img');if(!i)return;
+ const urls=[i.style.backgroundImage];document.querySelectorAll('.hero-full .hf-alt').forEach(a=>urls.push("url('"+a.dataset.img+"')"));
+ const parent=i.parentNode;let after=i;
+ const sets=urls.map((u,k)=>{const bg=document.createElement('div');bg.className='hf-bg';bg.setAttribute('aria-hidden','true');bg.style.backgroundImage=u;parent.insertBefore(bg,parent.querySelector('.hf-img'));
+  let im=i;if(k>0){im=i.cloneNode();im.style.backgroundImage=u;im.removeAttribute('role');im.removeAttribute('aria-label');im.setAttribute('aria-hidden','true');parent.insertBefore(im,after.nextSibling);after=im;}
+  return [bg,im];});
+ if(sets.length<2)return;sets.forEach((s,k)=>{if(k)s.forEach(e=>e.classList.add('off'));});
+ let cur=0;setInterval(()=>{if(document.hidden)return;const nx=(cur+1)%sets.length;sets[nx].forEach(e=>e.classList.remove('off'));sets[cur].forEach(e=>e.classList.add('off'));cur=nx;},6500);
 })();
 // photo wall: columns drift at different speeds while scrolling
 const wall=document.querySelector('.wall');if(wall&&!reduce){const cols=[...wall.querySelectorAll('.col')],sp=[-90,70,-130,60,-80];let tick=false;const mv=()=>{tick=false;const r=wall.getBoundingClientRect();const p=(innerHeight-r.top)/(innerHeight+r.height);if(p<-.1||p>1.1)return;cols.forEach((c,i)=>c.style.transform='translateY('+((p-.5)*sp[i%5]*2)+'px)');};addEventListener('scroll',()=>{if(!tick){tick=true;requestAnimationFrame(mv);}},{passive:true});mv();}
