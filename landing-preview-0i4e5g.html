@@ -611,6 +611,34 @@ html.js .story .ph.curtain.in{filter:none}
 @keyframes camFlash{0%,72%{opacity:0}76%{opacity:1}90%,100%{opacity:0}}
 @keyframes camBob{0%,68%,86%,100%{transform:none}74%{transform:translateY(1px) scale(.97)}}
 @media (prefers-reduced-motion:reduce){.cam-lens,.cam-flash,.cam svg{animation:none}}
+/* opening: no arch window, every photo spans the full width */
+.hero-full .hf-bg{display:none!important}
+.hero-full .hf-img{inset:0!important;left:0!important;right:0!important;top:0!important;bottom:0!important;width:100%!important;height:auto!important;border-radius:0!important;box-shadow:none!important;background-position:var(--pos,50% 40%)!important;transform-origin:50% 50%}
+.hero-full .hf-shade{background:linear-gradient(270deg,rgba(40,30,25,.62) 0%,rgba(40,30,25,.32) 36%,rgba(40,30,25,0) 62%),linear-gradient(0deg,rgba(40,30,25,.25),rgba(40,30,25,0) 30%)!important}
+@media (max-width:720px){.hero-full .hf-shade{background:linear-gradient(0deg,rgba(40,30,25,.72) 0%,rgba(40,30,25,.25) 55%,rgba(40,30,25,.05) 100%)!important}}
+/* sweet smiling camera in the empty space of the about section */
+.about-sec .about-grid{position:relative}
+.happy-cam{position:absolute;left:50%;top:50%;width:clamp(180px,15vw,250px);transform:translate(-50%,-50%);pointer-events:none}
+.hc-photo{opacity:0;animation:hcPhoto 5s ease-in-out infinite}
+@keyframes hcPhoto{0%,80%{opacity:0;transform:translateY(-16px)}86%{opacity:1;transform:translateY(-4px)}96%{opacity:1;transform:translateY(6px)}100%{opacity:0;transform:translateY(8px)}}
+.happy-cam svg{width:100%;height:auto;overflow:visible}
+.hc-body{transform-box:fill-box;transform-origin:50% 100%;animation:hcFloat 5s ease-in-out infinite}
+.hc-shutter{transform-box:fill-box;transform-origin:center;transform:scale(0);animation:hcShut 5s ease-in-out infinite}
+.hc-flash{opacity:0;animation:hcFlash 5s ease-out infinite}
+.hc-spark{transform-box:fill-box;transform-origin:center;animation:hcTw 3s ease-in-out infinite}
+.hc-spark.s2{animation-delay:.8s}.hc-spark.s3{animation-delay:1.6s}.hc-spark.s4{animation-delay:2.2s}
+@keyframes hcFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-8px) rotate(2deg)}}
+@keyframes hcShut{0%,76%,88%,100%{transform:scale(0)}81%{transform:scale(1)}}
+@keyframes hcFlash{0%,79%{opacity:0}82%{opacity:1}95%,100%{opacity:0}}
+@keyframes hcTw{0%,100%{opacity:.25;transform:scale(.7)}50%{opacity:1;transform:scale(1.1)}}
+@media (max-width:1000px){.happy-cam{display:none}}
+@media (prefers-reduced-motion:reduce){.hc-body,.hc-shutter,.hc-flash,.hc-spark{animation:none}}
+/* the camera's eyes blink now and then */
+.hc-eyes{transform-box:fill-box;transform-origin:center;animation:hcBlink 4.2s ease-in-out infinite}
+@keyframes hcBlink{0%,44%,52%,100%{transform:scaleY(1)}48%{transform:scaleY(.1)}}
+@media (prefers-reduced-motion:reduce){.hc-eyes{animation:none}}
+/* per-photo zoom in the opening */
+.hero-full .hf-img{background-size:var(--size,cover)!important}
 </style>
 <script>document.documentElement.classList.add('js')</script>
 
@@ -644,7 +672,7 @@ html.js .story .ph.curtain.in{filter:none}
 <main>
   <section class="hero-full" aria-label="פתיחה">
     <div class="hf-img" style="background-image:url('images/hero-olives-wide.jpg')" role="img" aria-label="ילדה עם כובע קש וזיתים"></div>
-    <div class="hf-alt" data-img="images/hero-strawberry.jpg" hidden></div>
+    <div class="hf-alt" data-img="images/hero-strawberry.jpg" data-pos="50% 24%" hidden></div><div class="hf-alt" data-img="images/hero-glasses.jpg" data-pos="38% 40%" hidden></div><div class="hf-alt" data-img="images/hero-umbrella-close.jpg" data-pos="100% 44%" data-size="116%" hidden></div>
     <div class="hf-shade" aria-hidden="true"></div>
     <div class="wrap hf-in">
       <div class="hf-text">
@@ -680,10 +708,34 @@ html.js .story .ph.curtain.in{filter:none}
 
   <section id="about" class="about-sec">
     <div class="wrap about-grid">
+      <div class="happy-cam" aria-hidden="true"><svg viewBox="0 0 220 220">
+        <g class="hc-spark s1"><path d="M24 50 l3 9 9 3 -9 3 -3 9 -3 -9 -9 -3 9 -3z" fill="#E3C3A8"/></g>
+        <g class="hc-spark s2"><path d="M200 34 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2z" fill="#C7867A"/></g>
+        <g class="hc-spark s3"><path d="M204 150 l2.5 7 7 2.5 -7 2.5 -2.5 7 -2.5 -7 -7 -2.5 7 -2.5z" fill="#A9B8A0"/></g>
+        <g class="hc-spark s4"><circle cx="18" cy="160" r="3.5" fill="#EBD3CB"/></g>
+        <g class="hc-photo"><rect x="80" y="150" width="60" height="52" rx="5" fill="#FCF9F6" stroke="#C7867A" stroke-width="2.5"/><rect x="87" y="156" width="46" height="34" rx="3" fill="#C9D2C1"/><path d="M110 182 c-6 -4 -9 -7 -9 -10 c0 -3 4 -5 9 -1 c5 -4 9 -2 9 1 c0 3 -3 6 -9 10z" fill="#EBD3CB"/></g>
+        <g class="hc-body">
+          <path d="M34 82 q-20 2 -18 30" fill="none" stroke="#A9B8A0" stroke-width="4" stroke-linecap="round"/><path d="M186 82 q20 2 18 30" fill="none" stroke="#A9B8A0" stroke-width="4" stroke-linecap="round"/>
+          <path d="M82 58 v-12 q0 -7 7 -7 h42 q7 0 7 7 v12" fill="none" stroke="#C7867A" stroke-width="3.5" stroke-linejoin="round"/>
+          <rect x="150" y="46" width="20" height="11" rx="5" fill="#E3C3A8"/>
+          <rect x="34" y="56" width="152" height="100" rx="32" fill="none" stroke="#C7867A" stroke-width="3.5"/>
+          <path d="M86 156 h48" stroke="#C7867A" stroke-width="3.5" stroke-linecap="round"/>
+          <g class="hc-flash"><circle cx="160" cy="51" r="16" fill="#FFF6E8" opacity=".9"/><path d="M160 24 v-10 M182 34 l8 -7 M138 34 l-8 -7" stroke="#E3C3A8" stroke-width="3" stroke-linecap="round"/></g>
+          <circle cx="110" cy="104" r="34" fill="none" stroke="#C7867A" stroke-width="3.5"/>
+          <circle cx="110" cy="104" r="25" fill="#EBD3CB"/>
+          <circle cx="110" cy="104" r="16" fill="#7E8F76"/>
+          <circle class="hc-shutter" cx="110" cy="104" r="16" fill="#5E6F58"/>
+          <circle cx="104" cy="98" r="4.5" fill="#FCF9F6" opacity=".9"/>
+          <g class="hc-eyes"><ellipse cx="58" cy="96" rx="5.5" ry="7" fill="#5E5048"/><ellipse cx="162" cy="96" rx="5.5" ry="7" fill="#5E5048"/><circle cx="60" cy="93" r="2" fill="#FCF9F6"/><circle cx="164" cy="93" r="2" fill="#FCF9F6"/></g>
+          <circle cx="56" cy="124" r="7" fill="#EBD3CB" opacity=".9"/><circle cx="164" cy="124" r="7" fill="#EBD3CB" opacity=".9"/>
+          <g class="hc-smile"><path d="M98 144 q6 7 12 0 q6 7 12 0" fill="none" stroke="#C7867A" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></g>
+        </g>
+        <g transform="translate(44 56)"><g transform="rotate(-25)"><path d="M0 0 C5 -8 16 -9 23 0 C16 9 5 8 0 0Z" fill="#C9D2C1" stroke="#7E8F76" stroke-width="1.4"/></g><g transform="rotate(-150)"><path d="M0 0 C5 -8 16 -9 23 0 C16 9 5 8 0 0Z" fill="#C9D2C1" stroke="#7E8F76" stroke-width="1.4"/></g><g transform="translate(4 -4)"><g fill="#EBD3CB" stroke="#C7867A" stroke-width=".9"><circle cx="0" cy="-6" r="5"/><circle cx="5.7" cy="-1.9" r="5"/><circle cx="3.5" cy="4.9" r="5"/><circle cx="-3.5" cy="4.9" r="5"/><circle cx="-5.7" cy="-1.9" r="5"/></g><circle r="2.8" fill="#E3C3A8"/></g></g>
+      </svg></div>
       <div class="about-pics rise" aria-hidden="true"><div class="ph about-main" style="background-image:url('images/about-main2.jpg')"></div><div class="ph about-dot" style="background-image:url('images/about-dot.jpg')"></div><svg class="about-sprig" viewBox="0 0 120 80"><use href="#sprig"/></svg></div>
       <div class="about-txt">
         <h2>קצת עליי</h2>
-        <p class="about-lines">אני חיה סגל. <span class="cam" aria-hidden="true"><svg viewBox="0 0 48 40"><g class="cam-flash"><path d="M37 3 l2 -3 M41 6 l3 -2 M33 2 l0 -2" stroke="#E3C3A8" stroke-width="1.8" stroke-linecap="round" fill="none"/></g><rect x="3" y="11" width="42" height="26" rx="6" fill="#FCF9F6" stroke="#C7867A" stroke-width="2"/><path d="M15 11 l3 -5 h12 l3 5" fill="#FCF9F6" stroke="#C7867A" stroke-width="2" stroke-linejoin="round"/><rect x="35" y="15" width="5" height="3" rx="1" fill="#E3C3A8"/><circle cx="24" cy="24" r="9" fill="#EBD3CB" stroke="#C7867A" stroke-width="2"/><circle class="cam-lens" cx="24" cy="24" r="5" fill="#7E8F76"/><circle cx="22" cy="22" r="1.5" fill="#FCF9F6" opacity=".9"/></svg></span><br>מצלמת חלאקה, גיל שנה וניו בורן.</p>
+        <p class="about-lines">אני חיה סגל.<br>מצלמת חלאקה, גיל שנה וניו בורן.</p>
         <p class="about-lines">רואה את מה שקורה בין הפוזות:<br>המבט, הצחוק, היד הקטנה.</p>
         <p class="about-lines">ושומרת לכם את זה, לתמיד.</p>
         <p class="about-sig">מחכה לפגוש אתכם,<span>חיה</span></p>
@@ -1065,6 +1117,7 @@ document.querySelectorAll('.story .s-more').forEach(row=>{
  const sets=urls.map((u,k)=>{const bg=document.createElement('div');bg.className='hf-bg';bg.setAttribute('aria-hidden','true');bg.style.backgroundImage=u;parent.insertBefore(bg,parent.querySelector('.hf-img'));
   let im=i;if(k>0){im=i.cloneNode();im.style.backgroundImage=u;im.removeAttribute('role');im.removeAttribute('aria-label');im.setAttribute('aria-hidden','true');parent.insertBefore(im,after.nextSibling);after=im;}
   return [bg,im];});
+ const alts=[...document.querySelectorAll('.hero-full .hf-alt')];sets.forEach((s,k)=>{const p=k?(alts[k-1].dataset.pos||'50% 45%'):'50% 40%';s[1].style.setProperty('--pos',p);if(k&&alts[k-1].dataset.size)s[1].style.setProperty('--size',alts[k-1].dataset.size);});
  if(sets.length<2)return;sets.forEach((s,k)=>{if(k)s.forEach(e=>e.classList.add('off'));});
  let cur=0;setInterval(()=>{if(document.hidden)return;const nx=(cur+1)%sets.length;sets[nx].forEach(e=>e.classList.remove('off'));sets[cur].forEach(e=>e.classList.add('off'));cur=nx;},6500);
 })();
