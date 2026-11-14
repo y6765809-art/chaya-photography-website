@@ -715,6 +715,13 @@ html.js .story .ph.curtain.in{filter:none}
 .about-sec .about-sig{align-items:flex-start!important}
 .about-lines{font-size:clamp(19px,1.85vw,24px)!important;line-height:1.6!important}
 .about-sec .about-txt{max-width:500px}
+/* faster intro */
+.intro{transition:opacity .6s ease,visibility .6s}
+.intro .i-stem{animation-duration:.7s;animation-delay:.05s}
+.intro .i-lf{animation-duration:.5s;animation-delay:calc(var(--d) * .6)}
+.intro .i-fl{animation-duration:.6s;animation-delay:.6s}
+.intro .i-txt{animation-duration:.7s;animation-delay:.5s}
+.intro .i-sub{animation-duration:.6s;animation-delay:.8s}
 </style>
 <script>document.documentElement.classList.add('js')</script>
 
@@ -735,7 +742,7 @@ html.js .story .ph.curtain.in{filter:none}
 
 
 <div class="intro" id="intro" aria-hidden="true"><svg class="l4" viewBox="0 20 420 130"><path class="i-stem" pathLength="1" d="M150 52 C175 40 205 36 240 42"/><g transform="translate(166 46) rotate(-110) scale(.4)"><g class="i-lf" style="--d:.45s"><use href="#l4lf"/></g></g><g transform="translate(180 42) rotate(40) scale(.38)"><g class="i-lf" style="--d:.55s"><use href="#l4lf"/></g></g><g transform="translate(198 38) rotate(-100) scale(.42)"><g class="i-lf" style="--d:.65s"><use href="#l4lf"/></g></g><g transform="translate(214 39) rotate(30) scale(.38)"><g class="i-lf" style="--d:.75s"><use href="#l4lf"/></g></g><g transform="translate(230 40) rotate(-80) scale(.38)"><g class="i-lf" style="--d:.85s"><use href="#l4lf"/></g></g><g transform="translate(244 42) scale(.65)"><g class="i-fl"><use href="#l4fl"/></g></g><g class="i-txt"><text class="t1" x="210" y="110" text-anchor="middle" font-family="Cormorant Garamond, Garamond, serif" font-weight="500" font-size="42" letter-spacing="10">CHAYA SEGAL</text></g><g class="i-sub"><line x1="40" y1="136" x2="92" y2="136" stroke="#E3C3A8" stroke-width="1.5"/><line x1="328" y1="136" x2="380" y2="136" stroke="#E3C3A8" stroke-width="1.5"/><text class="t2" x="210" y="141" text-anchor="middle" font-family="Cormorant Garamond, Garamond, serif" font-size="14" letter-spacing="6">PHOTOGRAPHY</text></g></svg></div>
-<script>(function(){var el=document.getElementById('intro'),seen=false,rm=false;try{seen=sessionStorage.getItem('introSeen')==='1';sessionStorage.setItem('introSeen','1');}catch(e){}try{rm=matchMedia('(prefers-reduced-motion: reduce)').matches;}catch(e){}if(seen||rm){el.parentNode.removeChild(el);return;}var h=document.documentElement;h.classList.add('intro-on');var done=function(){if(!el.parentNode)return;el.classList.add('out');h.classList.remove('intro-on');setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);},1000);};setTimeout(done,2700);el.addEventListener('click',done);})();</script>
+<script>(function(){var el=document.getElementById('intro'),seen=false,rm=false;try{seen=sessionStorage.getItem('introSeen')==='1';sessionStorage.setItem('introSeen','1');}catch(e){}try{rm=matchMedia('(prefers-reduced-motion: reduce)').matches;}catch(e){}if(seen||rm){el.parentNode.removeChild(el);return;}var h=document.documentElement;h.classList.add('intro-on');var done=function(){if(!el.parentNode)return;el.classList.add('out');h.classList.remove('intro-on');setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);},700);};setTimeout(done,1650);el.addEventListener('click',done);})();</script>
 <header class="wrap nav">
   <a class="logo" href="#" aria-label="Chaya Segal Photography">
     <svg class="l4 l4-head" viewBox="0 20 420 130" aria-hidden="true"><use href="#logo4"/></svg>
