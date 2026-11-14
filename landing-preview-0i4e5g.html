@@ -550,10 +550,8 @@ a,button,summary,label,[role=tab],.chip label,.svc,.ph,.c-dots button,.s-arrow{c
 /* leaves attached to the flower cursor */
 .leaf-host{position:fixed;left:0;top:0;width:0;height:0;pointer-events:none;z-index:70}
 .leaf-host .leaf-fx{position:absolute;left:0;top:-9px;transform-origin:0 50%}
-/* cursor turns into the service icon over each card: scissors, balloon, baby feet */
-.services .svc:nth-child(1),.services .svc:nth-child(1) *{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='38' fill='%23FCF9F6' fill-opacity='.92' stroke='%23EBD3CB' stroke-width='2'/%3E%3Cg fill='none' stroke='%23C7867A' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='27' cy='54' r='7'/%3E%3Ccircle cx='53' cy='54' r='7'/%3E%3Cpath d='M32 49 L58 20'/%3E%3Cpath d='M48 49 L22 20'/%3E%3C/g%3E%3C/svg%3E") 20 20, pointer!important}
-.services .svc:nth-child(2),.services .svc:nth-child(2) *{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='38' fill='%23FCF9F6' fill-opacity='.92' stroke='%23EBD3CB' stroke-width='2'/%3E%3Cg fill='none' stroke='%23C7867A' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M40 14 c-10 0 -16 7 -16 16 c0 11 9 18 16 21 c7 -3 16 -10 16 -21 c0 -9 -6 -16 -16 -16z'/%3E%3Cpath d='M40 51 c-3 5 3 8 0 14'/%3E%3Cpath d='M38 24 v14' stroke-width='3.5'/%3E%3Cpath d='M35 27 l3 -3' stroke-width='3.5'/%3E%3C/g%3E%3C/svg%3E") 20 20, pointer!important}
-.services .svc:nth-child(3),.services .svc:nth-child(3) *{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='38' fill='%23FCF9F6' fill-opacity='.92' stroke='%23EBD3CB' stroke-width='2'/%3E%3Cg fill='none' stroke='%23C7867A' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M30 60 c-6 0 -8 -5 -7 -11 c1 -6 -2 -12 -1 -18 c1 -6 5 -9 9 -9 c5 0 8 4 8 10 c0 6 -2 11 -1 17 c1 6 -2 11 -8 11z'/%3E%3Cpath d='M50 64 c-6 0 -8 -5 -7 -11 c1 -6 -2 -12 -1 -18 c1 -6 5 -9 9 -9 c5 0 8 4 8 10 c0 6 -2 11 -1 17 c1 6 -2 11 -8 11z'/%3E%3Ccircle cx='27' cy='17' r='2' fill='%23C7867A'/%3E%3Ccircle cx='32' cy='15' r='1.6' fill='%23C7867A'/%3E%3Ccircle cx='53' cy='21' r='2' fill='%23C7867A'/%3E%3Ccircle cx='58' cy='19' r='1.6' fill='%23C7867A'/%3E%3C/g%3E%3C/svg%3E") 20 20, pointer!important}
+/* click: a few pink petals pop out of the flower */
+.petal-fx{position:fixed;left:0;top:0;width:9px;height:12px;margin:-6px 0 0 -4.5px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#EBD3CB;border:1px solid #C7867A;pointer-events:none;z-index:71}
 </style>
 <script>document.documentElement.classList.add('js')</script>
 
@@ -988,36 +986,17 @@ document.querySelectorAll('.story .s-more').forEach(row=>{
   document.querySelectorAll('.tabs [data-tab]').forEach(t=>t.addEventListener('click',()=>requestAnimationFrame(upd)));
   upd();
 });
-// leaves slowly grow out of the flower cursor (like the opening vine) and stay attached to it
-(function(){if(reduce||!matchMedia('(hover:hover) and (pointer:fine)').matches)return;
- const host=document.createElement('div');host.className='leaf-host';document.body.appendChild(host);
- let mx=-100,my=-100,raf=0,lx=0,ly=0,lt=0,last=0,live=0,turn=0;
- const leaf='<svg viewBox="0 -14 34 28" width="22" height="18"><path d="M0 0 C7 -11 22 -12 32 0 C22 12 7 11 0 0Z" fill="#C9D2C1" stroke="#7E8F76" stroke-width="1.3"/><path d="M2 0 H26" stroke="#7E8F76" stroke-width=".9" opacity=".7"/></svg>';
- const place=()=>{raf=0;host.style.transform='translate('+mx+'px,'+my+'px)';};
- addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;if(!raf)raf=requestAnimationFrame(place);
-  const now=performance.now();const dt=Math.max(now-lt,8);const v=Math.hypot(e.clientX-lx,e.clientY-ly)/dt;lx=e.clientX;ly=e.clientY;lt=now;
-  if(v<1.2||now-last<260||live>=5)return;last=now;live++;
-  const el=document.createElement('span');el.className='leaf-fx';el.innerHTML=leaf;host.appendChild(el);
-  const ang=(turn+=137)%360;
-  const a=el.animate([
-   {transform:'rotate('+ang+'deg) translateX(7px) scale(0)',opacity:1,easing:'cubic-bezier(.3,1.35,.5,1)'},
-   {transform:'rotate('+ang+'deg) translateX(7px) scale(1)',opacity:1,offset:.42},
-   {transform:'rotate('+(ang+6)+'deg) translateX(7px) scale(1)',opacity:1,offset:.78,easing:'ease-in'},
-   {transform:'rotate('+(ang+6)+'deg) translateX(7px) scale(0)',opacity:0}
-  ],{duration:2300});
-  a.onfinish=()=>{el.remove();live--;};
+
+
+// click / tap: a few pink petals pop out of the flower and fade
+(function(){if(reduce)return;
+ addEventListener('pointerdown',e=>{if(e.target.closest&&e.target.closest('input,textarea,select'))return;
+  const n=6,base=Math.random()*60;
+  for(let i=0;i<n;i++){const p=document.createElement('span');p.className='petal-fx';p.style.left=e.clientX+'px';p.style.top=e.clientY+'px';document.body.appendChild(p);
+   const a=(base+i*360/n)*Math.PI/180,dist=22+Math.random()*16,dx=Math.cos(a)*dist,dy=Math.sin(a)*dist,rot=(base+i*360/n+90);
+   const an=p.animate([{transform:'translate(0,0) rotate('+rot+'deg) scale(.3)',opacity:1},{transform:'translate('+dx+'px,'+dy+'px) rotate('+(rot+40)+'deg) scale(1)',opacity:.95,offset:.55},{transform:'translate('+(dx*1.25)+'px,'+(dy*1.25+8)+'px) rotate('+(rot+70)+'deg) scale(.7)',opacity:0}],{duration:700+Math.random()*200,easing:'cubic-bezier(.2,.7,.3,1)'});
+   an.onfinish=()=>p.remove();}
  },{passive:true});
-})();
-// the flower cursor blooms as the visitor scrolls: closed bud at the top, open flower near the contact form
-(function(){if(!matchMedia('(hover:hover) and (pointer:fine)').matches)return;
- const mk=(t,hover)=>{const d=1.6+t*4.4,r=2.3+t*2.7;let c='';for(let i=0;i<5;i++){const a=(-90+i*72)*Math.PI/180;c+="<circle cx='"+(Math.cos(a)*d).toFixed(2)+"' cy='"+(Math.sin(a)*d).toFixed(2)+"' r='"+r.toFixed(2)+"'/>";}
-  const s="<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='-12 -12 24 24'><g fill='"+(hover?'#C7867A':'#EBD3CB')+"' stroke='"+(hover?'#9E5F55':'#C7867A')+"' stroke-width='.9'>"+c+"</g><circle r='"+(1.4+t*1.4).toFixed(2)+"' fill='"+(hover?'#F6D2C6':'#E3C3A8')+"'/></svg>";
-  return 'url("data:image/svg+xml,'+encodeURIComponent(s)+'") 16 16';};
- const N=7,base=[],hov=[];for(let k=0;k<N;k++){base.push(mk(k/(N-1),false));hov.push(mk(k/(N-1),true));}
- const st=document.createElement('style');document.head.appendChild(st);let cur=-1;
- const upd=()=>{const h=document.documentElement.scrollHeight-innerHeight;const p=h>0?Math.min(Math.max(scrollY/h,0),1):0;const k=Math.round(p*(N-1));if(k===cur)return;cur=k;
-  st.textContent='html,body{cursor:'+base[k]+', auto}a,button,summary,label,[role=tab],.chip label,.ph,.c-dots button,.s-arrow{cursor:'+hov[k]+', pointer!important}';};
- addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd();
 })();
 // photo wall: columns drift at different speeds while scrolling
 const wall=document.querySelector('.wall');if(wall&&!reduce){const cols=[...wall.querySelectorAll('.col')],sp=[-90,70,-130,60,-80];let tick=false;const mv=()=>{tick=false;const r=wall.getBoundingClientRect();const p=(innerHeight-r.top)/(innerHeight+r.height);if(p<-.1||p>1.1)return;cols.forEach((c,i)=>c.style.transform='translateY('+((p-.5)*sp[i%5]*2)+'px)');};addEventListener('scroll',()=>{if(!tick){tick=true;requestAnimationFrame(mv);}},{passive:true});mv();}
