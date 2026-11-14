@@ -724,6 +724,9 @@ html.js .story .ph.curtain.in{filter:none}
 .intro .i-sub{animation-duration:.6s;animation-delay:.8s}
 #whenBox input[type=date]{font:inherit;padding:10px 14px;border:1px solid rgba(94,80,72,.25);border-radius:12px;background:#fff;color:var(--fg);max-width:240px}
 .nb-note{display:block;color:var(--muted);font-size:14px;margin:-2px 0 8px}
+.dwrap[hidden]{display:none!important}.dmode{margin-bottom:10px}.dwrap{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.dwrap select{font:inherit;padding:10px 14px;border:1px solid rgba(94,80,72,.25);border-radius:12px;background:#fff;color:var(--fg);min-width:110px}
+.heb-eq{color:var(--rose,#C7867A);font-size:15px}
 </style>
 <script>document.documentElement.classList.add('js')</script>
 
@@ -958,7 +961,12 @@ html.js .story .ph.curtain.in{filter:none}
           <span class="chip"><input type="radio" name="type" id="t4" value="צילום"><label for="t4">אחר</label></span>
         </div></fieldset>
         <fieldset id="whenBox"><legend id="whenLbl">מתי החלאקה?</legend>
-          <input type="date" id="whenDate" aria-labelledby="whenLbl">
+          <div class="chips dmode">
+            <span class="chip"><input type="radio" name="dmode" id="dm1" value="g" checked><label for="dm1">תאריך לועזי</label></span>
+            <span class="chip"><input type="radio" name="dmode" id="dm2" value="h"><label for="dm2">תאריך עברי</label></span>
+          </div>
+          <div class="dwrap" id="gWrap"><input type="date" id="whenDate" aria-labelledby="whenLbl"><small class="heb-eq" id="hebEq"></small></div>
+          <div class="dwrap" id="hWrap" hidden><select id="hDay" aria-label="יום בחודש העברי"><option value="">יום</option></select><select id="hMonth" aria-label="חודש עברי"><option value="">חודש</option></select></div>
         </fieldset>
         <fieldset id="nbBox" class="nb-due"><legend>מתי הלידה המשוערת?</legend>
           <small class="nb-note">את מועד הצילום קובעים אחרי הלידה. אפשר כבר עכשיו לשריין מקום.</small>
@@ -1040,13 +1048,21 @@ const PK=[...document.querySelectorAll('.pkg')].map(p=>({el:p,name:p.querySelect
 const fmt=(d,loc)=>{try{return d.toLocaleDateString(loc||'he-IL',{day:'numeric',month:'long'});}catch(e){return d.toLocaleDateString('he-IL');}};
 if(due){due.min=new Date().toISOString().slice(0,10);}
 let lastPk=-1;
+const HD=['א׳','ב׳','ג׳','ד׳','ה׳','ו׳','ז׳','ח׳','ט׳','י׳','י״א','י״ב','י״ג','י״ד','ט״ו','ט״ז','י״ז','י״ח','י״ט','כ׳','כ״א','כ״ב','כ״ג','כ״ד','כ״ה','כ״ו','כ״ז','כ״ח','כ״ט','ל׳'];
+const HM=['תשרי','חשוון','כסלו','טבת','שבט','אדר','אדר א׳','אדר ב׳','ניסן','אייר','סיוון','תמוז','אב','אלול'];
+(function(){const d=document.getElementById('hDay'),m=document.getElementById('hMonth');if(!d)return;HD.forEach(x=>d.add(new Option(x,x)));HM.forEach(x=>m.add(new Option(x,x)));})();
+function hebDate(dt){try{const p=new Intl.DateTimeFormat('he-IL-u-ca-hebrew',{day:'numeric',month:'long'}).formatToParts(dt);const dn=+(p.find(x=>x.type==='day')||{}).value,mn=(p.find(x=>x.type==='month')||{}).value;if(!dn||!mn)return '';return HD[dn-1]+' ב'+mn;}catch(e){return '';}}
 function upd(){
  const g=n=>(form.querySelector('[name='+n+']:checked')||{}).value||'';
  const t=g('type'),w=g('when'),loc=g('loc'),n=+g('qty'),nb=t.indexOf('ניו')>-1;
  nbBox.classList.toggle('on',nb);whenBox.hidden=nb;
  const wl=t.indexOf('חלאקה')>-1?'מתי החלאקה?':t.indexOf('שנה')>-1?'מתי יום ההולדת?':'מתי תרצו להצטלם?';
  document.getElementById('whenLbl').textContent=wl;
- const wv=document.getElementById('whenDate').value,wd=wv?fmt(new Date(wv+'T12:00')):'';
+ const hm=g('dmode')==='h';document.getElementById('gWrap').hidden=hm;document.getElementById('hWrap').hidden=!hm;
+ const wv=document.getElementById('whenDate').value;let wd='';
+ if(hm){const hd=document.getElementById('hDay').value,hmo=document.getElementById('hMonth').value;wd=hd&&hmo?hd+' ב'+hmo:(hmo?'ב'+hmo:'');}
+ else if(wv){const dt=new Date(wv+'T12:00'),he=hebDate(dt);wd=fmt(dt)+(he?' ('+he+')':'');document.getElementById('hebEq').textContent=he;}
+ if(hm||!wv)document.getElementById('hebEq').textContent='';
  const wtxt=!wd?'':t.indexOf('חלאקה')>-1?' החלאקה ב־'+wd+'.':t.indexOf('שנה')>-1?' יום ההולדת ב־'+wd+'.':' אשמח להצטלם בסביבות '+wd+'.';
  let dd=null;
  if(nb&&due.value){dd=new Date(due.value+'T12:00');const a=new Date(dd),b=new Date(dd);a.setDate(dd.getDate()+5);b.setDate(dd.getDate()+14);
