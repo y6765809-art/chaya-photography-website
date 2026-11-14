@@ -561,6 +561,27 @@ a,button,summary,label,[role=tab],.chip label,.svc,.ph,.c-dots button,.s-arrow{c
 .gallery-sec .story .s-cap,.gallery-sec .s-arrow{display:none!important}
 @media (max-width:900px){.gallery-sec .story{grid-template-columns:repeat(3,1fr)!important}}
 @media (max-width:600px){.gallery-sec .story{grid-template-columns:repeat(2,1fr)!important;gap:6px!important}.gallery-sec .story .s-main{grid-row:span 1;aspect-ratio:4/5!important}}
+/* opening: split layout, the cap-and-strawberries photo at full height on one side, text on cream */
+.hero-full{background:var(--bg);color:var(--fg)}
+.hero-full .hf-img{left:0;right:auto;width:50%;transform-origin:0 50%;background-position:50% 30%!important;animation:hfZoom2 14s cubic-bezier(.2,.6,.2,1) forwards;transform:scale(1.04)}
+@keyframes hfZoom2{to{transform:scale(1)}}
+.hero-full .hf-shade{display:none}
+.hero-full .hf-in{display:flex;justify-content:flex-start}
+.hero-full .hf-text{width:46%;max-width:600px}
+.hero-full .hf-kicker{color:var(--moss)}
+.hero-full h1{color:var(--fg);text-shadow:none}
+.hero-full h1 span{color:var(--rust)}
+.hero-full .hf-lead{color:var(--fg)}
+.hero-full .hf-ghost{background:transparent!important;border-color:var(--fg)!important;color:var(--fg)!important;backdrop-filter:none}
+.hero-full .hf-down{border-color:var(--line)}.hero-full .hf-down span{background:var(--rust)}
+.hero-full .hf-down{left:75%}
+@media (max-width:720px){.hero-full{flex-direction:column;height:auto;max-height:none;align-items:stretch;padding-bottom:40px}.hero-full .hf-img{position:relative;width:100%;height:64svh;transform-origin:50% 50%}.hero-full .hf-text{width:100%;padding-top:26px}.hero-full .hf-down{display:none}}
+/* photos 'develop' like in a darkroom: soft sepia blur turns into full sharp colour */
+@keyframes hfDevelop{from{filter:sepia(.65) saturate(.45) blur(12px) brightness(1.18) contrast(.85)}to{filter:none}}
+.hero-full .hf-img{animation:hfZoom2 14s cubic-bezier(.2,.6,.2,1) forwards,hfDevelop 3s cubic-bezier(.4,0,.2,1) .25s both}
+html.js .story .ph.curtain{filter:sepia(.6) saturate(.5) blur(10px) brightness(1.15) contrast(.88);transition:clip-path 1.3s cubic-bezier(.7,0,.2,1),filter 2.4s cubic-bezier(.4,0,.2,1) .35s,transform .6s cubic-bezier(.2,.7,.2,1)}
+html.js .story .ph.curtain.in{filter:none}
+@media (prefers-reduced-motion:reduce){.hero-full .hf-img{animation:none;filter:none}html.js .story .ph.curtain{filter:none}}
 </style>
 <script>document.documentElement.classList.add('js')</script>
 
@@ -593,7 +614,7 @@ a,button,summary,label,[role=tab],.chip label,.svc,.ph,.c-dots button,.s-arrow{c
 
 <main>
   <section class="hero-full" aria-label="פתיחה">
-    <div class="hf-img" style="background-image:url('images/hero-wow.jpg')" role="img" aria-label="ילדה בשדה חמניות"></div>
+    <div class="hf-img" style="background-image:url('images/hero-strawberry.jpg')" role="img" aria-label="ילדה עם כובע ותותים"></div>
     <div class="hf-shade" aria-hidden="true"></div>
     <div class="wrap hf-in">
       <div class="hf-text">
@@ -925,7 +946,7 @@ document.querySelectorAll('.svc-go').forEach(a=>a.addEventListener('click',e=>{
  let tk=false;const up=()=>{tk=false;const h=document.documentElement.scrollHeight-innerHeight;bar.style.transform='scaleX('+(h>0?Math.min(scrollY/h,1):0)+')';};
  addEventListener('scroll',()=>{if(!tk){tk=true;requestAnimationFrame(up);}},{passive:true});up();
  if(reduce||!('IntersectionObserver' in window))return;
- const ph=[...document.querySelectorAll('.story .s-main,.story .s-sm')];
+ const ph=[...document.querySelectorAll('.story .s-main,.story .s-sm,.story .s-more .ph')];
  ph.forEach(el=>el.classList.add('curtain'));
  document.querySelectorAll('.story .s-side').forEach(s=>[...s.children].forEach((c,i)=>c.style.transitionDelay=(0.2+i*0.18)+'s'));
  const io3=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io3.unobserve(en.target);}}),{threshold:.2});
