@@ -722,6 +722,8 @@ html.js .story .ph.curtain.in{filter:none}
 .intro .i-fl{animation-duration:.6s;animation-delay:.6s}
 .intro .i-txt{animation-duration:.7s;animation-delay:.5s}
 .intro .i-sub{animation-duration:.6s;animation-delay:.8s}
+#whenBox input[type=date]{font:inherit;padding:10px 14px;border:1px solid rgba(94,80,72,.25);border-radius:12px;background:#fff;color:var(--fg);max-width:240px}
+.nb-note{display:block;color:var(--muted);font-size:14px;margin:-2px 0 8px}
 </style>
 <script>document.documentElement.classList.add('js')</script>
 
@@ -955,12 +957,11 @@ html.js .story .ph.curtain.in{filter:none}
           <span class="chip"><input type="radio" name="type" id="t3" value="צילום ניו בורן"><label for="t3">ניו בורן</label></span>
           <span class="chip"><input type="radio" name="type" id="t4" value="צילום"><label for="t4">אחר</label></span>
         </div></fieldset>
-        <fieldset id="whenBox"><legend>מתי בערך?</legend><div class="chips">
-          <span class="chip"><input type="radio" name="when" id="w1" value="בחודש הקרוב" checked><label for="w1">בחודש הקרוב</label></span>
-          <span class="chip"><input type="radio" name="when" id="w2" value="בעוד חודש-חודשיים"><label for="w2">בעוד חודש-חודשיים</label></span>
-          <span class="chip"><input type="radio" name="when" id="w3" value="עדיין לא יודעת"><label for="w3">עדיין לא יודעת</label></span>
-        </div></fieldset>
+        <fieldset id="whenBox"><legend id="whenLbl">מתי החלאקה?</legend>
+          <input type="date" id="whenDate" aria-labelledby="whenLbl">
+        </fieldset>
         <fieldset id="nbBox" class="nb-due"><legend>מתי הלידה המשוערת?</legend>
+          <small class="nb-note">את מועד הצילום קובעים אחרי הלידה. אפשר כבר עכשיו לשריין מקום.</small>
           <input type="date" id="dueDate" aria-label="תאריך לידה משוער">
           <div class="nb-win" id="nbWin" hidden><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><rect x="5" y="8" width="30" height="27" rx="5"/><path d="M5 15h30M13 4v7M27 4v7"/><path d="M20 31c-1.5-1-6-3.6-6-6.6c0-2.6 3.6-3.6 6-.6c2.4-3 6-2 6 .6c0 3-4.5 5.6-6 6.6z" fill="currentColor" stroke="none" opacity=".75"/></svg><div><small>הזמן הכי טוב לצילום, עד גיל שבועיים</small><b id="nbRange" aria-live="polite"></b><small id="nbHeb"></small></div></div>
         </fieldset>
@@ -1043,6 +1044,10 @@ function upd(){
  const g=n=>(form.querySelector('[name='+n+']:checked')||{}).value||'';
  const t=g('type'),w=g('when'),loc=g('loc'),n=+g('qty'),nb=t.indexOf('ניו')>-1;
  nbBox.classList.toggle('on',nb);whenBox.hidden=nb;
+ const wl=t.indexOf('חלאקה')>-1?'מתי החלאקה?':t.indexOf('שנה')>-1?'מתי יום ההולדת?':'מתי תרצו להצטלם?';
+ document.getElementById('whenLbl').textContent=wl;
+ const wv=document.getElementById('whenDate').value,wd=wv?fmt(new Date(wv+'T12:00')):'';
+ const wtxt=!wd?'':t.indexOf('חלאקה')>-1?' החלאקה ב־'+wd+'.':t.indexOf('שנה')>-1?' יום ההולדת ב־'+wd+'.':' אשמח להצטלם בסביבות '+wd+'.';
  let dd=null;
  if(nb&&due.value){dd=new Date(due.value+'T12:00');const a=new Date(dd),b=new Date(dd);a.setDate(dd.getDate()+5);b.setDate(dd.getDate()+14);
   document.getElementById('nbRange').textContent='עד '+fmt(b);
@@ -1054,9 +1059,9 @@ function upd(){
   match.innerHTML='<span class="m-k">החבילה שמתאימה לכם</span><span class="m-n">'+p.name+'</span><span class="m-p">'+p.price+'</span><span class="m-s">'+p.sub+' · '+p.list.join(' · ')+'</span>'+note+'<a class="m-go" href="#prices" data-pk="'+i+'">לכל הפרטים במחירון</a>';
   if(i!==lastPk&&lastPk!==-1&&!reduce){match.classList.remove('sw');void match.offsetWidth;match.classList.add('sw');}lastPk=i;}
  const pn=p?', חבילת '+p.name:'';
- const msg=nb?`היי חיה, אשמח לשריין צילום ניו בורן ${loc}${pn}.${dd?' הלידה המשוערת: '+fmt(dd)+'.':''} מתי יש לך מקום?`:`היי חיה, אשמח לתאם ${t} ${w}, ${loc}${pn}. מתי יש לך תאריכים פנויים?`;
+ const msg=nb?`היי חיה, אשמח לשריין צילום ניו בורן ${loc}${pn}.${dd?' הלידה המשוערת: '+fmt(dd)+'.':''} מתי יש לך מקום?`:`היי חיה, אשמח לתאם ${t} ${loc}.${wtxt} מתי יש לך תאריכים פנויים?`;
  wa.href=`https://wa.me/${PHONE}?text=${encodeURIComponent(msg)}`;}
-form.addEventListener('change',upd);due&&due.addEventListener('input',upd);form.addEventListener('submit',e=>e.preventDefault());upd();
+form.addEventListener('change',upd);due&&due.addEventListener('input',upd);document.getElementById('whenDate').addEventListener('input',upd);form.addEventListener('submit',e=>e.preventDefault());upd();
 match.addEventListener('click',e=>{const a=e.target.closest('[data-pk]');if(!a)return;e.preventDefault();const p=PK[+a.dataset.pk];if(!p)return;p.el.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'});p.el.classList.add('lit');setTimeout(()=>p.el.classList.remove('lit'),2600);});
 // live content from the site's admin panel (content.json): contact details + testimonials
 (function(){
