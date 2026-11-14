@@ -530,6 +530,8 @@ html.intro-on .hf-a,html.intro-on .hf-img{animation-play-state:paused}
 html,body{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='-12 -12 24 24'%3E%3Cg fill='%23EBD3CB' stroke='%23C7867A' stroke-width='.9'%3E%3Ccircle cx='0' cy='-6' r='5'/%3E%3Ccircle cx='5.7' cy='-1.9' r='5'/%3E%3Ccircle cx='3.5' cy='4.9' r='5'/%3E%3Ccircle cx='-3.5' cy='4.9' r='5'/%3E%3Ccircle cx='-5.7' cy='-1.9' r='5'/%3E%3C/g%3E%3Ccircle r='2.8' fill='%23E3C3A8'/%3E%3C/svg%3E") 16 16, auto}
 a,button,summary,label,[role=tab],.chip label,.svc,.ph,.c-dots button,.s-arrow{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='-12 -12 24 24'%3E%3Cg fill='%23C7867A' stroke='%239E5F55' stroke-width='.9'%3E%3Ccircle cx='0' cy='-6' r='5'/%3E%3Ccircle cx='5.7' cy='-1.9' r='5'/%3E%3Ccircle cx='3.5' cy='4.9' r='5'/%3E%3Ccircle cx='-3.5' cy='4.9' r='5'/%3E%3Ccircle cx='-5.7' cy='-1.9' r='5'/%3E%3C/g%3E%3Ccircle r='2.8' fill='%23F6D2C6'/%3E%3C/svg%3E") 16 16, pointer!important}
 @media (hover:none){html,body{cursor:auto}}
+/* no price list on this page */
+.match{display:none!important}
 </style>
 <script>document.documentElement.classList.add('js')</script>
 
@@ -556,7 +558,7 @@ a,button,summary,label,[role=tab],.chip label,.svc,.ph,.c-dots button,.s-arrow{c
     <svg class="l4 l4-head" viewBox="0 20 420 130" aria-hidden="true"><use href="#logo4"/></svg>
   </a>
   <nav aria-label="ניווט ראשי"><ul>
-    <li><a href="#services">צילומים</a></li><li><a href="#gallery">גלריה</a></li><li><a href="#prices">מחירון</a></li><li><a href="#contact">צרו קשר</a></li>
+    <li><a href="#services">צילומים</a></li><li><a href="#gallery">גלריה</a></li><li><a href="#contact">צרו קשר</a></li>
   </ul></nav>
 </header>
 
@@ -700,36 +702,7 @@ a,button,summary,label,[role=tab],.chip label,.svc,.ph,.c-dots button,.s-arrow{c
 
   <div class="strip" aria-hidden="true"><div class="ph" style="background-image:url('images/pf-kids-2.jpg')"></div><div class="ph" style="background-image:url('images/pf-one-2.jpg')"></div><div class="ph" style="background-image:url('images/pf-chal-2.jpg')"></div><div class="ph" style="background-image:url('images/pf-kids-4.jpg')"></div><div class="ph" style="background-image:url('images/pf-one-4.jpg')"></div></div>
 
-  <section id="prices" class="prices-sec">
-    <div class="wrap">
-      <div class="head"><h2>מחירון 2027</h2><p>סשן צילום מהאגדות, לחוויה בלתי נשכחת.</p></div>
-      <div class="pkgs">
-        <article class="pkg">
-          <span class="pkg-name">בייסיק</span>
-          <span class="pkg-price">1,090 ₪</span>
-          <span class="pkg-sub">ללא אלבום</span>
-          <ul><li>שעה צילומים בסטודיו</li><li>3 סטים של בגדים</li><li>15 תמונות מעובדות</li></ul>
-          <span class="pkg-extra">תמונה מעובדת נוספת: 25 ₪</span>
-        </article>
-        <article class="pkg featured">
-          <span class="pkg-badge">הכי אהוב</span>
-          <span class="pkg-name">גולד</span>
-          <span class="pkg-price">1,730 ₪</span>
-          <span class="pkg-sub">כולל אלבום</span>
-          <ul><li>שעתיים צילומים בסטודיו / טבע<span class="ast">*</span></li><li>4 סטים של בגדים</li><li>25 תמונות מעובדות</li><li>אלבום בוק מעוצב 21×56, 11 עמודים</li></ul>
-          <span class="pkg-extra">תמונה או עמוד נוסף: 25 ₪</span>
-        </article>
-        <article class="pkg">
-          <span class="pkg-name">פרימיום</span>
-          <span class="pkg-price">2,150 ₪</span>
-          <span class="pkg-sub">כולל אלבום</span>
-          <ul><li>שעתיים וחצי צילומים בסטודיו / טבע<span class="ast">*</span></li><li>4 סטים של בגדים</li><li>35 תמונות מעובדות</li><li>אלבום בוק מעוצב 21×56, 17 עמודים</li></ul>
-          <span class="pkg-extra">תמונה או עמוד נוסף: 25 ₪</span>
-        </article>
-      </div>
-      <p class="pkg-note"><span class="ast">*</span> עלויות הנסיעה על הלקוחה</p>
-    </div>
-  </section>
+  
 
   
 
@@ -769,11 +742,7 @@ a,button,summary,label,[role=tab],.chip label,.svc,.ph,.c-dots button,.s-arrow{c
           <span class="chip"><input type="radio" name="loc" id="l1" value="בסטודיו" checked><label for="l1">בסטודיו</label></span>
           <span class="chip"><input type="radio" name="loc" id="l2" value="בטבע"><label for="l2">בטבע</label></span>
         </div></fieldset>
-        <fieldset><legend>כמה תמונות מעובדות?</legend><div class="chips">
-          <span class="chip"><input type="radio" name="qty" id="q1" value="15"><label for="q1">15</label></span>
-          <span class="chip"><input type="radio" name="qty" id="q2" value="25" checked><label for="q2">25</label></span>
-          <span class="chip"><input type="radio" name="qty" id="q3" value="35"><label for="q3">35</label></span>
-        </div></fieldset>
+        
         <div class="match" id="match" aria-live="polite"></div>
         <div class="row"><a class="btn" id="waBtn" href="#" target="_blank" rel="noopener">שליחה בוואטסאפ</a><small>ההודעה נפתחת בוואטסאפ ואת שולחת אותה בעצמך.</small></div>
       </form>
