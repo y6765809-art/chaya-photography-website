@@ -547,6 +547,9 @@ a,button,summary,label,[role=tab],.chip label,.svc,.ph,.c-dots button,.s-arrow{c
 .about-dot{position:absolute;width:38%;aspect-ratio:1;border-radius:50%;bottom:-6%;right:-10%;border:8px solid var(--bg-alt);background-size:cover;background-position:center}
 .about-sprig{position:absolute;width:30%;top:-4%;left:-8%;color:var(--moss);opacity:.8;transform:rotate(-18deg)}
 @media (max-width:820px){.about-grid{grid-template-columns:1fr;text-align:center!important}.about-txt{align-items:center!important}.about-sig{align-items:center}.about-pics{order:0;max-width:300px}}
+/* leaves attached to the flower cursor */
+.leaf-host{position:fixed;left:0;top:0;width:0;height:0;pointer-events:none;z-index:70}
+.leaf-host .leaf-fx{position:absolute;left:0;top:-9px;transform-origin:0 50%}
 </style>
 <script>document.documentElement.classList.add('js')</script>
 
@@ -981,18 +984,24 @@ document.querySelectorAll('.story .s-more').forEach(row=>{
   document.querySelectorAll('.tabs [data-tab]').forEach(t=>t.addEventListener('click',()=>requestAnimationFrame(upd)));
   upd();
 });
-// fast mouse movement: little green leaves sprout out of the flower cursor, like the logo
+// leaves slowly grow out of the flower cursor (like the opening vine) and stay attached to it
 (function(){if(reduce||!matchMedia('(hover:hover) and (pointer:fine)').matches)return;
- let lx=0,ly=0,lt=0,last=0,live=0;
- const leaf='<svg viewBox="0 -14 34 28" width="24" height="20"><path d="M0 0 C7 -11 22 -12 32 0 C22 12 7 11 0 0Z" fill="#C9D2C1" stroke="#7E8F76" stroke-width="1.3"/><path d="M2 0 H26" stroke="#7E8F76" stroke-width=".9" opacity=".7"/></svg>';
- addEventListener('mousemove',e=>{const now=performance.now();const dt=Math.max(now-lt,8);const v=Math.hypot(e.clientX-lx,e.clientY-ly)/dt;lx=e.clientX;ly=e.clientY;lt=now;
-  if(v<1.4||now-last<70||live>=16)return;last=now;
-  const base=Math.random()*360;
-  for(let k=0;k<2;k++){live++;
-   const el=document.createElement('span');el.className='leaf-fx';el.innerHTML=leaf;el.style.left=e.clientX+'px';el.style.top=e.clientY+'px';document.body.appendChild(el);
-   const ang=base+k*150+(Math.random()-.5)*40;
-   const a=el.animate([{transform:'translate(0,-50%) rotate('+ang+'deg) translateX(6px) scale(0)',opacity:1},{transform:'translate(0,-50%) rotate('+(ang+8)+'deg) translateX(6px) scale(1)',opacity:1,offset:.45},{transform:'translate(0,-50%) rotate('+(ang+14)+'deg) translateX(8px) scale(.9)',opacity:0}],{duration:850+Math.random()*250,easing:'cubic-bezier(.3,1.3,.5,1)'});
-   a.onfinish=()=>{el.remove();live--;};}
+ const host=document.createElement('div');host.className='leaf-host';document.body.appendChild(host);
+ let mx=-100,my=-100,raf=0,lx=0,ly=0,lt=0,last=0,live=0,turn=0;
+ const leaf='<svg viewBox="0 -14 34 28" width="22" height="18"><path d="M0 0 C7 -11 22 -12 32 0 C22 12 7 11 0 0Z" fill="#C9D2C1" stroke="#7E8F76" stroke-width="1.3"/><path d="M2 0 H26" stroke="#7E8F76" stroke-width=".9" opacity=".7"/></svg>';
+ const place=()=>{raf=0;host.style.transform='translate('+mx+'px,'+my+'px)';};
+ addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;if(!raf)raf=requestAnimationFrame(place);
+  const now=performance.now();const dt=Math.max(now-lt,8);const v=Math.hypot(e.clientX-lx,e.clientY-ly)/dt;lx=e.clientX;ly=e.clientY;lt=now;
+  if(v<1.2||now-last<260||live>=5)return;last=now;live++;
+  const el=document.createElement('span');el.className='leaf-fx';el.innerHTML=leaf;host.appendChild(el);
+  const ang=(turn+=137)%360;
+  const a=el.animate([
+   {transform:'rotate('+ang+'deg) translateX(7px) scale(0)',opacity:1,easing:'cubic-bezier(.3,1.35,.5,1)'},
+   {transform:'rotate('+ang+'deg) translateX(7px) scale(1)',opacity:1,offset:.42},
+   {transform:'rotate('+(ang+6)+'deg) translateX(7px) scale(1)',opacity:1,offset:.78,easing:'ease-in'},
+   {transform:'rotate('+(ang+6)+'deg) translateX(7px) scale(0)',opacity:0}
+  ],{duration:2300});
+  a.onfinish=()=>{el.remove();live--;};
  },{passive:true});
 })();
 // photo wall: columns drift at different speeds while scrolling
