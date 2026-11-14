@@ -679,6 +679,18 @@ html.js .story .ph.curtain.in{filter:none}
 .strip{grid-template-columns:repeat(4,1fr)!important}
 @media (max-width:700px){.strip{grid-template-columns:repeat(2,1fr)!important;height:auto}.strip .ph{display:block!important;aspect-ratio:3/2}}
 .ab-cam{transform:translate(-30px,-14px)}
+/* realistic shaded camera with a peony beside it */
+.about-real{width:clamp(220px,18vw,300px)!important;left:56%!important}
+.about-real svg{animation:none!important}
+.about-real .ar-cam,.about-real .ar-flower{opacity:0}
+.about-real.drawn .ar-cam{animation:fadeUp .9s cubic-bezier(.2,.7,.2,1) forwards}
+.about-real.drawn .ar-flower{animation:fadeUp .9s cubic-bezier(.2,.7,.2,1) .35s forwards}
+.about-real .ar-flower>g:first-of-type{transform-box:fill-box;transform-origin:50% 100%}
+.about-real .ar-glint{animation:arGlint 6s ease-in-out 1.5s infinite}
+@keyframes arGlint{0%,70%{transform:translateX(-60px) rotate(30deg)}85%,100%{transform:translateX(90px) rotate(30deg)}}
+@media (prefers-reduced-motion:reduce){.about-real .ar-cam,.about-real .ar-flower{opacity:1}}
+/* first camera icon back, centred in the gap */
+.happy-cam{left:55%!important;top:50%!important;width:clamp(170px,15vw,240px)!important}
 </style>
 <script>document.documentElement.classList.add('js')</script>
 
@@ -748,21 +760,27 @@ html.js .story .ph.curtain.in{filter:none}
 
   <section id="about" class="about-sec">
     <div class="wrap about-grid">
-      <div class="about-bloom" aria-hidden="true"><svg viewBox="0 0 160 300">
-        <g class="ab-cam"><path d="M62 244 l6 -9 h22 l6 9" fill="none" stroke="#C7867A" stroke-width="2.4" stroke-linejoin="round"/><rect x="36" y="243" width="88" height="54" rx="14" fill="none" stroke="#C7867A" stroke-width="2.4"/><rect x="102" y="250" width="12" height="7" rx="3" fill="#E3C3A8"/><circle cx="80" cy="270" r="17" fill="none" stroke="#C7867A" stroke-width="2.4"/><circle cx="80" cy="270" r="10" fill="#A9B8A0"/><circle cx="76" cy="266" r="3" fill="#FCF9F6" opacity=".9"/></g>
-        <path class="ab-stem" pathLength="1" d="M78 236 C70 190 92 150 80 110 C70 76 84 44 104 20"/>
-        <path class="ab-stem ab-s2" pathLength="1" d="M80 150 C60 132 46 112 40 86"/>
-        <g transform="translate(76 206) rotate(-150)"><g class="ab-lf" style="--d:.5s"><path d="M0 0 C7 -11 22 -12 32 0 C22 12 7 11 0 0Z"/><path class="rib" d="M2 0 H26"/></g></g>
-        <g transform="translate(80 186) rotate(-30)"><g class="ab-lf" style="--d:.65s"><path d="M0 0 C7 -11 22 -12 32 0 C22 12 7 11 0 0Z"/><path class="rib" d="M2 0 H26"/></g></g>
-        <g transform="translate(84 160) rotate(-160)"><g class="ab-lf" style="--d:.8s"><path d="M0 0 C7 -11 22 -12 32 0 C22 12 7 11 0 0Z"/><path class="rib" d="M2 0 H26"/></g></g>
-        <g transform="translate(82 128) rotate(-25)"><g class="ab-lf" style="--d:.95s"><path d="M0 0 C7 -11 22 -12 32 0 C22 12 7 11 0 0Z"/><path class="rib" d="M2 0 H26"/></g></g>
-        <g transform="translate(78 96) rotate(-150) scale(.9)"><g class="ab-lf" style="--d:1.1s"><path d="M0 0 C7 -11 22 -12 32 0 C22 12 7 11 0 0Z"/><path class="rib" d="M2 0 H26"/></g></g>
-        <g transform="translate(88 64) rotate(-35) scale(.85)"><g class="ab-lf" style="--d:1.25s"><path d="M0 0 C7 -11 22 -12 32 0 C22 12 7 11 0 0Z"/><path class="rib" d="M2 0 H26"/></g></g>
-        <g transform="translate(52 108) rotate(-120) scale(.8)"><g class="ab-lf" style="--d:1s"><path d="M0 0 C7 -11 22 -12 32 0 C22 12 7 11 0 0Z"/><path class="rib" d="M2 0 H26"/></g></g>
-        <g transform="translate(104 20) scale(1.5)"><g class="ab-fl" style="--d:1.5s"><circle cx="0" cy="-6" r="5"/><circle cx="5.7" cy="-1.9" r="5"/><circle cx="3.5" cy="4.9" r="5"/><circle cx="-3.5" cy="4.9" r="5"/><circle cx="-5.7" cy="-1.9" r="5"/><circle class="c" r="2.6"/></g></g>
-        <g transform="translate(40 86) scale(1.1)"><g class="ab-fl" style="--d:1.35s"><circle cx="0" cy="-6" r="5"/><circle cx="5.7" cy="-1.9" r="5"/><circle cx="3.5" cy="4.9" r="5"/><circle cx="-3.5" cy="4.9" r="5"/><circle cx="-5.7" cy="-1.9" r="5"/><circle class="c" r="2.6"/></g></g>
-        <g class="ab-petal p1"><ellipse cx="120" cy="70" rx="4" ry="6" fill="#EBD3CB" stroke="#C7867A" stroke-width=".8"/></g>
-        <g class="ab-petal p2"><ellipse cx="30" cy="140" rx="3.5" ry="5" fill="#EBD3CB" stroke="#C7867A" stroke-width=".8"/></g>
+      <div class="happy-cam" aria-hidden="true"><svg viewBox="0 0 220 190">
+        <g class="hc-spark s1"><path d="M30 40 l3 9 9 3 -9 3 -3 9 -3 -9 -9 -3 9 -3z" fill="#E3C3A8"/></g>
+        <g class="hc-spark s2"><path d="M192 30 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2z" fill="#C7867A"/></g>
+        <g class="hc-spark s3"><path d="M200 120 l2.5 7 7 2.5 -7 2.5 -2.5 7 -2.5 -7 -7 -2.5 7 -2.5z" fill="#A9B8A0"/></g>
+        <g class="hc-spark s4"><circle cx="22" cy="130" r="3.5" fill="#EBD3CB"/></g>
+        <g class="hc-body">
+          <path d="M78 52 l10 -16 h44 l10 16" fill="#FCF9F6" stroke="#C7867A" stroke-width="3.5" stroke-linejoin="round"/>
+          <rect x="36" y="50" width="148" height="104" rx="24" fill="#FCF9F6" stroke="#C7867A" stroke-width="3.5"/>
+          <rect x="150" y="62" width="20" height="11" rx="4" fill="#E3C3A8"/>
+          <g class="hc-flash"><circle cx="160" cy="67" r="16" fill="#FFF6E8" opacity=".9"/><path d="M160 40 v-10 M182 50 l8 -7 M138 50 l-8 -7" stroke="#E3C3A8" stroke-width="3" stroke-linecap="round"/></g>
+          <circle cx="110" cy="98" r="34" fill="#EBD3CB" stroke="#C7867A" stroke-width="3.5"/>
+          <circle cx="110" cy="98" r="22" fill="#7E8F76"/>
+          <circle class="hc-shutter" cx="110" cy="98" r="22" fill="#5E6F58"/>
+          <circle cx="101" cy="89" r="6" fill="#FCF9F6" opacity=".9"/><circle cx="118" cy="106" r="2.5" fill="#FCF9F6" opacity=".7"/>
+          <circle cx="62" cy="128" r="7" fill="#EBD3CB" opacity=".9"/><circle cx="158" cy="128" r="7" fill="#EBD3CB" opacity=".9"/>
+          <g class="hc-eyes"><ellipse cx="60" cy="96" rx="5.5" ry="7" fill="#5E5048"/><ellipse cx="160" cy="96" rx="5.5" ry="7" fill="#5E5048"/><circle cx="62" cy="93" r="2" fill="#FCF9F6"/><circle cx="162" cy="93" r="2" fill="#FCF9F6"/></g>
+          <path class="hc-smile" d="M92 138 q18 13 36 0" fill="none" stroke="#C7867A" stroke-width="3.5" stroke-linecap="round"/>
+        </g>
+        <g transform="translate(52 46) rotate(-25)"><path d="M0 0 C5 -8 16 -9 23 0 C16 9 5 8 0 0Z" fill="#C9D2C1" stroke="#7E8F76" stroke-width="1.4"/></g>
+        <g transform="translate(44 54) rotate(-150)"><path d="M0 0 C5 -8 16 -9 23 0 C16 9 5 8 0 0Z" fill="#C9D2C1" stroke="#7E8F76" stroke-width="1.4"/></g>
+        <g transform="translate(48 50)"><g fill="#EBD3CB" stroke="#C7867A" stroke-width=".9"><circle cx="0" cy="-6" r="5"/><circle cx="5.7" cy="-1.9" r="5"/><circle cx="3.5" cy="4.9" r="5"/><circle cx="-3.5" cy="4.9" r="5"/><circle cx="-5.7" cy="-1.9" r="5"/></g><circle r="2.8" fill="#E3C3A8"/></g>
       </svg></div>
       <div class="about-pics rise" aria-hidden="true"><div class="ph about-main" style="background-image:url('images/about-main2.jpg')"></div><div class="ph about-dot" style="background-image:url('images/about-dot.jpg')"></div><svg class="about-sprig" viewBox="0 0 120 80"><use href="#sprig"/></svg></div>
       <div class="about-txt">
