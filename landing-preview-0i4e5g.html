@@ -577,9 +577,9 @@ a,button,summary,label,[role=tab],.chip label,.svc,.ph,.c-dots button,.s-arrow{c
 .hero-full .hf-down{left:75%}
 @media (max-width:720px){.hero-full{flex-direction:column;height:auto;max-height:none;align-items:stretch;padding-bottom:40px}.hero-full .hf-img{position:relative;width:100%;height:64svh;transform-origin:50% 50%}.hero-full .hf-text{width:100%;padding-top:26px}.hero-full .hf-down{display:none}}
 /* photos 'develop' like in a darkroom: soft sepia blur turns into full sharp colour */
-@keyframes hfDevelop{from{filter:sepia(.65) saturate(.45) blur(12px) brightness(1.18) contrast(.85)}to{filter:none}}
+@keyframes hfDevelop{from{filter:blur(14px) brightness(1.06)}to{filter:none}}
 .hero-full .hf-img{animation:hfZoom2 14s cubic-bezier(.2,.6,.2,1) forwards,hfDevelop 3s cubic-bezier(.4,0,.2,1) .25s both}
-html.js .story .ph.curtain{filter:sepia(.6) saturate(.5) blur(10px) brightness(1.15) contrast(.88);transition:clip-path 1.3s cubic-bezier(.7,0,.2,1),filter 2.4s cubic-bezier(.4,0,.2,1) .35s,transform .6s cubic-bezier(.2,.7,.2,1)}
+html.js .story .ph.curtain{filter:blur(12px) brightness(1.05);transition:clip-path 1.3s cubic-bezier(.7,0,.2,1),filter 2.4s cubic-bezier(.4,0,.2,1) .35s,transform .6s cubic-bezier(.2,.7,.2,1)}
 html.js .story .ph.curtain.in{filter:none}
 @media (prefers-reduced-motion:reduce){.hero-full .hf-img{animation:none;filter:none}html.js .story .ph.curtain{filter:none}}
 </style>
