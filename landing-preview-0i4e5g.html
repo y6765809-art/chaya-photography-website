@@ -17,7 +17,7 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"LocalBusiness","name":"חיה סגל צילום","description":"צילומי חלאקה, גיל שנה וניו בורן בטבריה","telephone":"+972-54-846-3238","email":"chaya054846@gmail.com","priceRange":"₪₪","address":{"@type":"PostalAddress","addressLocality":"טבריה","addressCountry":"IL"},"geo":{"@type":"GeoCoordinates","latitude":32.7922,"longitude":35.5312},"areaServed":["טבריה","כנרת","גליל","צפון"],"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Sunday","Monday","Tuesday","Wednesday","Thursday"],"opens":"09:00","closes":"20:00"}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bellefair&family=Frank+Ruhl+Libre:wght@400;500;700&family=Assistant:wght@300;400;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bellefair&family=Amatic+SC:wght@700&family=Frank+Ruhl+Libre:wght@400;500;700&family=Assistant:wght@300;400;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap">
 <style>
 /* Layout: playful-editorial story — overlapping photo collage hero, colour-blocked sections, arches/circles as recurring frames, handwritten notes as the human touch */
 :root{
@@ -554,7 +554,7 @@ a,button,summary,label,[role=tab],.chip label,.svc,.ph,.c-dots button,.s-arrow{c
 .petal-fx{position:fixed;left:0;top:0;width:9px;height:12px;margin:-6px 0 0 -4.5px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#EBD3CB;border:1px solid #C7867A;pointer-events:none;z-index:71}
 /* gallery fills the whole page width: one big arch photo + a full grid of the rest */
 .gallery-sec .wrap{max-width:none;padding-inline:clamp(10px,1.6vw,26px)}
-.gallery-sec .story{grid-template-columns:repeat(5,1fr)!important;gap:10px!important;max-width:none!important;grid-auto-flow:dense}
+.gallery-sec .story{grid-template-columns:repeat(var(--cols,5),1fr)!important;gap:10px!important;max-width:none!important;grid-auto-flow:dense}
 .gallery-sec .story .s-main{grid-column:span 2;grid-row:span 2;aspect-ratio:auto!important}
 .gallery-sec .story .s-side,.gallery-sec .story .s-wrap,.gallery-sec .story .s-more{display:contents!important}
 .gallery-sec .story .s-sm,.gallery-sec .story .s-more .ph{aspect-ratio:4/5;border-radius:14px;min-height:0;flex:none;margin:0}
@@ -639,6 +639,17 @@ html.js .story .ph.curtain.in{filter:none}
 @media (prefers-reduced-motion:reduce){.hc-eyes{animation:none}}
 /* per-photo zoom in the opening */
 .hero-full .hf-img{background-size:var(--size,cover)!important}
+/* handwritten quote in the about section */
+.about-quote{position:absolute;left:51%;top:50%;transform:translate(-50%,-50%) rotate(-4deg);text-align:center;pointer-events:none}
+.about-quote p{font-family:"Amatic SC",var(--display);font-weight:700;font-size:clamp(40px,3.8vw,62px);line-height:1.05;color:var(--rust);margin:0}
+.about-quote svg{width:110px;height:72px;color:var(--moss);opacity:.85;margin-top:6px;transform:rotate(8deg)}
+@media (max-width:1000px){.about-quote{display:none}}
+/* gallery opens only after choosing a service */
+.gallery-sec.g-closed{display:none}
+.gallery-sec.g-open{animation:fadeUp .8s cubic-bezier(.2,.7,.2,1) both}
+#services .svc.clickable{cursor:pointer}
+.svc-hint{display:inline-block;align-self:center;margin-top:10px;font-size:15.5px;font-weight:600;color:var(--rust);border-bottom:1.5px solid color-mix(in srgb,var(--rust) 40%,transparent);padding-bottom:2px}
+#services .svc.clickable:hover .svc-hint{border-color:var(--rust)}
 </style>
 <script>document.documentElement.classList.add('js')</script>
 
@@ -708,30 +719,7 @@ html.js .story .ph.curtain.in{filter:none}
 
   <section id="about" class="about-sec">
     <div class="wrap about-grid">
-      <div class="happy-cam" aria-hidden="true"><svg viewBox="0 0 220 220">
-        <g class="hc-spark s1"><path d="M24 50 l3 9 9 3 -9 3 -3 9 -3 -9 -9 -3 9 -3z" fill="#E3C3A8"/></g>
-        <g class="hc-spark s2"><path d="M200 34 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2z" fill="#C7867A"/></g>
-        <g class="hc-spark s3"><path d="M204 150 l2.5 7 7 2.5 -7 2.5 -2.5 7 -2.5 -7 -7 -2.5 7 -2.5z" fill="#A9B8A0"/></g>
-        <g class="hc-spark s4"><circle cx="18" cy="160" r="3.5" fill="#EBD3CB"/></g>
-        <g class="hc-photo"><rect x="80" y="150" width="60" height="52" rx="5" fill="#FCF9F6" stroke="#C7867A" stroke-width="2.5"/><rect x="87" y="156" width="46" height="34" rx="3" fill="#C9D2C1"/><path d="M110 182 c-6 -4 -9 -7 -9 -10 c0 -3 4 -5 9 -1 c5 -4 9 -2 9 1 c0 3 -3 6 -9 10z" fill="#EBD3CB"/></g>
-        <g class="hc-body">
-          <path d="M34 82 q-20 2 -18 30" fill="none" stroke="#A9B8A0" stroke-width="4" stroke-linecap="round"/><path d="M186 82 q20 2 18 30" fill="none" stroke="#A9B8A0" stroke-width="4" stroke-linecap="round"/>
-          <path d="M82 58 v-12 q0 -7 7 -7 h42 q7 0 7 7 v12" fill="none" stroke="#C7867A" stroke-width="3.5" stroke-linejoin="round"/>
-          <rect x="150" y="46" width="20" height="11" rx="5" fill="#E3C3A8"/>
-          <rect x="34" y="56" width="152" height="100" rx="32" fill="none" stroke="#C7867A" stroke-width="3.5"/>
-          <path d="M86 156 h48" stroke="#C7867A" stroke-width="3.5" stroke-linecap="round"/>
-          <g class="hc-flash"><circle cx="160" cy="51" r="16" fill="#FFF6E8" opacity=".9"/><path d="M160 24 v-10 M182 34 l8 -7 M138 34 l-8 -7" stroke="#E3C3A8" stroke-width="3" stroke-linecap="round"/></g>
-          <circle cx="110" cy="104" r="34" fill="none" stroke="#C7867A" stroke-width="3.5"/>
-          <circle cx="110" cy="104" r="25" fill="#EBD3CB"/>
-          <circle cx="110" cy="104" r="16" fill="#7E8F76"/>
-          <circle class="hc-shutter" cx="110" cy="104" r="16" fill="#5E6F58"/>
-          <circle cx="104" cy="98" r="4.5" fill="#FCF9F6" opacity=".9"/>
-          <g class="hc-eyes"><ellipse cx="58" cy="96" rx="5.5" ry="7" fill="#5E5048"/><ellipse cx="162" cy="96" rx="5.5" ry="7" fill="#5E5048"/><circle cx="60" cy="93" r="2" fill="#FCF9F6"/><circle cx="164" cy="93" r="2" fill="#FCF9F6"/></g>
-          <circle cx="56" cy="124" r="7" fill="#EBD3CB" opacity=".9"/><circle cx="164" cy="124" r="7" fill="#EBD3CB" opacity=".9"/>
-          <g class="hc-smile"><path d="M98 144 q6 7 12 0 q6 7 12 0" fill="none" stroke="#C7867A" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></g>
-        </g>
-        <g transform="translate(44 56)"><g transform="rotate(-25)"><path d="M0 0 C5 -8 16 -9 23 0 C16 9 5 8 0 0Z" fill="#C9D2C1" stroke="#7E8F76" stroke-width="1.4"/></g><g transform="rotate(-150)"><path d="M0 0 C5 -8 16 -9 23 0 C16 9 5 8 0 0Z" fill="#C9D2C1" stroke="#7E8F76" stroke-width="1.4"/></g><g transform="translate(4 -4)"><g fill="#EBD3CB" stroke="#C7867A" stroke-width=".9"><circle cx="0" cy="-6" r="5"/><circle cx="5.7" cy="-1.9" r="5"/><circle cx="3.5" cy="4.9" r="5"/><circle cx="-3.5" cy="4.9" r="5"/><circle cx="-5.7" cy="-1.9" r="5"/></g><circle r="2.8" fill="#E3C3A8"/></g></g>
-      </svg></div>
+      <div class="about-quote" aria-hidden="true"><p>הרגעים הקטנים<br>הם הגדולים</p><svg viewBox="0 0 120 80"><use href="#sprig"/></svg></div>
       <div class="about-pics rise" aria-hidden="true"><div class="ph about-main" style="background-image:url('images/about-main2.jpg')"></div><div class="ph about-dot" style="background-image:url('images/about-dot.jpg')"></div><svg class="about-sprig" viewBox="0 0 120 80"><use href="#sprig"/></svg></div>
       <div class="about-txt">
         <h2>קצת עליי</h2>
@@ -1120,6 +1108,24 @@ document.querySelectorAll('.story .s-more').forEach(row=>{
  const alts=[...document.querySelectorAll('.hero-full .hf-alt')];sets.forEach((s,k)=>{const p=k?(alts[k-1].dataset.pos||'50% 45%'):'50% 40%';s[1].style.setProperty('--pos',p);if(k&&alts[k-1].dataset.size)s[1].style.setProperty('--size',alts[k-1].dataset.size);});
  if(sets.length<2)return;sets.forEach((s,k)=>{if(k)s.forEach(e=>e.classList.add('off'));});
  let cur=0;setInterval(()=>{if(document.hidden)return;const nx=(cur+1)%sets.length;sets[nx].forEach(e=>e.classList.remove('off'));sets[cur].forEach(e=>e.classList.add('off'));cur=nx;},6500);
+})();
+// gallery: choose the column count per tab so the grid has no empty holes
+(function(){const fit=()=>{const w=innerWidth;document.querySelectorAll('.gallery-sec .story').forEach(st=>{const tiles=[...st.querySelectorAll('.s-sm,.s-more .ph')];tiles.forEach(t=>t.style.gridColumn='');if(w<=900)return;
+  const cells=4+tiles.length;const best=5,bestE=Math.ceil(cells/5)*5-cells;
+  st.style.setProperty('--cols',best);if(bestE>0&&tiles.length){tiles[tiles.length-1].style.gridColumn='span '+(bestE+1);tiles[tiles.length-1].style.aspectRatio='auto';}});};
+ fit();addEventListener('resize',fit);})();
+// gallery stays closed until a service card (or a gallery link) is clicked
+(function(){const g=document.getElementById('gallery');if(!g)return;g.classList.add('g-closed');
+ const open=key=>{g.classList.remove('g-closed');g.classList.add('g-open');if(key){const t=g.querySelector('.tabs [data-tab="'+key+'"]');if(t)t.click();}
+  g.querySelectorAll('.curtain').forEach(c=>c.classList.add('in'));g.querySelectorAll('.rise').forEach(c=>c.classList.add('in'));dispatchEvent(new Event('resize'));
+  setTimeout(()=>g.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'}),60);};
+ const keys=['chal','one','nb'];
+ document.querySelectorAll('#services .svc').forEach((c,i)=>{const k=keys[i];if(!k)return;c.classList.add('clickable');c.tabIndex=0;
+  const hint=document.createElement('span');hint.className='svc-hint';hint.textContent=k==='nb'?'לשריון מקום':'לצפייה בתמונות';const b=c.querySelector('.body');if(b)b.appendChild(hint);
+  const go=()=>{if(k==='nb'){const r=document.getElementById('t3');if(r){r.checked=true;r.dispatchEvent(new Event('change',{bubbles:true}));}const bk=document.getElementById('book');if(bk)bk.scrollIntoView({behavior:reduce?'auto':'smooth'});return;}open(k);};
+  c.addEventListener('click',go);c.addEventListener('keydown',e=>{if(e.key==='Enter')go();});});
+ document.querySelectorAll('a[href="#gallery"]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();open(null);}));
+ if(location.hash==='#gallery')open(null);
 })();
 // photo wall: columns drift at different speeds while scrolling
 const wall=document.querySelector('.wall');if(wall&&!reduce){const cols=[...wall.querySelectorAll('.col')],sp=[-90,70,-130,60,-80];let tick=false;const mv=()=>{tick=false;const r=wall.getBoundingClientRect();const p=(innerHeight-r.top)/(innerHeight+r.height);if(p<-.1||p>1.1)return;cols.forEach((c,i)=>c.style.transform='translateY('+((p-.5)*sp[i%5]*2)+'px)');};addEventListener('scroll',()=>{if(!tick){tick=true;requestAnimationFrame(mv);}},{passive:true});mv();}
