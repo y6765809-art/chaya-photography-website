@@ -691,18 +691,6 @@ html.js .story .ph.curtain.in{filter:none}
 @media (prefers-reduced-motion:reduce){.about-real .ar-cam,.about-real .ar-flower{opacity:1}}
 /* first camera icon back, centred in the gap */
 .happy-cam{left:49.5%!important;top:44%!important;width:clamp(200px,18vw,290px)!important;z-index:3}
-/* studio section */
-.studio-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(30px,6vw,90px);align-items:center}
-.studio-txt{display:flex;flex-direction:column;gap:18px;align-items:flex-start}
-.studio-lead{font-family:var(--display);font-size:clamp(20px,2vw,25px);line-height:1.55;color:var(--fg)}
-.studio-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;color:var(--muted);font-size:17px}
-.studio-list li{display:flex;align-items:center;gap:10px}.studio-list li::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--sage)}
-.studio-pics{position:relative;aspect-ratio:1/1;max-width:560px;width:100%;justify-self:center}
-.studio-pics .ph{position:absolute;background-size:cover;background-position:center;box-shadow:0 26px 50px -30px rgba(60,45,30,.55)}
-.studio-pics .sp-a{inset:0 30% 8% 0;border-radius:999px 999px 22px 22px}
-.studio-pics .sp-b{width:42%;aspect-ratio:4/5;right:0;top:4%;border-radius:20px;border:7px solid var(--bg)}
-.studio-pics .sp-c{width:50%;aspect-ratio:3/2;right:4%;bottom:0;border-radius:20px;border:7px solid var(--bg)}
-@media (max-width:820px){.studio-grid{grid-template-columns:1fr}.studio-pics{max-width:420px}}
 </style>
 <script>document.documentElement.classList.add('js')</script>
 
@@ -841,22 +829,6 @@ html.js .story .ph.curtain.in{filter:none}
   </section>
 
   
-
-  <section id="studio" class="studio-sec">
-    <div class="wrap studio-grid">
-      <div class="studio-txt rise">
-        <h2>הסטודיו</h2>
-        <p class="studio-lead">סטודיו נעים ורגוע בטבריה, עם רקעים, תפאורות ואביזרים שמתחלפים לפי העונה והגיל.<br>מגיעים, מתרווחים, וכל השאר עליי.</p>
-        <ul class="studio-list"><li>רקעים ותפאורות מתחלפים</li><li>אביזרים ובגדים לצילום</li><li>מתאים לחלאקה, גיל שנה וניו בורן</li></ul>
-        <a class="btn" href="#book">לתיאום צילום בסטודיו</a>
-      </div>
-      <div class="studio-pics" aria-hidden="true">
-        <div class="ph sp-a" style="background-image:url('images/pf-kids-1.jpg')"></div>
-        <div class="ph sp-b" style="background-image:url('images/pf-one-1.jpg')"></div>
-        <div class="ph sp-c" style="background-image:url('images/strip-32.jpg')"></div>
-      </div>
-    </div>
-  </section>
 
   <section class="band" style="--img:url('images/p36.jpg')">
     <div class="wrap">
