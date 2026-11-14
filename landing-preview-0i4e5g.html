@@ -699,6 +699,13 @@ html.js .story .ph.curtain.in{filter:none}
 /* about text centred */
 .about-sec .about-txt{align-items:center!important;text-align:center!important;justify-self:center}
 .about-sec .about-sig{align-items:center!important}
+/* the camera draws itself when it comes into view */
+.happy-cam .hc-line{stroke-dasharray:1;stroke-dashoffset:1;fill-opacity:0}
+.happy-cam.drawn .hc-line{animation:draw 1.7s cubic-bezier(.45,0,.25,1) forwards,hcFillIn .7s ease 1.5s forwards}
+@keyframes hcFillIn{to{fill-opacity:1}}
+.happy-cam .hc-fill{opacity:0}
+.happy-cam.drawn .hc-fill{animation:fadeIn .7s ease 1.4s forwards}
+@media (prefers-reduced-motion:reduce){.happy-cam .hc-line{stroke-dashoffset:0;fill-opacity:1}.happy-cam .hc-fill{opacity:1}}
 </style>
 <script>document.documentElement.classList.add('js')</script>
 
@@ -790,7 +797,7 @@ html.js .story .ph.curtain.in{filter:none}
       <div class="about-pics rise" aria-hidden="true"><div class="ph about-main" style="background-image:url('images/about-main2.jpg')"></div><div class="ph about-dot" style="background-image:url('images/about-dot.jpg')"></div><svg class="about-sprig" viewBox="0 0 120 80"><use href="#sprig"/></svg></div>
       <div class="about-txt">
         
-        <p class="about-lines">אני חיה סגל,<br>צלמת ילדים ומשפחה כבר קרוב ל־6 שנים.</p>
+        <p class="about-lines">היי, אני חיה סגל,<br>צלמת ילדים ומשפחה כבר קרוב ל־6 שנים.</p>
         <p class="about-lines">אני רואה את מה שקורה בין הפוזות:<br>המבט, הצחוק, היד הקטנה.</p>
         <p class="about-lines">ושומרת לכם את זה, לתמיד.</p>
         <p class="about-sig">מחכה לפגוש אתכם,<span>חיה</span></p>
@@ -837,6 +844,18 @@ html.js .story .ph.curtain.in{filter:none}
   </section>
 
   
+
+  <section id="how" class="how-sec">
+    <div class="wrap">
+      <div class="head"><h2>איך זה עובד?</h2></div>
+      <div class="steps">
+        <div class="step"><span class="n">1</span><h3>שיחה קצרה</h3><p>מכירים, שומעת מה אתם אוהבים וקובעים תאריך.</p></div>
+        <div class="step"><span class="n">2</span><h3>תכנון</h3><p>בוחרות יחד צבעים, בגדים ואביזרים.</p></div>
+        <div class="step"><span class="n">3</span><h3>יום הצילום</h3><p>בקצב של הילד, בלי לחץ ועם הרבה סבלנות.</p></div>
+        <div class="step"><span class="n">4</span><h3>תמונות ואלבום</h3><p>תמונות ערוכות ביד ואלבום מעוצב.</p></div>
+      </div>
+    </div>
+  </section>
 
   <section class="band" style="--img:url('images/p36.jpg')">
     <div class="wrap">
@@ -1196,6 +1215,14 @@ document.querySelectorAll('.story .s-more').forEach(row=>{
 })();
 // about sprig draws itself when it comes into view
 (function(){const b=document.querySelector('.about-bloom');if(!b)return;if(!('IntersectionObserver' in window)){b.classList.add('drawn');return;}const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){b.classList.add('drawn');io.disconnect();}}),{threshold:.35});io.observe(b);})();
+// about camera: line-draw on first view
+(function(){const c=document.querySelector('.happy-cam');if(!c)return;
+ c.querySelectorAll('.hc-body [stroke]').forEach(e=>{e.setAttribute('pathLength','1');e.classList.add('hc-line');});
+ c.querySelectorAll('.hc-body > :not([stroke]):not(.hc-shutter):not(.hc-flash)').forEach(e=>e.classList.add('hc-fill'));
+ c.querySelectorAll('svg > g[transform]').forEach(e=>e.classList.add('hc-fill'));
+ if(reduce||!('IntersectionObserver' in window)){c.classList.add('drawn');return;}
+ const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){c.classList.add('drawn');io.disconnect();}}),{threshold:.4});io.observe(c);
+})();
 // photo wall: columns drift at different speeds while scrolling
 const wall=document.querySelector('.wall');if(wall&&!reduce){const cols=[...wall.querySelectorAll('.col')],sp=[-90,70,-130,60,-80];let tick=false;const mv=()=>{tick=false;const r=wall.getBoundingClientRect();const p=(innerHeight-r.top)/(innerHeight+r.height);if(p<-.1||p>1.1)return;cols.forEach((c,i)=>c.style.transform='translateY('+((p-.5)*sp[i%5]*2)+'px)');};addEventListener('scroll',()=>{if(!tick){tick=true;requestAnimationFrame(mv);}},{passive:true});mv();}
 // mobile action bar: whatsapp with a short greeting, phone follows content.json
