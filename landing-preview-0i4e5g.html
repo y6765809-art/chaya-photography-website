@@ -675,6 +675,10 @@ html.js .story .ph.curtain.in{filter:none}
 .about-bloom.drawn .ab-lf,.about-bloom.drawn .ab-fl{animation-delay:calc(var(--d) + .6s)}
 .about-bloom{width:clamp(130px,11vw,185px)}
 @media (prefers-reduced-motion:reduce){.ab-cam{opacity:1}}
+/* strip after the quote band: 4 chosen photos */
+.strip{grid-template-columns:repeat(4,1fr)!important}
+@media (max-width:700px){.strip{grid-template-columns:repeat(2,1fr)!important;height:auto}.strip .ph{display:block!important;aspect-ratio:3/2}}
+.ab-cam{transform:translate(-30px,-14px)}
 </style>
 <script>document.documentElement.classList.add('js')</script>
 
@@ -745,7 +749,7 @@ html.js .story .ph.curtain.in{filter:none}
   <section id="about" class="about-sec">
     <div class="wrap about-grid">
       <div class="about-bloom" aria-hidden="true"><svg viewBox="0 0 160 300">
-        <g class="ab-cam"><path d="M62 244 l6 -9 h22 l6 9" fill="none" stroke="#C7867A" stroke-width="2.4" stroke-linejoin="round"/><rect x="36" y="243" width="88" height="54" rx="14" fill="#FCF9F6" fill-opacity=".55" stroke="#C7867A" stroke-width="2.4"/><rect x="102" y="250" width="12" height="7" rx="3" fill="#E3C3A8"/><circle cx="80" cy="270" r="17" fill="none" stroke="#C7867A" stroke-width="2.4"/><circle cx="80" cy="270" r="10" fill="#A9B8A0"/><circle cx="76" cy="266" r="3" fill="#FCF9F6" opacity=".9"/></g>
+        <g class="ab-cam"><path d="M62 244 l6 -9 h22 l6 9" fill="none" stroke="#C7867A" stroke-width="2.4" stroke-linejoin="round"/><rect x="36" y="243" width="88" height="54" rx="14" fill="none" stroke="#C7867A" stroke-width="2.4"/><rect x="102" y="250" width="12" height="7" rx="3" fill="#E3C3A8"/><circle cx="80" cy="270" r="17" fill="none" stroke="#C7867A" stroke-width="2.4"/><circle cx="80" cy="270" r="10" fill="#A9B8A0"/><circle cx="76" cy="266" r="3" fill="#FCF9F6" opacity=".9"/></g>
         <path class="ab-stem" pathLength="1" d="M78 236 C70 190 92 150 80 110 C70 76 84 44 104 20"/>
         <path class="ab-stem ab-s2" pathLength="1" d="M80 150 C60 132 46 112 40 86"/>
         <g transform="translate(76 206) rotate(-150)"><g class="ab-lf" style="--d:.5s"><path d="M0 0 C7 -11 22 -12 32 0 C22 12 7 11 0 0Z"/><path class="rib" d="M2 0 H26"/></g></g>
@@ -861,7 +865,7 @@ html.js .story .ph.curtain.in{filter:none}
     </div>
   </section>
 
-  <div class="strip" aria-hidden="true"><div class="ph" style="background-image:url('images/pf-kids-2.jpg')"></div><div class="ph" style="background-image:url('images/pf-one-2.jpg')"></div><div class="ph" style="background-image:url('images/pf-chal-2.jpg')"></div><div class="ph" style="background-image:url('images/pf-kids-4.jpg')"></div><div class="ph" style="background-image:url('images/pf-one-4.jpg')"></div></div>
+  <div class="strip" aria-hidden="true"><div class="ph" style="background-image:url('images/strip-52.jpg')"></div><div class="ph" style="background-image:url('images/strip-45.jpg')"></div><div class="ph" style="background-image:url('images/strip-32.jpg')"></div><div class="ph" style="background-image:url('images/strip-42.jpg')"></div></div>
 
   
 
