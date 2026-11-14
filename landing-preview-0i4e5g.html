@@ -552,6 +552,15 @@ a,button,summary,label,[role=tab],.chip label,.svc,.ph,.c-dots button,.s-arrow{c
 .leaf-host .leaf-fx{position:absolute;left:0;top:-9px;transform-origin:0 50%}
 /* click: a few pink petals pop out of the flower */
 .petal-fx{position:fixed;left:0;top:0;width:9px;height:12px;margin:-6px 0 0 -4.5px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#EBD3CB;border:1px solid #C7867A;pointer-events:none;z-index:71}
+/* gallery fills the whole page width: one big arch photo + a full grid of the rest */
+.gallery-sec .wrap{max-width:none;padding-inline:clamp(10px,1.6vw,26px)}
+.gallery-sec .story{grid-template-columns:repeat(5,1fr)!important;gap:10px!important;max-width:none!important;grid-auto-flow:dense}
+.gallery-sec .story .s-main{grid-column:span 2;grid-row:span 2;aspect-ratio:auto!important}
+.gallery-sec .story .s-side,.gallery-sec .story .s-wrap,.gallery-sec .story .s-more{display:contents!important}
+.gallery-sec .story .s-sm,.gallery-sec .story .s-more .ph{aspect-ratio:4/5;border-radius:14px;min-height:0;flex:none;margin:0}
+.gallery-sec .story .s-cap,.gallery-sec .s-arrow{display:none!important}
+@media (max-width:900px){.gallery-sec .story{grid-template-columns:repeat(3,1fr)!important}}
+@media (max-width:600px){.gallery-sec .story{grid-template-columns:repeat(2,1fr)!important;gap:6px!important}.gallery-sec .story .s-main{grid-row:span 1;aspect-ratio:4/5!important}}
 </style>
 <script>document.documentElement.classList.add('js')</script>
 
