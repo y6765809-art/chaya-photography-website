@@ -527,7 +527,20 @@ html.intro-on .hf-a,html.intro-on .hf-img{animation-play-state:paused}
 @keyframes hfDot{0%{opacity:0;transform:translateY(0)}40%{opacity:1}100%{opacity:0;transform:translateY(16px)}}
 @media (max-width:720px){.hero-full{height:calc(100svh - 90px)}.hf-img{background-position:40% 50%}.hf-shade{background:linear-gradient(0deg,rgba(40,30,25,.65) 0%,rgba(40,30,25,.25) 55%,rgba(40,30,25,.1) 100%)}.hero-full{align-items:flex-end;padding-bottom:84px}.hf-text{gap:16px}}
 @media (prefers-reduced-motion:reduce){.hf-a{opacity:1;transform:none}.hf-img{transform:none}}
-/* flower cursor like the logo */
+/* magic circle cursor: a dot on the mouse + a soft ring that floats after it (mouse only) */
+.mc-dot,.mc-ring{position:fixed;left:0;top:0;pointer-events:none;z-index:9999;border-radius:50%;opacity:0;transition:opacity .3s}
+.mc-dot{width:6px;height:6px;margin:-3px 0 0 -3px;background:#C7867A}
+.mc-ring{width:38px;height:38px;margin:-19px 0 0 -19px;border:1px solid rgba(199,134,122,.75);display:grid;place-items:center;transition:opacity .3s,width .35s cubic-bezier(.2,.8,.2,1),height .35s cubic-bezier(.2,.8,.2,1),margin .35s cubic-bezier(.2,.8,.2,1),background .35s,border-color .35s}
+.mc-ring span{font:500 12px/1 'Heebo','Assistant',sans-serif;letter-spacing:.06em;color:#5E5048;opacity:0;transition:opacity .2s}
+.mc-on .mc-dot,.mc-on .mc-ring{opacity:1}
+.mc-ring.hov{width:64px;height:64px;margin:-32px 0 0 -32px;background:rgba(235,211,203,.35);border-color:rgba(199,134,122,.35)}
+.mc-ring.zoom{width:86px;height:86px;margin:-43px 0 0 -43px;background:rgba(246,241,234,.82);border-color:transparent}
+.mc-ring.zoom span{opacity:1}
+.mc-ring.down{width:26px;height:26px;margin:-13px 0 0 -13px}
+.mc-dot.hide{opacity:0!important}
+@media (hover:hover) and (pointer:fine){html.mc-on,html.mc-on *{cursor:none!important}html.mc-on input,html.mc-on textarea,html.mc-on select{cursor:auto!important}}
+.cursor-dot{display:none!important}
+/* (old) flower cursor like the logo */
 html,body{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='-12 -12 24 24'%3E%3Cg fill='%23EBD3CB' stroke='%23C7867A' stroke-width='.9'%3E%3Ccircle cx='0' cy='-6' r='5'/%3E%3Ccircle cx='5.7' cy='-1.9' r='5'/%3E%3Ccircle cx='3.5' cy='4.9' r='5'/%3E%3Ccircle cx='-3.5' cy='4.9' r='5'/%3E%3Ccircle cx='-5.7' cy='-1.9' r='5'/%3E%3C/g%3E%3Ccircle r='2.8' fill='%23E3C3A8'/%3E%3C/svg%3E") 16 16, auto}
 a,button,summary,label,[role=tab],.chip label,.svc,.ph,.c-dots button,.s-arrow{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='-12 -12 24 24'%3E%3Cg fill='%23C7867A' stroke='%239E5F55' stroke-width='.9'%3E%3Ccircle cx='0' cy='-6' r='5'/%3E%3Ccircle cx='5.7' cy='-1.9' r='5'/%3E%3Ccircle cx='3.5' cy='4.9' r='5'/%3E%3Ccircle cx='-3.5' cy='4.9' r='5'/%3E%3Ccircle cx='-5.7' cy='-1.9' r='5'/%3E%3C/g%3E%3Ccircle r='2.8' fill='%23F6D2C6'/%3E%3C/svg%3E") 16 16, pointer!important}
 @media (hover:none){html,body{cursor:auto}}
@@ -1215,6 +1228,22 @@ document.querySelectorAll('.story .s-more').forEach(row=>{
 });
 
 
+// magic circle cursor: the dot sits on the mouse, the ring glides after it
+(function(){if(!matchMedia('(hover:hover) and (pointer:fine)').matches)return;
+ const h=document.documentElement,dot=document.createElement('div'),ring=document.createElement('div');
+ dot.className='mc-dot';ring.className='mc-ring';ring.innerHTML='<span>הגדלה</span>';document.body.append(ring,dot);
+ let x=-100,y=-100,rx=-100,ry=-100,shown=false;const k=reduce?1:.18;
+ const tick=()=>{rx+=(x-rx)*k;ry+=(y-ry)*k;dot.style.transform='translate('+x+'px,'+y+'px)';ring.style.transform='translate('+rx.toFixed(1)+'px,'+ry.toFixed(1)+'px)';requestAnimationFrame(tick);};
+ addEventListener('mousemove',e=>{x=e.clientX;y=e.clientY;if(!shown){shown=true;rx=x;ry=y;h.classList.add('mc-on');}},{passive:true});
+ document.addEventListener('mouseleave',()=>{shown=false;h.classList.remove('mc-on');});
+ document.addEventListener('mouseover',e=>{const t=e.target;if(!t.closest)return;
+  const zoom=!!t.closest('.story .ph,.cat-modal .cm-grid img,.gallery .ph');
+  const hov=!zoom&&!!t.closest('a,button,summary,label,[role=tab],.svc.clickable,.c-dots button,.s-arrow');
+  const field=!!t.closest('input,textarea,select');
+  ring.classList.toggle('zoom',zoom);ring.classList.toggle('hov',hov);dot.classList.toggle('hide',zoom||field);ring.style.opacity=field?'0':'';});
+ addEventListener('mousedown',()=>ring.classList.add('down'));addEventListener('mouseup',()=>ring.classList.remove('down'));
+ requestAnimationFrame(tick);
+})();
 // click / tap: a few pink petals pop out of the flower and fade
 (function(){if(reduce)return;
  addEventListener('pointerdown',e=>{if(e.target.closest&&e.target.closest('input,textarea,select'))return;
