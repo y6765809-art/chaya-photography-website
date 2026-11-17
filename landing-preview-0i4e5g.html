@@ -811,6 +811,7 @@ h3,.step h3,.why h3{font-size:22px;font-weight:400}
 .hf-trust{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:15px;font-weight:300;color:#FBF3EC;letter-spacing:.04em;text-shadow:0 2px 12px rgba(0,0,0,.3)}
 .hf-trust span{display:inline-flex;align-items:center;gap:8px}
 .hf-trust span::before{content:"";width:5px;height:5px;border-radius:50%;background:#F6D2C6}
+.sec-cta{display:flex;justify-content:center;margin-top:clamp(32px,4vw,48px)}
 </style><script>document.documentElement.classList.add('js')</script>
 
 </head>
@@ -900,7 +901,7 @@ h3,.step h3,.why h3{font-size:22px;font-weight:400}
         <g transform="translate(44 54) rotate(-150)"><path d="M0 0 C5 -8 16 -9 23 0 C16 9 5 8 0 0Z" fill="#C9D2C1" stroke="#7E8F76" stroke-width="1.4"/></g>
         <g transform="translate(48 50)"><g fill="#EBD3CB" stroke="#C7867A" stroke-width=".9"><circle cx="0" cy="-6" r="5"/><circle cx="5.7" cy="-1.9" r="5"/><circle cx="3.5" cy="4.9" r="5"/><circle cx="-3.5" cy="4.9" r="5"/><circle cx="-5.7" cy="-1.9" r="5"/></g><circle r="2.8" fill="#E3C3A8"/></g>
       </svg></div>
-      <div class="about-pics rise" aria-hidden="true"><div class="ph about-main" style="background-image:url('images/about-main2.jpg')"></div><div class="ph about-dot" style="background-image:url('images/about-dot.jpg')"></div><svg class="about-sprig" viewBox="0 0 120 80"><use href="#sprig"/></svg></div>
+      <div class="about-pics rise" aria-hidden="true"><div class="ph about-main" data-lzb="images/about-main2.jpg"></div><div class="ph about-dot" data-lzb="images/about-dot.jpg"></div><svg class="about-sprig" viewBox="0 0 120 80"><use href="#sprig"/></svg></div>
       <div class="about-txt">
         
         <p class="about-lines">היי, אני חיה סגל,<br>צלמת ילדים ומשפחה, עם קרוב לשש שנות ניסיון.</p>
@@ -960,10 +961,11 @@ h3,.step h3,.why h3{font-size:22px;font-weight:400}
         <div class="step"><span class="n">3</span><h3>יום הצילום</h3><p>בקצב של הילד, בלי לחץ ועם הרבה סבלנות.</p></div>
         <div class="step"><span class="n">4</span><h3>תמונות ואלבום</h3><p>תמונות ערוכות ביד ואלבום מעוצב.</p></div>
       </div>
+      <div class="sec-cta"><a class="btn ghost" href="#book">לתיאום צילום</a></div>
     </div>
   </section>
 
-  <section class="band" style="--img:url('images/p36.jpg')">
+  <section class="band" data-lz="images/p36.jpg">
     <div class="wrap">
       <p>הצחוק, התלתלים, המבט הסקרן.<br>נשארים איתכם לתמיד.</p>
     </div>
@@ -978,38 +980,39 @@ h3,.step h3,.why h3{font-size:22px;font-weight:400}
         <button type="button" role="tab" aria-selected="false" data-tab="kids">ילדים</button>
       </div>
       <div class="story" data-panel="chal" role="tabpanel">
-        <div class="ph s-main" style="--img:url('images/pf-chal-1.jpg')" role="img" aria-label="ילד עם ספר תורה לפני החלאקה"></div>
+        <div class="ph s-main" data-lz="images/pf-chal-1.jpg" role="img" aria-label="ילד עם ספר תורה לפני החלאקה"></div>
         <div class="s-side">
-          <div class="ph s-sm" style="--img:url('images/pf-chal-2.jpg')" role="img" aria-label="תלתלים וציציות"></div>
-          <div class="ph s-sm" style="--img:url('images/pf-chal-3.jpg')" role="img" aria-label="ילד עטוף בטלית"></div>
-          <div class="ph s-sm" style="--img:url('images/pf-chal-4.jpg')" role="img" aria-label="ילד עם ספר תורה בפתח הבית"></div>
+          <div class="ph s-sm" data-lz="images/pf-chal-2.jpg" role="img" aria-label="תלתלים וציציות"></div>
+          <div class="ph s-sm" data-lz="images/pf-chal-3.jpg" role="img" aria-label="ילד עטוף בטלית"></div>
+          <div class="ph s-sm" data-lz="images/pf-chal-4.jpg" role="img" aria-label="ילד עם ספר תורה בפתח הבית"></div>
         </div>
         
-        <div class="s-more" hidden><div class="ph" style="--img:url('images/pf-more-chal-1.jpg')" role="img" aria-label="מצילומי חלאקה"></div><div class="ph" style="--img:url('images/pf-more-chal-2.jpg')" role="img" aria-label="מצילומי חלאקה"></div></div>
+        <div class="s-more" hidden><div class="ph" data-lz="images/pf-more-chal-1.jpg" role="img" aria-label="מצילומי חלאקה"></div><div class="ph" data-lz="images/pf-more-chal-2.jpg" role="img" aria-label="מצילומי חלאקה"></div></div>
         <button type="button" class="s-more-btn">לעוד תמונות</button>
       </div>
       <div class="story" data-panel="one" role="tabpanel" hidden>
-        <div class="ph s-main" style="--img:url('images/pf-one-1.jpg')" role="img" aria-label="תינוקת עם כובע בגיגית"></div>
+        <div class="ph s-main" data-lz="images/pf-one-1.jpg" role="img" aria-label="תינוקת עם כובע בגיגית"></div>
         <div class="s-side">
-          <div class="ph s-sm" style="--img:url('images/pf-one-2.jpg')" role="img" aria-label="פעוטה עם כובע בשדה"></div>
-          <div class="ph s-sm" style="--img:url('images/pf-one-3.jpg')" role="img" aria-label="פעוט יושב ומחייך"></div>
-          <div class="ph s-sm" style="--img:url('images/pf-one-4.jpg')" role="img" aria-label="תינוק בדשא"></div>
+          <div class="ph s-sm" data-lz="images/pf-one-2.jpg" role="img" aria-label="פעוטה עם כובע בשדה"></div>
+          <div class="ph s-sm" data-lz="images/pf-one-3.jpg" role="img" aria-label="פעוט יושב ומחייך"></div>
+          <div class="ph s-sm" data-lz="images/pf-one-4.jpg" role="img" aria-label="תינוק בדשא"></div>
         </div>
         <p class="s-cap">שנה ראשונה, בקצב שלהם</p>
-        <div class="s-more" hidden><div class="ph" style="--img:url('images/pf-more-one-1.jpg')" role="img" aria-label="מצילומי גיל שנה"></div><div class="ph" style="--img:url('images/pf-more-one-2.jpg')" role="img" aria-label="מצילומי גיל שנה"></div><div class="ph" style="--img:url('images/pf-more-one-3.jpg')" role="img" aria-label="מצילומי גיל שנה"></div><div class="ph" style="--img:url('images/pf-more-one-4.jpg')" role="img" aria-label="מצילומי גיל שנה"></div><div class="ph" style="--img:url('images/pf-more-one-5.jpg')" role="img" aria-label="מצילומי גיל שנה"></div><div class="ph" style="--img:url('images/pf-more-one-6.jpg')" role="img" aria-label="מצילומי גיל שנה"></div><div class="ph" style="--img:url('images/pf-more-one-7.jpg')" role="img" aria-label="מצילומי גיל שנה"></div><div class="ph" style="--img:url('images/pf-more-one-8.jpg')" role="img" aria-label="מצילומי גיל שנה"></div></div>
+        <div class="s-more" hidden><div class="ph" data-lz="images/pf-more-one-1.jpg" role="img" aria-label="מצילומי גיל שנה"></div><div class="ph" data-lz="images/pf-more-one-2.jpg" role="img" aria-label="מצילומי גיל שנה"></div><div class="ph" data-lz="images/pf-more-one-3.jpg" role="img" aria-label="מצילומי גיל שנה"></div><div class="ph" data-lz="images/pf-more-one-4.jpg" role="img" aria-label="מצילומי גיל שנה"></div><div class="ph" data-lz="images/pf-more-one-5.jpg" role="img" aria-label="מצילומי גיל שנה"></div><div class="ph" data-lz="images/pf-more-one-6.jpg" role="img" aria-label="מצילומי גיל שנה"></div><div class="ph" data-lz="images/pf-more-one-7.jpg" role="img" aria-label="מצילומי גיל שנה"></div><div class="ph" data-lz="images/pf-more-one-8.jpg" role="img" aria-label="מצילומי גיל שנה"></div></div>
         <button type="button" class="s-more-btn">לעוד תמונות</button>
       </div>
       <div class="story" data-panel="kids" role="tabpanel" hidden>
-        <div class="ph s-main" style="--img:url('images/pf-kids-1.jpg')" role="img" aria-label="ילדה עם כומתה"></div>
+        <div class="ph s-main" data-lz="images/pf-kids-1.jpg" role="img" aria-label="ילדה עם כומתה"></div>
         <div class="s-side">
-          <div class="ph s-sm" style="--img:url('images/pf-kids-2.jpg')" role="img" aria-label="ילדה מחייכת"></div>
-          <div class="ph s-sm" style="--img:url('images/pf-kids-3.jpg')" role="img" aria-label="ילדה עם כובע קש"></div>
-          <div class="ph s-sm" style="--img:url('images/pf-kids-4.jpg')" role="img" aria-label="ילד בשדה חמניות"></div>
+          <div class="ph s-sm" data-lz="images/pf-kids-2.jpg" role="img" aria-label="ילדה מחייכת"></div>
+          <div class="ph s-sm" data-lz="images/pf-kids-3.jpg" role="img" aria-label="ילדה עם כובע קש"></div>
+          <div class="ph s-sm" data-lz="images/pf-kids-4.jpg" role="img" aria-label="ילד בשדה חמניות"></div>
         </div>
         <p class="s-cap">סקרנות, צחוק ושובבות של ילדות</p>
-        <div class="s-more" hidden><div class="ph" style="--img:url('images/pf-more-kids-1.jpg')" role="img" aria-label="מצילומי ילדים"></div><div class="ph" style="--img:url('images/pf-more-kids-2.jpg')" role="img" aria-label="מצילומי ילדים"></div><div class="ph" style="--img:url('images/pf-more-kids-3.jpg')" role="img" aria-label="מצילומי ילדים"></div><div class="ph" style="--img:url('images/pf-more-kids-4.jpg')" role="img" aria-label="מצילומי ילדים"></div><div class="ph" style="--img:url('images/pf-more-kids-5.jpg')" role="img" aria-label="מצילומי ילדים"></div><div class="ph" style="--img:url('images/pf-more-kids-6.jpg')" role="img" aria-label="מצילומי ילדים"></div><div class="ph" style="--img:url('images/pf-more-kids-7.jpg')" role="img" aria-label="מצילומי ילדים"></div><div class="ph" style="--img:url('images/pf-more-kids-8.jpg')" role="img" aria-label="מצילומי ילדים"></div><div class="ph" style="--img:url('images/pf-more-kids-9.jpg')" role="img" aria-label="מצילומי ילדים"></div><div class="ph" style="--img:url('images/pf-more-kids-10.jpg')" role="img" aria-label="מצילומי ילדים"></div><div class="ph" style="--img:url('images/pf-more-kids-11.jpg')" role="img" aria-label="מצילומי ילדים"></div><div class="ph" style="--img:url('images/pf-more-kids-12.jpg')" role="img" aria-label="מצילומי ילדים"></div></div>
+        <div class="s-more" hidden><div class="ph" data-lz="images/pf-more-kids-1.jpg" role="img" aria-label="מצילומי ילדים"></div><div class="ph" data-lz="images/pf-more-kids-2.jpg" role="img" aria-label="מצילומי ילדים"></div><div class="ph" data-lz="images/pf-more-kids-3.jpg" role="img" aria-label="מצילומי ילדים"></div><div class="ph" data-lz="images/pf-more-kids-4.jpg" role="img" aria-label="מצילומי ילדים"></div><div class="ph" data-lz="images/pf-more-kids-5.jpg" role="img" aria-label="מצילומי ילדים"></div><div class="ph" data-lz="images/pf-more-kids-6.jpg" role="img" aria-label="מצילומי ילדים"></div><div class="ph" data-lz="images/pf-more-kids-7.jpg" role="img" aria-label="מצילומי ילדים"></div><div class="ph" data-lz="images/pf-more-kids-8.jpg" role="img" aria-label="מצילומי ילדים"></div><div class="ph" data-lz="images/pf-more-kids-9.jpg" role="img" aria-label="מצילומי ילדים"></div><div class="ph" data-lz="images/pf-more-kids-10.jpg" role="img" aria-label="מצילומי ילדים"></div><div class="ph" data-lz="images/pf-more-kids-11.jpg" role="img" aria-label="מצילומי ילדים"></div><div class="ph" data-lz="images/pf-more-kids-12.jpg" role="img" aria-label="מצילומי ילדים"></div></div>
         <button type="button" class="s-more-btn">לעוד תמונות</button>
       </div>
+      <div class="sec-cta"><a class="btn ghost" href="#book">אהבתם? בואו נתאם צילום</a></div>
     </div>
   </section>
 
@@ -1030,7 +1033,7 @@ h3,.step h3,.why h3{font-size:22px;font-weight:400}
     </div>
   </section>
 
-  <div class="strip" aria-hidden="true"><div class="ph" style="background-image:url('images/strip-52.jpg')"></div><div class="ph" style="background-image:url('images/strip-45.jpg')"></div><div class="ph" style="background-image:url('images/strip-32.jpg')"></div><div class="ph" style="background-image:url('images/strip-42.jpg')"></div></div>
+  <div class="strip" aria-hidden="true"><div class="ph" data-lzb="images/strip-52.jpg"></div><div class="ph" data-lzb="images/strip-45.jpg"></div><div class="ph" data-lzb="images/strip-32.jpg"></div><div class="ph" data-lzb="images/strip-42.jpg"></div></div>
 
   <section id="book">
     <div class="wrap">
@@ -1378,7 +1381,7 @@ const mWa=document.getElementById('mWa'),mCall=document.getElementById('mCall');
 function setBar(){if(mWa)mWa.href='https://wa.me/'+PHONE+'?text='+encodeURIComponent('היי חיה, הגעתי מהאתר ואשמח לשמוע פרטים על צילום');if(mCall)mCall.href='tel:+'+PHONE;}
 setBar();if(mWa)mWa.addEventListener('click',setBar);if(mCall)mCall.addEventListener('click',setBar);
 // gallery lightbox
-const gImgs=[...document.querySelectorAll('.gallery .ph, .story .ph')].map(el=>{const m=(el.getAttribute('style')||'').match(/url\('([^']+)'\)/);return m?m[1]:null;});
+const gImgs=[...document.querySelectorAll('.gallery .ph, .story .ph')].map(el=>{if(el.dataset.lz)return el.dataset.lz;const m=(el.getAttribute('style')||'').match(/url\('([^']+)'\)/);return m?m[1]:null;});
 let lbI=0,lb=null;
 function lbShow(i){lbI=(i+gImgs.length)%gImgs.length;lb.querySelector('img').src=gImgs[lbI];}
 function lbClose(){if(lb){lb.remove();lb=null;}}
@@ -1395,5 +1398,6 @@ document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',async()
 }));
 </script>
 
+<script>(function(){var els=document.querySelectorAll("[data-lz],[data-lzb]");function put(el){if(el.dataset.lz)el.style.setProperty("--img","url('"+el.dataset.lz+"')");if(el.dataset.lzb)el.style.backgroundImage="url('"+el.dataset.lzb+"')";}if(!("IntersectionObserver" in window)){els.forEach(put);return;}var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){put(e.target);io.unobserve(e.target);}});},{rootMargin:"900px 0px"});els.forEach(function(el){io.observe(el);});})();</script>
 </body>
 </html>
