@@ -817,6 +817,12 @@ h3,.step h3,.why h3{font-size:22px;font-weight:400}
 /* polish: even service cards */
 .services{align-items:stretch}.svc:nth-child(2){margin-top:0!important}
 .svc .body{display:flex;flex-direction:column;flex:1}.svc .body .svc-hint{margin-top:auto;align-self:center}
+/* one form: contact card = details + WhatsApp */
+.contact .card{grid-template-columns:1fr;max-width:780px;margin-inline:auto;text-align:center}
+.contact .txt{align-items:center}.contact .lines{width:100%;max-width:520px}
+.c-cta{display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:14px}
+.btn.c-wa{background:var(--paper);color:var(--rust);border-color:var(--paper)}.btn.c-wa:hover{background:#fff;color:var(--rust)}
+.c-book{color:var(--on-color);opacity:.9;text-decoration:underline;text-underline-offset:4px;font-size:16px}
 </style><script>document.documentElement.classList.add('js')</script>
 
 </head>
@@ -1103,19 +1109,9 @@ h3,.step h3,.why h3{font-size:22px;font-weight:400}
             <div class="cline"><span>מייל</span><strong id="mail">chaya054846@gmail.com</strong><button class="copy" type="button" data-copy="mail">העתקה</button></div>
             <div class="cline"><span>סטודיו</span><strong>טבריה</strong><span></span></div>
           </div>
+          <div class="c-cta"><a class="btn c-wa" href="https://wa.me/972548463238?text=%D7%94%D7%99%D7%99%20%D7%97%D7%99%D7%94%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A9%D7%9E%D7%95%D7%A2%20%D7%A4%D7%A8%D7%98%D7%99%D7%9D%20%D7%A2%D7%9C%20%D7%A6%D7%99%D7%9C%D7%95%D7%9D" target="_blank" rel="noopener">שליחת הודעה בוואטסאפ</a><a class="c-book" href="#book">או בחירת פרטי הצילום</a></div>
         </div>
-        <div class="cform-wrap">
-          <form class="cform" id="cform" novalidate>
-            <div class="f"><label for="cf-name">שם מלא</label><input id="cf-name" name="name" type="text" autocomplete="name" required></div>
-            <div class="f"><label for="cf-phone">טלפון</label><input id="cf-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required></div>
-            <div class="f"><label for="cf-type">סוג צילום</label><select id="cf-type" name="type"><option value="">בחרו סוג צילום</option><option>חלאקה</option><option>גיל שנה</option><option>ניו בורן</option><option>אחר</option></select></div>
-            <div class="f"><label for="cf-email">מייל (לא חובה)</label><input id="cf-email" name="email" type="email" autocomplete="email"></div>
-            <div class="f full"><label for="cf-msg">הודעה</label><textarea id="cf-msg" name="message" rows="3"></textarea></div>
-            <p class="cf-note" id="cf-note" aria-live="polite"></p>
-            <button class="btn cf-send" type="submit">שליחה</button>
-          </form>
-          <div class="cf-done" id="cf-done" hidden><h3>תודה, הפנייה התקבלה</h3><p>אחזור אליכם בהקדם.</p></div>
-        </div>
+
       </div>
     </div>
   </section>
@@ -1203,7 +1199,7 @@ match.addEventListener('click',e=>{const a=e.target.closest('[data-pk]');if(!a)r
 // contact form -> email (Google Apps Script, same as the main site)
 const GAS_URL='https://script.google.com/macros/s/AKfycbx7onMA1nGK3Bh4Re1jAaR2jLoBXon1CPhPtAFVpyjfpQML6g9acuvpdZ9god-wlmRv/exec';
 const cf=document.getElementById('cform'),note=document.getElementById('cf-note');
-cf.addEventListener('submit',e=>{e.preventDefault();
+if(cf)cf.addEventListener('submit',e=>{e.preventDefault();
   const v=id=>document.getElementById(id).value.trim();
   const name=v('cf-name'),phone=v('cf-phone');
   if(!name||!phone){note.textContent='אנא מלאו שם וטלפון';return;}
