@@ -11,14 +11,14 @@
 <meta property="og:title" content="חיה סגל צילום">
 <meta property="og:description" content="צילומי חלאקה, גיל שנה וניו בורן בטבריה. בסטודיו ובטבע.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://raw.githubusercontent.com/y6765809-art/chaya-segal-images/main/logo.png">
+<meta property="og:image" content="https://chaya-photography-website.pages.dev/images/hero-strawberry.jpg"><meta property="og:locale" content="he_IL"><meta name="theme-color" content="#F6F1EA"><link rel="preload" as="image" href="images/hero-olives-wide.jpg">
 <link rel="icon" href="images/flower-favicon.ico" sizes="any">
 <link rel="icon" type="image/png" href="images/flower-favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="images/flower-apple-touch-icon.png">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"LocalBusiness","name":"חיה סגל צילום","description":"צילומי חלאקה, גיל שנה וניו בורן בטבריה","telephone":"+972-54-846-3238","email":"chaya054846@gmail.com","priceRange":"₪₪","address":{"@type":"PostalAddress","addressLocality":"טבריה","addressCountry":"IL"},"geo":{"@type":"GeoCoordinates","latitude":32.7922,"longitude":35.5312},"areaServed":["טבריה","כנרת","גליל","צפון"],"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Sunday","Monday","Tuesday","Wednesday","Thursday"],"opens":"09:00","closes":"20:00"}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bellefair&family=Bodoni+Moda:opsz,wght@6..96,400&family=Heebo:wght@200;300;400;500&family=Jost:wght@200;300;400&family=Amatic+SC:wght@700&family=Frank+Ruhl+Libre:wght@400;500;700&family=Assistant:wght@300;400;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bellefair&family=Bodoni+Moda:opsz,wght@6..96,400&family=Heebo:wght@200;300;400;500&family=Jost:wght@200;300;400&family=Italiana&family=Amatic+SC:wght@700&family=Frank+Ruhl+Libre:wght@400;500;700&family=Assistant:wght@300;400;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap">
 <style>
 /* Layout: playful-editorial story — overlapping photo collage hero, colour-blocked sections, arches/circles as recurring frames, handwritten notes as the human touch */
 :root{
@@ -785,13 +785,38 @@ h3,.step h3,.why h3{font-size:22px;font-weight:400}
 .foot5 .f-links a:hover,.foot5 .f-contact a:hover{color:var(--rust)}
 .foot5 .f-contact{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 12px;font-size:15px;color:var(--muted)}
 .foot5 .f-copy{font-size:13.5px;color:var(--muted);letter-spacing:.04em;margin-top:10px;padding-top:18px;border-top:1px solid var(--line);width:min(520px,100%);text-align:center}
-</style>
-<script>document.documentElement.classList.add('js')</script>
+/* logo 6: sprig + Italiana name + Jost PHOTOGRAPHY */
+.l4-head{width:270px!important;height:93px!important}
+.nav-sticky .l4-head{width:160px!important;height:55px!important}
+.l4-foot{width:290px!important;height:100px!important}
+.intro svg.i6{width:min(600px,86vw)}
+@media (max-width:720px){.l4-head{width:210px!important;height:72px!important}}
+/* accessibility */
+.skip{position:fixed;top:-60px;right:16px;z-index:200;background:#5E5048;color:#FFFCF9;padding:10px 18px;border-radius:0 0 12px 12px;text-decoration:none;font-weight:500;transition:top .2s}
+.skip:focus{top:0}
+.foot5 .a11y{width:min(620px,100%);text-align:center;font-size:14.5px;color:var(--muted)}
+.foot5 .a11y summary{cursor:pointer;list-style:none;display:inline-block;border-bottom:1px solid var(--line);padding-bottom:1px}
+.foot5 .a11y summary::-webkit-details-marker{display:none}
+.foot5 .a11y-in{text-align:right;margin-top:14px;display:flex;flex-direction:column;gap:8px;line-height:1.7;background:var(--paper);border-radius:16px;padding:18px 22px}
+.foot5 .a11y-in a{color:var(--rust)}
+/* calmer, more premium: no cartoon camera, icons move only on hover */
+.happy-cam{display:none!important}
+.ico .blade-a,.ico .blade-b,.ico .curl,.ico .float,.ico .string,.ico .ft,.ico .hrt{animation-play-state:paused!important}
+.svc:hover .ico .blade-a,.svc:hover .ico .blade-b,.svc:hover .ico .curl,.svc:hover .ico .float,.svc:hover .ico .string,.svc:hover .ico .ft,.svc:hover .ico .hrt{animation-play-state:running!important}
+.svc .body p{font-size:16.5px;line-height:1.65}
+.svc ul{font-size:15.5px}
+/* reviews: five small stars build trust */
+.reviews blockquote::before{content:"★★★★★";display:block;font-size:13px;letter-spacing:.3em;color:#C7867A;margin-bottom:10px;font-family:"Segoe UI Symbol","Heebo",sans-serif}
+/* trust line under the opening buttons */
+.hf-trust{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:15px;font-weight:300;color:#FBF3EC;letter-spacing:.04em;text-shadow:0 2px 12px rgba(0,0,0,.3)}
+.hf-trust span{display:inline-flex;align-items:center;gap:8px}
+.hf-trust span::before{content:"";width:5px;height:5px;border-radius:50%;background:#F6D2C6}
+</style><script>document.documentElement.classList.add('js')</script>
 
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <defs><g id="l4lf"><path d="M0 0 C7 -11 22 -12 32 0 C22 12 7 11 0 0Z" fill="#C9D2C1" stroke="#7E8F76" stroke-width="1"/><path d="M2 0 H26" stroke="#7E8F76" stroke-width=".8" opacity=".7"/></g><g id="l4fl"><g fill="#EBD3CB" stroke="#C7867A" stroke-width=".7"><circle cx="0" cy="-6" r="5"/><circle cx="5.7" cy="-1.9" r="5"/><circle cx="3.5" cy="4.9" r="5"/><circle cx="-3.5" cy="4.9" r="5"/><circle cx="-5.7" cy="-1.9" r="5"/></g><circle r="2.6" fill="#E3C3A8"/></g><g id="logo4"><path d="M150 52 C175 40 205 36 240 42" fill="none" stroke="#7E8F76" stroke-width="1.1"/><use href="#l4lf" transform="translate(166 46) rotate(-110) scale(.4)"/><use href="#l4lf" transform="translate(180 42) rotate(40) scale(.38)"/><use href="#l4lf" transform="translate(198 38) rotate(-100) scale(.42)"/><use href="#l4lf" transform="translate(214 39) rotate(30) scale(.38)"/><use href="#l4lf" transform="translate(230 40) rotate(-80) scale(.38)"/><use href="#l4fl" transform="translate(244 42) scale(.65)"/><text class="t1" x="210" y="110" text-anchor="middle" font-family="Bodoni Moda, Didot, serif" font-weight="400" font-size="40" letter-spacing="7">CHAYA SEGAL</text><text class="t2" x="210" y="142" text-anchor="middle" font-family="Cormorant Garamond, Garamond, serif" font-style="italic" font-size="21" textLength="341" lengthAdjust="spacing">photography</text></g><path id="hp5" d="M0 8.5 C-4 5.6 -10.5 1.2 -10.5 -3.6 C-10.5 -7.4 -7.6 -9.6 -4.8 -9.6 C-2.6 -9.6 -0.9 -8.3 0 -6.6 C0.9 -8.3 2.6 -9.6 4.8 -9.6 C7.6 -9.6 10.5 -7.4 10.5 -3.6 C10.5 1.2 4 5.6 0 8.5Z"/><g id="logo5"><text class="t1" x="215" y="88" text-anchor="middle" font-family="Jost, sans-serif" font-weight="200" font-size="36" letter-spacing="10">CHAYA SEGAL</text><path class="l5-line" d="M120 110 H198 M222 110 H300" stroke="#C9B3AA" stroke-width=".8"/><use href="#hp5" transform="translate(210 110) scale(.55)" fill="#EBD3CB" stroke="#C7867A" stroke-width="1.2"/><text class="t2" x="213.5" y="138" text-anchor="middle" font-family="Jost, sans-serif" font-weight="300" font-size="11" letter-spacing="7">PHOTOGRAPHY</text></g></defs>
+  <defs><g id="l4lf"><path d="M0 0 C7 -11 22 -12 32 0 C22 12 7 11 0 0Z" fill="#C9D2C1" stroke="#7E8F76" stroke-width="1"/><path d="M2 0 H26" stroke="#7E8F76" stroke-width=".8" opacity=".7"/></g><g id="l4fl"><g fill="#EBD3CB" stroke="#C7867A" stroke-width=".7"><circle cx="0" cy="-6" r="5"/><circle cx="5.7" cy="-1.9" r="5"/><circle cx="3.5" cy="4.9" r="5"/><circle cx="-3.5" cy="4.9" r="5"/><circle cx="-5.7" cy="-1.9" r="5"/></g><circle r="2.6" fill="#E3C3A8"/></g><g id="logo4"><path d="M150 52 C175 40 205 36 240 42" fill="none" stroke="#7E8F76" stroke-width="1.1"/><use href="#l4lf" transform="translate(166 46) rotate(-110) scale(.4)"/><use href="#l4lf" transform="translate(180 42) rotate(40) scale(.38)"/><use href="#l4lf" transform="translate(198 38) rotate(-100) scale(.42)"/><use href="#l4lf" transform="translate(214 39) rotate(30) scale(.38)"/><use href="#l4lf" transform="translate(230 40) rotate(-80) scale(.38)"/><use href="#l4fl" transform="translate(244 42) scale(.65)"/><text class="t1" x="210" y="110" text-anchor="middle" font-family="Bodoni Moda, Didot, serif" font-weight="400" font-size="40" letter-spacing="7">CHAYA SEGAL</text><text class="t2" x="210" y="142" text-anchor="middle" font-family="Cormorant Garamond, Garamond, serif" font-style="italic" font-size="21" textLength="341" lengthAdjust="spacing">photography</text></g><path id="hp5" d="M0 8.5 C-4 5.6 -10.5 1.2 -10.5 -3.6 C-10.5 -7.4 -7.6 -9.6 -4.8 -9.6 C-2.6 -9.6 -0.9 -8.3 0 -6.6 C0.9 -8.3 2.6 -9.6 4.8 -9.6 C7.6 -9.6 10.5 -7.4 10.5 -3.6 C10.5 1.2 4 5.6 0 8.5Z"/><g id="logo5"><text class="t1" x="215" y="88" text-anchor="middle" font-family="Jost, sans-serif" font-weight="200" font-size="36" letter-spacing="10">CHAYA SEGAL</text><path class="l5-line" d="M120 110 H198 M222 110 H300" stroke="#C9B3AA" stroke-width=".8"/><use href="#hp5" transform="translate(210 110) scale(.55)" fill="#EBD3CB" stroke="#C7867A" stroke-width="1.2"/><text class="t2" x="213.5" y="138" text-anchor="middle" font-family="Jost, sans-serif" font-weight="300" font-size="11" letter-spacing="7">PHOTOGRAPHY</text></g><g id="logo6"><g transform="translate(-3 4)"><path d="M150 52 C175 40 205 36 240 42" fill="none" stroke="#7E8F76" stroke-width="1.1"/><use href="#l4lf" transform="translate(166 46) rotate(-110) scale(.4)"/><use href="#l4lf" transform="translate(180 42) rotate(40) scale(.38)"/><use href="#l4lf" transform="translate(198 38) rotate(-100) scale(.42)"/><use href="#l4lf" transform="translate(214 39) rotate(30) scale(.38)"/><use href="#l4lf" transform="translate(230 40) rotate(-80) scale(.38)"/><use href="#l4fl" transform="translate(244 42) scale(.65)"/></g><text class="t1" x="210" y="112" text-anchor="middle" font-family="Italiana, serif" font-size="40" textLength="318" lengthAdjust="spacing">CHAYA SEGAL</text><path class="l5-line" d="M86 137 H130 M290 137 H334" stroke="#C9B3AA" stroke-width=".8"/><text class="t2" x="210" y="141" text-anchor="middle" font-family="Jost, sans-serif" font-weight="300" font-size="10.5" textLength="140" lengthAdjust="spacing">PHOTOGRAPHY</text></g></defs>
   <symbol id="sprig" viewBox="0 0 120 80">
     <path d="M8 74 C38 52 70 34 112 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
     <g fill="currentColor" opacity=".9">
@@ -804,18 +829,19 @@ h3,.step h3,.why h3{font-size:22px;font-weight:400}
 </svg>
 
 
-<div class="intro" id="intro" aria-hidden="true"><svg class="l4 i5" viewBox="30 46 360 108"><g class="i-txt"><text class="t1" x="215" y="88" text-anchor="middle" font-family="Jost, sans-serif" font-weight="200" font-size="36" letter-spacing="10">CHAYA SEGAL</text></g><path class="i5-line" pathLength="1" d="M198 110 H120"/><path class="i5-line" pathLength="1" d="M222 110 H300"/><g transform="translate(210 110) scale(.55)"><g class="i5-heart"><use href="#hp5" fill="#EBD3CB" stroke="#C7867A" stroke-width="1.2"/></g></g><g class="i-sub"><text class="t2" x="213.5" y="138" text-anchor="middle" font-family="Jost, sans-serif" font-weight="300" font-size="11" letter-spacing="7">PHOTOGRAPHY</text></g></svg></div>
+<div class="intro" id="intro" aria-hidden="true"><svg class="l4 i6" viewBox="24 20 372 128"><g transform="translate(-3 4)"><path class="i-stem" pathLength="1" d="M150 52 C175 40 205 36 240 42"/><g transform="translate(166 46) rotate(-110) scale(.4)"><g class="i-lf" style="--d:.45s"><use href="#l4lf"/></g></g><g transform="translate(180 42) rotate(40) scale(.38)"><g class="i-lf" style="--d:.55s"><use href="#l4lf"/></g></g><g transform="translate(198 38) rotate(-100) scale(.42)"><g class="i-lf" style="--d:.65s"><use href="#l4lf"/></g></g><g transform="translate(214 39) rotate(30) scale(.38)"><g class="i-lf" style="--d:.75s"><use href="#l4lf"/></g></g><g transform="translate(230 40) rotate(-80) scale(.38)"><g class="i-lf" style="--d:.85s"><use href="#l4lf"/></g></g><g transform="translate(244 42) scale(.65)"><g class="i-fl"><use href="#l4fl"/></g></g></g><g class="i-txt"><text class="t1" x="210" y="112" text-anchor="middle" font-family="Italiana, serif" font-size="40" textLength="318" lengthAdjust="spacing">CHAYA SEGAL</text></g><g class="i-sub"><path class="l5-line" d="M86 137 H130 M290 137 H334" stroke="#C9B3AA" stroke-width=".8"/><text class="t2" x="210" y="141" text-anchor="middle" font-family="Jost, sans-serif" font-weight="300" font-size="10.5" textLength="140" lengthAdjust="spacing">PHOTOGRAPHY</text></g></svg></div>
 <script>(function(){var el=document.getElementById('intro'),seen=false,rm=false;try{seen=sessionStorage.getItem('introSeen')==='1';sessionStorage.setItem('introSeen','1');}catch(e){}try{rm=matchMedia('(prefers-reduced-motion: reduce)').matches;}catch(e){}if(seen||rm){el.parentNode.removeChild(el);return;}var h=document.documentElement;h.classList.add('intro-on');var done=function(){if(!el.parentNode)return;el.classList.add('out');h.classList.remove('intro-on');setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);},700);};setTimeout(done,1650);el.addEventListener('click',done);})();</script>
+<a class="skip" href="#main">דלגו לתוכן הראשי</a>
 <header class="wrap nav">
   <a class="logo" href="#" aria-label="Chaya Segal Photography">
-    <svg class="l4 l4-head" viewBox="30 46 360 108" aria-hidden="true"><use href="#logo5"/></svg>
+    <svg class="l4 l4-head" viewBox="24 20 372 128" aria-hidden="true"><use href="#logo6"/></svg>
   </a>
   <nav aria-label="ניווט ראשי"><ul>
     <li><a href="#services">צילומים</a></li><li><a href="#gallery">גלריה</a></li><li><a href="#contact">צרו קשר</a></li>
   </ul></nav>
 </header>
 
-<main>
+<main id="main">
   <section class="hero-full" aria-label="פתיחה">
     <div class="hf-img" style="background-image:url('images/hero-olives-wide.jpg')" role="img" aria-label="ילדה עם כובע קש וזיתים"></div>
     <div class="hf-alt" data-img="images/hero-strawberry.jpg" data-pos="50% 24%" hidden></div><div class="hf-alt" data-img="images/hero-glasses.jpg" data-pos="38% 40%" hidden></div><div class="hf-alt" data-img="images/hero-umbrella-close.jpg" data-pos="100% 44%" data-size="116%" hidden></div>
@@ -826,6 +852,7 @@ h3,.step h3,.why h3{font-size:22px;font-weight:400}
         
         <p class="hf-lead hf-a" style="--d:.65s">צילומי חלאקה, גיל שנה וניו בורן. בסטודיו ובטבע.</p>
         <div class="hf-cta hf-a" style="--d:.85s"><a class="btn hf-breathe" href="#book">לתיאום צילום</a><a class="btn hf-ghost" href="#gallery">לגלריה</a></div>
+        <div class="hf-trust hf-a" style="--d:1.05s"><span>קרוב ל־6 שנות ניסיון</span><span>עריכה אישית לכל תמונה</span><span>אלבום מעוצב</span></div>
       </div>
     </div>
     <a class="hf-down" href="#about" aria-label="גללו להמשך"><span></span></a>
@@ -1085,11 +1112,11 @@ h3,.step h3,.why h3{font-size:22px;font-weight:400}
 </main>
 
 <footer class="foot5"><div class="wrap">
-  <svg class="l4 l4-foot" viewBox="30 46 360 108" role="img" aria-label="Chaya Segal Photography"><use href="#logo5"/></svg>
+  <svg class="l4 l4-foot" viewBox="24 20 372 128" role="img" aria-label="Chaya Segal Photography"><use href="#logo6"/></svg>
   <p class="f-tag">צילומי חלאקה, גיל שנה וניו בורן · סטודיו בטבריה</p>
   <nav class="f-links" aria-label="קישורים בתחתית"><a href="#services">צילומים</a><a href="#gallery">גלריה</a><a href="#faq">שאלות נפוצות</a><a href="#contact">צרו קשר</a></nav>
   <p class="f-contact"><a href="https://wa.me/972548463238" target="_blank" rel="noopener">וואטסאפ</a><span>·</span><a href="tel:+972548463238" dir="ltr">054-846-3238</a><span>·</span><a href="mailto:chaya054846@gmail.com">chaya054846@gmail.com</a></p>
-  <p class="f-copy">© <span id="fYear">2026</span> חיה סגל צילום. כל הזכויות שמורות.</p>
+  <details class="a11y" id="a11y"><summary>הצהרת נגישות</summary><div class="a11y-in"><p>חשוב לי שכל אחד ואחת יוכלו לגלוש באתר בנוחות. האתר נבנה לפי הנחיות הנגישות לתכני אינטרנט (WCAG 2.0 ברמה AA, בהתאם לתקן הישראלי 5568) ככל שניתן.</p><p>מה הותאם: ניווט מלא במקלדת עם סימון ברור של המיקום, קישור לדילוג לתוכן הראשי, טקסט חלופי לתמונות, ניגודיות צבעים קריאה, טפסים עם תוויות ברורות, התאמה לטלפון ולהגדלת טקסט, וביטול אנימציות אוטומטי למי שהגדיר זאת במכשיר.</p><p>נתקלתם בבעיה או במשהו שלא נגיש? אשמח לשמוע ולתקן: <a href="tel:+972548463238" dir="ltr">054-846-3238</a> או <a href="mailto:chaya054846@gmail.com">chaya054846@gmail.com</a>.</p><p>רכזת הנגישות: חיה סגל. עודכן לאחרונה: נובמבר 2026.</p></div></details><p class="f-copy">© <span id="fYear">2026</span> חיה סגל צילום. כל הזכויות שמורות.</p>
 </div></footer>
 <script>try{document.getElementById('fYear').textContent=new Date().getFullYear()}catch(e){}</script>
 
