@@ -1192,7 +1192,7 @@ match.addEventListener('click',e=>{const a=e.target.closest('[data-pk]');if(!a)r
     if(rev){
       if(String(c.hide_testimonials).toLowerCase()==='true'){document.getElementById('reviews').hidden=true;}
       else{const items=[1,2,3,4,5].map(i=>({t:c['test'+i+'_text'],a:c['test'+i+'_author']})).filter(x=>x.t&&String(x.t).trim());
-        if(items.length)rev.innerHTML=[...rev.querySelectorAll('figure[data-keep]')].map(x=>x.outerHTML).join('')+items.map(x=>'<figure><blockquote>'+esc(x.t)+'</blockquote><figcaption>'+esc(String(x.a||'').replace(/\s*[—–-]\s*/,' · '))+'</figcaption></figure>').join('');}
+        if(items.length)rev.innerHTML=[...rev.querySelectorAll('figure[data-keep]')].map(x=>{x.classList.remove('rise');x.removeAttribute('style');return x.outerHTML}).join('')+items.map(x=>'<figure><blockquote>'+esc(x.t)+'</blockquote><figcaption>'+esc(String(x.a||'').replace(/\s*[—–-]\s*/,' · '))+'</figcaption></figure>').join('');}
     }
   }
   fetch('content.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json();})
