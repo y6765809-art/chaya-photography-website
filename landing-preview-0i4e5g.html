@@ -1034,7 +1034,7 @@ h3,.step h3,.why h3{font-size:22px;font-weight:400}
     <div class="wrap">
       <div class="head"><h2>מילים חמות מהורים</h2></div>
       <div class="reviews">
-        <figure><blockquote>אני כל כך מרוצה, שכבר רוצה לעשות להם שוב! הייתי מאוד מרוצה מהשירות, והתמונות יפהפיות. נחת!</blockquote><figcaption>לקוחה מרוצה</figcaption></figure>
+        <figure data-keep><blockquote>אני כל כך מרוצה, שכבר רוצה לעשות להם שוב! הייתי מאוד מרוצה מהשירות, והתמונות יפהפיות. נחת!</blockquote><figcaption>לקוחה מרוצה</figcaption></figure>
         <figure><blockquote>צילומי החלאקה מדהימים! חיה מקצועית ונעימה, הילדים אהבו אותה מיד!</blockquote><figcaption>ר.כ. · טבריה</figcaption></figure>
         <figure><blockquote>צילומי הניובורן חלומיים! חיה סבלנית ומקצועית בצורה מדהימה!</blockquote><figcaption>מ.ר. · כרמיאל</figcaption></figure>
         <figure><blockquote>הסטודיו יפהפה! התמונות מושלמות, האלבום יצא מהמם!</blockquote><figcaption>ש.ל. · צפת</figcaption></figure>
@@ -1192,7 +1192,7 @@ match.addEventListener('click',e=>{const a=e.target.closest('[data-pk]');if(!a)r
     if(rev){
       if(String(c.hide_testimonials).toLowerCase()==='true'){document.getElementById('reviews').hidden=true;}
       else{const items=[1,2,3,4,5].map(i=>({t:c['test'+i+'_text'],a:c['test'+i+'_author']})).filter(x=>x.t&&String(x.t).trim());
-        if(items.length)rev.innerHTML=items.map(x=>'<figure><blockquote>'+esc(x.t)+'</blockquote><figcaption>'+esc(String(x.a||'').replace(/\s*[—–-]\s*/,' · '))+'</figcaption></figure>').join('');}
+        if(items.length)rev.innerHTML=[...rev.querySelectorAll('figure[data-keep]')].map(x=>x.outerHTML).join('')+items.map(x=>'<figure><blockquote>'+esc(x.t)+'</blockquote><figcaption>'+esc(String(x.a||'').replace(/\s*[—–-]\s*/,' · '))+'</figcaption></figure>').join('');}
     }
   }
   fetch('content.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json();})
