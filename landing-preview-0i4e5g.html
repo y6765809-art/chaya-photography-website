@@ -589,13 +589,7 @@ a,button,summary,label,[role=tab],.chip label,.svc,.ph,.c-dots button,.s-arrow{c
 .petal-fx{position:fixed;left:0;top:0;width:9px;height:12px;margin:-6px 0 0 -4.5px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#EBD3CB;border:1px solid #C7867A;pointer-events:none;z-index:71}
 /* gallery fills the whole page width: one big arch photo + a full grid of the rest */
 .gallery-sec .wrap{max-width:none;padding-inline:clamp(10px,1.6vw,26px)}
-.gallery-sec .story{grid-template-columns:repeat(var(--cols,5),1fr)!important;gap:10px!important;max-width:none!important;grid-auto-flow:dense}
-.gallery-sec .story .s-main{grid-column:span 2;grid-row:span 2;aspect-ratio:auto!important}
-.gallery-sec .story .s-side,.gallery-sec .story .s-wrap,.gallery-sec .story .s-more{display:contents!important}
-.gallery-sec .story .s-sm,.gallery-sec .story .s-more .ph{aspect-ratio:4/5;border-radius:14px;min-height:0;flex:none;margin:0}
-.gallery-sec .story .s-cap,.gallery-sec .s-arrow{display:none!important}
-@media (max-width:900px){.gallery-sec .story{grid-template-columns:repeat(3,1fr)!important}}
-@media (max-width:600px){.gallery-sec .story{grid-template-columns:repeat(2,1fr)!important;gap:6px!important}.gallery-sec .story .s-main{grid-row:span 1;aspect-ratio:4/5!important}}
+.gallery-sec .story .s-cap{display:none!important}.gallery-sec .story{max-width:1080px}.gallery-sec .story .s-more .ph{flex-basis:clamp(150px,22%,240px)}.gallery-sec .s-wrap{margin-top:10px}
 /* opening: split layout, the cap-and-strawberries photo at full height on one side, text on cream */
 .hero-full{background:var(--bg);color:var(--fg)}
 .hero-full .hf-img{left:0;right:auto;width:50%;transform-origin:0 50%;background-position:50% 74%!important;animation:hfZoom2 14s cubic-bezier(.2,.6,.2,1) forwards;transform:scale(1.04)}
@@ -1421,19 +1415,7 @@ document.querySelectorAll('.story .s-more').forEach(row=>{
  if(sets.length<2)return;sets.forEach((s,k)=>{if(k)s.forEach(e=>e.classList.add('off'));});
  let cur=0;setInterval(()=>{if(document.hidden)return;const nx=(cur+1)%sets.length;sets[nx].forEach(e=>e.classList.remove('off'));sets[cur].forEach(e=>e.classList.add('off'));cur=nx;},6500);
 })();
-// gallery: show a first batch of photos, a "+" button reveals more, and the last visible tile fills the row so there are no holes
-(function(){const shown=new Map();
- const cfg=()=>{const w=innerWidth;return w>900?{cols:5,main:4,first:6,step:5}:w>600?{cols:3,main:4,first:5,step:6}:{cols:2,main:2,first:6,step:6};};
- const fit=()=>{const c=cfg();document.querySelectorAll('.gallery-sec .story').forEach(st=>{const tiles=[...st.querySelectorAll('.s-sm,.s-more .ph')];
-  if(!shown.has(st))shown.set(st,c.first);const n=Math.min(shown.get(st),tiles.length);
-  tiles.forEach((t,i)=>{t.style.gridColumn='';t.style.aspectRatio='';t.classList.toggle('g-hide',i>=n);});
-  let btn=st.querySelector('.g-plus');if(!btn){btn=document.createElement('button');btn.type='button';btn.className='g-plus';btn.innerHTML='<span class="g-plus-i" aria-hidden="true">+</span><span>עוד תמונות</span>';
-   btn.addEventListener('click',()=>{const k=cfg();const before=shown.get(st);shown.set(st,before+k.step);fit();const all=[...st.querySelectorAll('.s-sm,.s-more .ph')];all.slice(before,before+k.step).forEach((t,j)=>{t.classList.add('in','g-new');t.style.animationDelay=(reduce?0:j*0.07)+'s';});const first=all[before];if(first&&!reduce)setTimeout(()=>first.scrollIntoView({behavior:'smooth',block:'center'}),60);});st.appendChild(btn);}
-  btn.hidden=n>=tiles.length;
-  if(innerWidth>900)st.style.setProperty('--cols',c.cols);
-  const cells=c.main+n,gap=(Math.ceil(cells/c.cols)*c.cols-cells);
-  if(gap>0&&n>0&&c.cols>2){const last=tiles[n-1];last.style.gridColumn='span '+(gap+1);last.style.aspectRatio='auto';}});};
- fit();addEventListener('resize',fit);})();
+
 // gallery stays closed until a service card (or a gallery link) is clicked
 (function(){const g=document.getElementById('gallery');if(!g)return;g.classList.add('g-closed');
  const open=key=>{g.classList.remove('g-closed');g.classList.add('g-open');if(key){const t=g.querySelector('.tabs [data-tab="'+key+'"]');if(t)t.click();}
