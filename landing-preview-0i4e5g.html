@@ -196,13 +196,28 @@ footer .monogram{width:44px;height:44px;margin:0 auto 10px;display:block}
 .cf-done[hidden],.cform[hidden]{display:none!important}
 @media (max-width:520px){.cform{grid-template-columns:1fr}}
 /* lightbox */
-.gallery .ph{cursor:zoom-in}
-.lb{position:fixed;inset:0;z-index:60;background:rgba(30,24,22,.92);display:grid;place-items:center;padding:max(20px,env(safe-area-inset-top,0px)) 16px}
-.lb img{max-width:min(92vw,1100px);max-height:86vh;border-radius:14px;box-shadow:0 30px 80px -30px #000}
-.lb button{position:absolute;background:none;border:0;color:#FBF8F2;font-size:34px;line-height:1;padding:14px;cursor:pointer}
-.lb .x{top:calc(10px + env(safe-area-inset-top,0px));left:12px}
-.lb .nx{left:8px;top:50%;transform:translateY(-50%)}
-.lb .pv{right:8px;top:50%;transform:translateY(-50%)}
+.gallery .ph,.story .ph{cursor:zoom-in}
+.lb{position:fixed;inset:0;z-index:300;background:rgba(28,22,20,.96);display:flex;flex-direction:column;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px);color:#FBF8F2;-webkit-user-select:none;user-select:none;animation:lbIn .3s ease}
+@keyframes lbIn{from{opacity:0}}
+.lb-top{display:flex;align-items:center;gap:14px;padding:12px clamp(14px,3vw,32px);font-size:15px;letter-spacing:.06em}
+.lb-count{font-family:Jost,sans-serif;font-weight:300;opacity:.75;direction:ltr}
+.lb-x{margin-inline-start:auto;background:none;border:0;color:inherit;font-size:36px;line-height:1;cursor:pointer;padding:2px 8px}
+.lb-stage{position:relative;flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:0 clamp(8px,7vw,100px);touch-action:pan-y}
+.lb-stage .lb-img{max-width:100%;max-height:100%;object-fit:contain;border-radius:10px;box-shadow:0 30px 80px -30px #000;opacity:0;transform:scale(.985);transition:opacity .35s ease,transform .35s ease}
+.lb-stage .lb-img.on{opacity:1;transform:none}
+.lb-pv,.lb-nx{position:absolute;top:50%;transform:translateY(-50%);width:54px;height:54px;border-radius:50%;border:1px solid rgba(251,248,242,.4);background:rgba(251,248,242,.08);color:#FBF8F2;font-size:30px;line-height:1;cursor:pointer;display:grid;place-items:center;padding:0 0 4px;z-index:1;transition:background .2s}
+.lb-pv:hover,.lb-nx:hover{background:rgba(251,248,242,.22)}
+.lb-pv{right:clamp(8px,2vw,28px)}.lb-nx{left:clamp(8px,2vw,28px)}
+.lb-th{display:flex;gap:8px;overflow-x:auto;padding:12px clamp(14px,3vw,32px) 16px;scrollbar-width:thin;scrollbar-color:rgba(251,248,242,.3) transparent;justify-content:safe center}
+.lb-th button{flex:0 0 auto;width:58px;height:72px;border-radius:8px;border:2px solid transparent;background:center/cover no-repeat;opacity:.45;cursor:pointer;padding:0;transition:opacity .2s,border-color .2s}
+.lb-th button:hover{opacity:.8}.lb-th button.cur{opacity:1;border-color:#FBF8F2}
+@media (max-width:640px){.lb-pv,.lb-nx{width:42px;height:42px;font-size:24px;background:rgba(28,22,20,.5)}.lb-stage{padding:0 4px}.lb-th button{width:46px;height:58px}}
+.lb{inset:auto!important;top:0!important;left:0!important;width:100vw;height:100vh;height:100dvh;overflow:hidden}
+.lb-top,.lb-th{width:100%;box-sizing:border-box;min-width:0}
+.lb-stage{width:100%;box-sizing:border-box;min-width:0}
+.lb-stage .lb-img{max-width:calc(100vw - 2*clamp(8px,7vw,100px));max-height:calc(100vh - 190px);max-height:calc(100dvh - 190px);min-width:0;min-height:0;width:auto;height:auto}
+.lb-pv,.lb-nx{direction:ltr;unicode-bidi:isolate}
+@media (max-width:640px){.lb-stage .lb-img{max-width:calc(100vw - 8px);max-height:calc(100dvh - 170px)}}.g-hint{text-align:center;margin:-6px 0 18px;font-size:14px;color:var(--muted);letter-spacing:.04em}
 /* prices */
 .pkgs{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:stretch}
 .pkg{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:999px 999px 24px 24px;padding:56px 28px 30px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;min-width:0}
@@ -1008,6 +1023,7 @@ legend,.kicker{color:var(--sage-ink)}.contact .card{background:#EBD9D1!important
         <button type="button" role="tab" aria-selected="false" data-tab="nb">ניו בורן</button>
         <button type="button" role="tab" aria-selected="false" data-tab="kids">ילדים</button>
       </div>
+      <p class="g-hint">לחצו על תמונה לצפייה במסך מלא</p>
       <div class="story" data-panel="chal" role="tabpanel">
         <div class="ph s-main" data-lz="images/pf-chal-1.jpg" role="img" aria-label="ילד עם ספר תורה לפני החלאקה"></div>
         <div class="s-side">
@@ -1433,16 +1449,32 @@ const wall=document.querySelector('.wall');if(wall&&!reduce){const cols=[...wall
 const mWa=document.getElementById('mWa'),mCall=document.getElementById('mCall');
 function setBar(){if(mWa)mWa.href='https://wa.me/'+PHONE+'?text='+encodeURIComponent('היי חיה, הגעתי מהאתר ואשמח לשמוע פרטים על צילום');if(mCall)mCall.href='tel:+'+PHONE;}
 setBar();if(mWa)mWa.addEventListener('click',setBar);if(mCall)mCall.addEventListener('click',setBar);
-// gallery lightbox
-const gImgs=[...document.querySelectorAll('.gallery .ph, .story .ph')].map(el=>{if(el.dataset.lz)return el.dataset.lz;const m=(el.getAttribute('style')||'').match(/url\('([^']+)'\)/);return m?m[1]:null;});
-let lbI=0,lb=null;
-function lbShow(i){lbI=(i+gImgs.length)%gImgs.length;lb.querySelector('img').src=gImgs[lbI];}
-function lbClose(){if(lb){lb.remove();lb=null;}}
-document.querySelectorAll('.gallery .ph, .story .ph').forEach((el,i)=>{el.tabIndex=0;el.addEventListener('click',()=>{lb=document.createElement('div');lb.className='lb';lb.setAttribute('role','dialog');lb.innerHTML='<img alt=""><button class="x" aria-label="סגירה">×</button><button class="pv" aria-label="הקודמת">›</button><button class="nx" aria-label="הבאה">‹</button>';document.body.appendChild(lb);lbShow(i);
-  lb.addEventListener('click',ev=>{if(ev.target===lb||ev.target.classList.contains('x'))lbClose();else if(ev.target.classList.contains('nx'))lbShow(lbI+1);else if(ev.target.classList.contains('pv'))lbShow(lbI-1);});
-  let sx=0;lb.addEventListener('touchstart',ev=>sx=ev.touches[0].clientX);lb.addEventListener('touchend',ev=>{const d=ev.changedTouches[0].clientX-sx;if(Math.abs(d)>40)lbShow(lbI+(d>0?1:-1));});});
+// gallery lightbox: full-screen viewer of the current category, with arrows, swipe, wheel, keys and a thumbnail row
+(function(){
+ const src=el=>{if(el.dataset.lz)return el.dataset.lz;const m=(el.getAttribute('style')||'').match(/url\(['"]?([^'")]+)/);return m?m[1]:null;};
+ let lb=null,list=[],cur=0,wheelT=0;
+ function show(i){if(!lb)return;cur=(i+list.length)%list.length;const im=lb.querySelector('.lb-img');im.classList.remove('on');const n=new Image();const want=list[cur];n.onload=()=>{if(!lb||list[cur]!==want)return;im.src=want;requestAnimationFrame(()=>im.classList.add('on'));};n.src=want;
+  lb.querySelector('.lb-count').textContent=(cur+1)+' / '+list.length;
+  lb.querySelectorAll('.lb-th button').forEach((b,k)=>{b.classList.toggle('cur',k===cur);if(k===cur)b.scrollIntoView({block:'nearest',inline:'center',behavior:reduce?'auto':'smooth'});});
+  [list[(cur+1)%list.length],list[(cur-1+list.length)%list.length]].forEach(u=>{const p=new Image();p.src=u;});}
+ function close(){if(!lb)return;lb.remove();lb=null;if(!document.querySelector('.cat-modal'))document.documentElement.style.overflow='';}
+ function open(items,i,title){list=items;lb=document.createElement('div');lb.className='lb';lb.setAttribute('role','dialog');lb.setAttribute('aria-modal','true');
+  lb.innerHTML='<div class="lb-top"><span class="lb-title"></span><span class="lb-count"></span><button type="button" class="lb-x" aria-label="סגירה">×</button></div><div class="lb-stage"><button type="button" class="lb-pv" aria-label="הקודמת">›</button><img class="lb-img" alt=""><button type="button" class="lb-nx" aria-label="הבאה">‹</button></div><div class="lb-th"></div>';
+  lb.querySelector('.lb-title').textContent=title;const th=lb.querySelector('.lb-th');
+  list.forEach((u,k)=>{const b=document.createElement('button');b.type='button';b.style.backgroundImage="url('"+u+"')";b.setAttribute('aria-label','תמונה '+(k+1));b.addEventListener('click',()=>show(k));th.appendChild(b);});
+  const st=lb.querySelector('.lb-stage');
+  lb.querySelector('.lb-x').addEventListener('click',close);lb.querySelector('.lb-nx').addEventListener('click',()=>show(cur+1));lb.querySelector('.lb-pv').addEventListener('click',()=>show(cur-1));
+  st.addEventListener('click',e=>{if(e.target===st)close();});
+  let sx=0,sy=0;st.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
+  st.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy))show(cur+(dx>0?1:-1));else if(dy>90&&Math.abs(dy)>Math.abs(dx))close();});
+  st.addEventListener('wheel',e=>{e.preventDefault();const now=Date.now();if(now-wheelT<380)return;const d=Math.abs(e.deltaY)>Math.abs(e.deltaX)?e.deltaY:-e.deltaX;if(Math.abs(d)<8)return;wheelT=now;show(cur+(d>0?1:-1));},{passive:false});
+  document.body.appendChild(lb);document.documentElement.style.overflow='hidden';show(i);lb.querySelector('.lb-x').focus();}
+ document.querySelectorAll('.gallery .ph, .story .ph').forEach(el=>{el.tabIndex=0;
+  el.addEventListener('click',()=>{const box=el.closest('.story')||el.closest('.gallery')||document.body;const els=[...box.querySelectorAll('.ph')].filter(e=>src(e));const k=els.indexOf(el);if(k<0)return;
+   const tab=box.dataset&&box.dataset.panel?document.querySelector('.tabs [data-tab="'+box.dataset.panel+'"]'):null;open(els.map(src),k,tab?tab.textContent.trim():'');});
   el.addEventListener('keydown',ev=>{if(ev.key==='Enter')el.click();});});
-addEventListener('keydown',e=>{if(!lb)return;if(e.key==='Escape')lbClose();if(e.key==='ArrowLeft')lbShow(lbI+1);if(e.key==='ArrowRight')lbShow(lbI-1);});
+ addEventListener('keydown',e=>{if(!lb)return;if(e.key==='Escape'){e.stopImmediatePropagation();close();}else if(e.key==='ArrowLeft')show(cur+1);else if(e.key==='ArrowRight')show(cur-1);},true);
+})();
 document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',async()=>{
   const el=document.getElementById(b.dataset.copy);
   try{await navigator.clipboard.writeText(el.textContent.trim());b.textContent='הועתק';}
