@@ -217,7 +217,13 @@ footer .monogram{width:44px;height:44px;margin:0 auto 10px;display:block}
 .lb-stage{width:100%;box-sizing:border-box;min-width:0}
 .lb-stage .lb-img{max-width:calc(100vw - 2*clamp(8px,7vw,100px));max-height:calc(100vh - 190px);max-height:calc(100dvh - 190px);min-width:0;min-height:0;width:auto;height:auto}
 .lb-pv,.lb-nx{direction:ltr;unicode-bidi:isolate}
-@media (max-width:640px){.lb-stage .lb-img{max-width:calc(100vw - 8px);max-height:calc(100dvh - 170px)}}.g-hint{text-align:center;margin:-6px 0 18px;font-size:14px;color:var(--muted);letter-spacing:.04em}
+@media (max-width:640px){.lb-stage .lb-img{max-width:calc(100vw - 8px);max-height:calc(100dvh - 170px)}}.gallery-sec .story .g-hide{display:none!important}
+.gallery-sec .story .g-new{animation:gNew .6s ease both}
+@keyframes gNew{from{opacity:0;transform:translateY(14px)}}
+.g-plus{grid-column:1/-1;justify-self:center;display:inline-flex;align-items:center;gap:12px;margin-top:18px;font:inherit;font-size:16px;color:var(--fg);background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:8px 26px 8px 10px;cursor:pointer;box-shadow:0 14px 30px -20px rgba(60,45,30,.5);transition:transform .25s,box-shadow .25s}
+.g-plus:hover{transform:translateY(-2px);box-shadow:0 18px 34px -18px rgba(60,45,30,.55)}
+.g-plus-i{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--rust);color:#fff;font-size:24px;font-weight:300;line-height:1;padding-bottom:2px}
+.g-plus[hidden]{display:none}.g-hint{text-align:center;margin:-6px 0 18px;font-size:14px;color:var(--muted);letter-spacing:.04em}
 /* prices */
 .pkgs{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:stretch}
 .pkg{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:999px 999px 24px 24px;padding:56px 28px 30px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;min-width:0}
@@ -1415,10 +1421,18 @@ document.querySelectorAll('.story .s-more').forEach(row=>{
  if(sets.length<2)return;sets.forEach((s,k)=>{if(k)s.forEach(e=>e.classList.add('off'));});
  let cur=0;setInterval(()=>{if(document.hidden)return;const nx=(cur+1)%sets.length;sets[nx].forEach(e=>e.classList.remove('off'));sets[cur].forEach(e=>e.classList.add('off'));cur=nx;},6500);
 })();
-// gallery: choose the column count per tab so the grid has no empty holes
-(function(){const fit=()=>{const w=innerWidth;document.querySelectorAll('.gallery-sec .story').forEach(st=>{const tiles=[...st.querySelectorAll('.s-sm,.s-more .ph')];tiles.forEach(t=>t.style.gridColumn='');if(w<=900)return;
-  const cells=4+tiles.length;const best=5,bestE=Math.ceil(cells/5)*5-cells;
-  st.style.setProperty('--cols',best);if(bestE>0&&tiles.length){tiles[tiles.length-1].style.gridColumn='span '+(bestE+1);tiles[tiles.length-1].style.aspectRatio='auto';}});};
+// gallery: show a first batch of photos, a "+" button reveals more, and the last visible tile fills the row so there are no holes
+(function(){const shown=new Map();
+ const cfg=()=>{const w=innerWidth;return w>900?{cols:5,main:4,first:6,step:5}:w>600?{cols:3,main:4,first:5,step:6}:{cols:2,main:2,first:6,step:6};};
+ const fit=()=>{const c=cfg();document.querySelectorAll('.gallery-sec .story').forEach(st=>{const tiles=[...st.querySelectorAll('.s-sm,.s-more .ph')];
+  if(!shown.has(st))shown.set(st,c.first);const n=Math.min(shown.get(st),tiles.length);
+  tiles.forEach((t,i)=>{t.style.gridColumn='';t.style.aspectRatio='';t.classList.toggle('g-hide',i>=n);});
+  let btn=st.querySelector('.g-plus');if(!btn){btn=document.createElement('button');btn.type='button';btn.className='g-plus';btn.innerHTML='<span class="g-plus-i" aria-hidden="true">+</span><span>עוד תמונות</span>';
+   btn.addEventListener('click',()=>{const k=cfg();const before=shown.get(st);shown.set(st,before+k.step);fit();const all=[...st.querySelectorAll('.s-sm,.s-more .ph')];all.slice(before,before+k.step).forEach((t,j)=>{t.classList.add('in','g-new');t.style.animationDelay=(reduce?0:j*0.07)+'s';});const first=all[before];if(first&&!reduce)setTimeout(()=>first.scrollIntoView({behavior:'smooth',block:'center'}),60);});st.appendChild(btn);}
+  btn.hidden=n>=tiles.length;
+  if(innerWidth>900)st.style.setProperty('--cols',c.cols);
+  const cells=c.main+n,gap=(Math.ceil(cells/c.cols)*c.cols-cells);
+  if(gap>0&&n>0&&c.cols>2){const last=tiles[n-1];last.style.gridColumn='span '+(gap+1);last.style.aspectRatio='auto';}});};
  fit();addEventListener('resize',fit);})();
 // gallery stays closed until a service card (or a gallery link) is clicked
 (function(){const g=document.getElementById('gallery');if(!g)return;g.classList.add('g-closed');
